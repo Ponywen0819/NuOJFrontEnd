@@ -1,14 +1,17 @@
 "use client"
 
+import { useRouter } from 'next/navigation';
 import { HOST } from '@/setting';
 import { success_swal, error_swal } from "@/components/notification";
 import { Form } from "@/components/form"
 import { color_context } from '@/contexts/color';
 import { useContext } from "react";
+import Swal from "sweetalert2";
 
 
 const Registe = () =>{
     const color = useContext(color_context);    
+    const router = useRouter();
 
     const handleRegister = async (info) => {
         let res = await fetch(`${HOST}/api/auth/register`, {
@@ -20,7 +23,12 @@ const Registe = () =>{
         });
 
         if(res.ok){
-            success_swal("註冊成功")
+            Swal.fire({
+                icon: "success",
+                title: "註冊成功",
+                text: "驗證信已寄至信箱，請收信來驗證信箱",
+                showConfirmButton: true
+            }).then(() => {router.push("/")});
         }
         else{
             let resCode = res.status;
