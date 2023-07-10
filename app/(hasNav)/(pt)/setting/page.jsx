@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
  
-export default function Profile({ params }) {
+export default function SettingIndex({ params }) {
   redirect("/setting/profile")
 }
