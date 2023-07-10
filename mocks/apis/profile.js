@@ -4,6 +4,7 @@ import { HOST } from "@/setting";
 
 const user_pony = {
   role: 0,
+  userid: 1,
   handle: "pony",
   img: monkey.src,
   email: "pomy076152340@gmail.com",

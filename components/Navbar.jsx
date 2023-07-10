@@ -76,14 +76,23 @@ const User = () =>{
     )
 }
 
-export const Navbar = ({
-    links
-})=>{
+export const Navbar = ()=>{
     const path = usePathname();
     const NavColor = (path === "/")? '' : "bg-black"
     const NavClass = `absolute p-10 w-full flex justify-between h-32 z-10 top-0 ` + NavColor;
     const LinkClass = "text-white text-2xl border-b-2 border-white border-opacity-0 duration-500 hover:border-white hover:border-opacity-100 ml-10"
     const auth = useContext(auth_context);
+    const links = (path.match(/\/problem\/?.*/))?[
+        {title: "題目列表", href: "/problem/list"},
+        {title: "提交狀況", href: "/problem/submition"},
+    ]:
+    
+    [
+        { title: "題目", href: "/problem" },
+        { title: "關於", href: "/about" },
+        { title: "狀態", href: "/status" },
+    ]
+
 
     return(
         <nav className={NavClass}>
