@@ -22,7 +22,7 @@ const Index = ()=>{
                         </div>
                     </div>
                     <div className="w-fit mx-auto m-5">
-                        <p className="text-white"> 2022, NuOJ Team. </p>
+                        <p className="text-white"> 2023, NuOJ Team. </p>
                     </div>
                 </div>
             </div>
