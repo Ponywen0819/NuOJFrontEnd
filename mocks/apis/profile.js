@@ -1,5 +1,6 @@
 import { rest } from "msw";
 import monkey from "../img/coding_monkey.jpeg";
+import { HOST } from "@/setting";
 
 const user_pony = {
   role: 0,
@@ -11,7 +12,7 @@ const user_pony = {
 };
 
 export const profile = [
-  rest.get("/api/profile/:handle", (req, res, ctx) => {
+  rest.get(`${HOST}/api/profile/:handle`, (req, res, ctx) => {
     if (req.params.handle === user_pony.handle) {
       return res(
         ctx.status(200),
@@ -27,7 +28,7 @@ export const profile = [
     }
   }),
 
-  rest.get("/api/profile/:handle/avatar", async (req, res, ctx) => {
+  rest.get(`${HOST}/api/profile/:handle/avatar`, async (req, res, ctx) => {
     let handle = req.params.handle;
     if (handle === user_pony.handle) {
       const imageBuffer = await fetch(user_pony.img).then((res) =>
@@ -44,7 +45,7 @@ export const profile = [
     }
   }),
 
-  rest.post("/api/profile/:handle", async (req, res, ctx) => {
+  rest.post(`${HOST}/api/profile/:handle`, async (req, res, ctx) => {
     let json = await req.json();
     if ("bio" in json) {
       user_pony.bio = json["bio"];
