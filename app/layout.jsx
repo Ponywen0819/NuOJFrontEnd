@@ -1,8 +1,12 @@
 import { AuthProvider } from "@/contexts/auth";
+import { MockProvider } from '@/mocks/provider';
+import { NavigateProvider } from '@/contexts/navigate';
+
 import LogoWhite from '@/public/logo-white.svg';
 import Icon from '@/public/logo_min.png';
+
 import "./global.css";
-import { MockProvider } from '@/mocks/provider';
+
 
 export const metadata = {
   title: {
@@ -25,9 +29,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="w-full bg-gray-100 bg-opacity-80 min-h-screen">
         <MockProvider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <NavigateProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </NavigateProvider>
         </MockProvider>
       </body>
     </html>

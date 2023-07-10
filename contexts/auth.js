@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   const signin = async ({ account, password }) => {
     let res;
     try {
-      res = await fetch("/api/auth/login", {
+      res = await fetch(`${HOST}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   const signout = async () => {
     let res;
     try {
-      res = await fetch("/api/auth/logout", { method: "POST" });
+      res = await fetch(`${HOST}/api/auth/logout`, { method: "POST" });
     } catch (error) {
       console.log(error);
     }
