@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { NavBar } from '@/components/Navbar';
 import { HOST } from '@/setting';
 
 const ProblemDetail = ({ params })=>{
