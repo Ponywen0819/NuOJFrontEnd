@@ -1,6 +1,8 @@
 import { AuthProvider } from "@/contexts/auth";
-import { Navbar } from "@/components/Navbar";
+import LogoWhite from '@/public/logo-white.svg';
+import Icon from '@/public/logo_min.png';
 import "./global.css";
+import { MockProvider } from '@/mocks/provider';
 
 export const metadata = {
   title: {
@@ -10,10 +12,10 @@ export const metadata = {
   openGraph: {
     title: "NuOJ - Index",
     url: "https://nuoj.ntut-xuan.net/",
-    image: "/logo-white.svg",
+    image: LogoWhite.src,
   },
   icons: {
-    icon: "/logo_min.png",
+    icon: Icon.src,
   },
   description: "一款來自 國立臺北科技大學 的線上程式評測系統s",
 };
@@ -22,16 +24,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="w-full bg-gray-100 bg-opacity-80 min-h-screen">
-        <AuthProvider>
-          <Navbar
-            links={[
-              { title: "題目", href: "/problem" },
-              { title: "關於", href: "/about" },
-              { title: "狀態", href: "/status" },
-            ]}
-          />
-          {children}
-        </AuthProvider>
+        <MockProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </MockProvider>
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { HOST } from "@/setting";
 
 export const auth_context = createContext(null);
 
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   const getInfo = async () => {
     let jwt = Cookies.get("jwt");
     if (jwt) {
-      let res = await fetch("/api/auth/verify_jwt", {
+      let res = await fetch(`${HOST}/api/auth/verify_jwt`, {
         method: "POST",
       });
       if (res.ok) {
@@ -88,7 +89,6 @@ export const RequireAuth = ({ children, loadingElement = <p>loading</p> }) => {
   const location = usePathname();
   const router = useRouter();
 
-  console.log(user, location);
   if (user.state === 1) {
     return children;
   } else if (user.state === -1) {

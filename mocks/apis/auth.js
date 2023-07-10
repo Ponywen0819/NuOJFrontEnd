@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { HOST } from "./setting";
+import { HOST } from "@/setting";
 
 export const auth = [
   rest.post(`${HOST}/api/auth/login`, async (req, res, ctx) => {
