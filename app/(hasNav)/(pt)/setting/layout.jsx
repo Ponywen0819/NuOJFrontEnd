@@ -1,4 +1,5 @@
 import { RequireAuth } from '@/contexts/auth';
+import { SettingNav } from '@/components/SettingAside';
 
 export const metadata = {
     title: "設定"
@@ -6,14 +7,18 @@ export const metadata = {
 
 
 export default function SettingLayout({ children }) {
+    const links = [
+        {href: "/profile", title: '個人資訊'}
+    ]
+
     return (
         <RequireAuth>
-            <main>
-                <aside></aside>            
-                <section>
+            <div className='mx-auto max-w-5xl flex'>
+                <SettingNav links={links} />
+                <section className='grow p-2'>
                     {children}
                 </section>
-            </main>
+            </div>
         </RequireAuth>
     );
   }

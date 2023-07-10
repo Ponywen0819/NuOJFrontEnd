@@ -1,11 +1,5 @@
-
-
-const Profile = ()=>{
-    return(
-        <div>
-            asd
-        </div>
-    )
+import { redirect } from 'next/navigation'
+ 
+export default function Profile({ params }) {
+  redirect("/setting/profile")
 }
-
-export default Profile;
