@@ -10,7 +10,11 @@ const HsaNav = ({ children })=>{
               { title: "狀態", href: "/status" },
             ]}
           />
-          {children}
+          <section className="pt-32">
+            <div className="py-5">
+              {children}
+            </div>
+          </section>
         </>
     )
 }

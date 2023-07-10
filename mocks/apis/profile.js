@@ -5,7 +5,7 @@ import { HOST } from "@/setting";
 const user_pony = {
   role: 0,
   handle: "pony",
-  img: monkey,
+  img: monkey.src,
   email: "pomy076152340@gmail.com",
   school: "台北科大",
   bio: "真假拉！原神-啟動!小跑豬來了！",
