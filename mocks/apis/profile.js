@@ -6,11 +6,22 @@ const user_pony = {
   role: 0,
   userid: 1,
   handle: "pony",
-  img: monkey.src,
+  img: {
+    buff: "",
+    mime: "",
+  },
   email: "pomy076152340@gmail.com",
   school: "台北科大",
   bio: "真假拉！原神-啟動!小跑豬來了！",
 };
+
+const initimg = async () => {
+  const imageBuffer = await fetch(monkey.src).then((res) => res.arrayBuffer());
+  user_pony.img.buff = imageBuffer;
+  user_pony.img.mime = "image/jpeg";
+};
+
+initimg();
 
 export const profile = [
   rest.get(`${HOST}/api/profile/:handle`, (req, res, ctx) => {
@@ -32,14 +43,10 @@ export const profile = [
   rest.get(`${HOST}/api/profile/:handle/avatar`, async (req, res, ctx) => {
     let handle = req.params.handle;
     if (handle === user_pony.handle) {
-      const imageBuffer = await fetch(user_pony.img).then((res) =>
-        res.arrayBuffer()
-      );
-
       return res(
-        ctx.set("Content-Length", imageBuffer.byteLength.toString()),
-        ctx.set("Content-Type", "image/jpeg"),
-        ctx.body(imageBuffer)
+        ctx.set("Content-Length", user_pony.img.buff.byteLength),
+        ctx.set("Content-Type", user_pony.img.mime),
+        ctx.body(user_pony.img.buff)
       );
     } else {
       return res(ctx.status(403));
@@ -55,5 +62,22 @@ export const profile = [
       user_pony.school = json["school"];
     }
     return res(ctx.status(200), ctx.json({ status: "ok" }));
+  }),
+
+  rest.put(`${HOST}/api/profile/:handle/avatar`, async (req, res, ctx) => {
+    const handle = req.params.handle;
+    if (handle === user_pony.handle) {
+      const text = await req.text();
+
+      const mime = req.headers.get("content-type");
+
+      user_pony.img.buff = imageBuffer;
+      user_pony.img.mime = mime;
+
+      return res(ctx.status(200));
+      // return req.passthrough();
+    } else {
+      return res(ctx.status(403));
+    }
   }),
 ];

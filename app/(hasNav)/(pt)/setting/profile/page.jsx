@@ -3,7 +3,7 @@
 import { HOST } from '@/setting';
 import { useContext, useEffect, useState } from 'react';
 import { auth_context } from '@/contexts/auth';
-import { success_swal } from '@/components/notification';
+import { error_swal, success_swal } from '@/components/notification';
 import img_x from './x.svg'
 
 const Input = ({val, title, callback})=>{
@@ -22,6 +22,7 @@ const Input = ({val, title, callback})=>{
 const ProfileForm = ({infos, callback}) => {
     const auth = useContext(auth_context);
     const user = auth.getUser();
+
     const [vals, setVal] = useState({});
     const [isChange, setChange] = useState(false);
 
@@ -102,6 +103,9 @@ const ProfileForm = ({infos, callback}) => {
 }
 
 const ImgForm = ({imgSrc, callback}) => {
+    const auth = useContext(auth_context);
+    const handle = auth.getUser().handle;
+
     const [newImg, setNew] = useState(null);
 
     useEffect(()=>{
@@ -109,23 +113,37 @@ const ImgForm = ({imgSrc, callback}) => {
     },[imgSrc])
 
     const handleUpdate = async () =>{
-        if(newImg == imgSrc)
-            success_swal("大頭照並未更改").then(()=>callback(false));
+        const imageBuffer = await fetch(newImg).then((res) =>res.arrayBuffer());
+        const mime = newImg.match(/:(.*?);/)[1];
+        
+        let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
+            method: "PUT",
+            headers: {
+                "content-type": mime,
+                "content-length": imageBuffer.byteLength,
+            },
+            body: imageBuffer
+        })
+        if(res.ok){
+            success_swal("大頭照更改成功").then(()=>callback(false));
+        }
+        else{
+            error_swal("大頭照上傳失敗");
+        }
     }
 
     const updateImg = () =>{
-        console.log("qwe")
         let file_input = document.createElement("input")
         file_input.type = "file"
         file_input.accept = "image/*"
         file_input.onchange = e => {
             let image = e.target.files[0];
             let reader = new FileReader();
-            reader.readAsDataURL(image)
             reader.onload = readerEvent => {
                 let content = readerEvent.target.result;
                 setNew(content);
             }
+            reader.readAsDataURL(image)
         }
         file_input.click();
     }
