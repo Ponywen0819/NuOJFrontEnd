@@ -1,32 +1,17 @@
 import Link from "next/link";
+import { Data }from '@/components/table_type';
 
 const Header = ({width, lable = ''})=>{
     return(
         <th 
             key={lable}
             scope="col"
-            className={`px-6 py-3`}
+            // className={`px-6 py-3`}
+            className={`py-3`}
             style={{width: `${width}\%`}} 
         >{lable}</th>
     )
 }
-
-const Data = ({conf, data}) =>{
-    const type = conf.type;
-    let content;
-    if(type === "link"){
-        content = (<Link href={data.href}>{data.lable}</Link>)
-    }
-    else{
-        content = (<p>{data}</p>)
-    }
-
-    return(
-        <td className={`px-6 py-4`} style={{width: `${conf.width}%`}}>
-            {content}
-        </td>
-    )
-} 
 
 const Row = ({data, conf})=>(
     <tr className="hover:bg-slate-100 border bg-white">

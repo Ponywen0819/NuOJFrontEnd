@@ -36,10 +36,10 @@ const ProblemList = () =>{
                 {lable: "提交 ID", width: 10},
                 {lable: "題目名稱", width: 20},
                 {lable: "提交人", type: "link"},
-                {lable: "提交時間"},
-                {lable: "狀態",},
-                {lable: "記憶體"},
-                {lable: "時長"}
+                {lable: "提交時間", type: "time"},
+                {lable: "狀態", type: "status"},
+                {lable: "記憶體", type: "mem"},
+                {lable: "時長", type: "sec"}
             ]}
             datas={datas}
         />
