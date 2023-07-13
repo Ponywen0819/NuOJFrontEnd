@@ -7,7 +7,6 @@ export default function TableLayout({ children }) {
     ]
 
     return (
-        <RequireAuth>
             <div className='flex'>   
                 {children}
                 <aside className="w-[20%] m-5  p-5 h-full bg-white rounded-xl">
@@ -15,6 +14,5 @@ export default function TableLayout({ children }) {
                     <p className="text-2xl text-center p-5"> NuOJ Lab </p>
                 </aside>
             </div>
-        </RequireAuth>
     );
   }

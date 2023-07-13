@@ -4,7 +4,11 @@ export const metadata = {
 
 
 const ProblemSubmitionLayout = ({ children }) => {
-    return(children)
+    return(
+        <RequireAuth>
+            {children}
+        </RequireAuth>
+    )
 }
 
 export default ProblemSubmitionLayout;
