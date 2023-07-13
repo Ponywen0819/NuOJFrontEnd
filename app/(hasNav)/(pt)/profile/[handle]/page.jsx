@@ -1,44 +1,12 @@
 "use client";
 
 import { HOST } from "@/setting";
-import { useState, useEffect } from 'react';
+import Loading from './loading';
+import NotFound from './not-found';
+import { useEffect, useState } from "react";
+// import { useState, useEffect } from 'react';
 
-const Profile = ({ params }) => {
-    const handle = params.handle;
-    const [info, setInfo] = useState({school:'', email: "",role: 0, bio: "" });
-    const [imgsrc, setSrc] = useState(null);
-
-    useEffect(()=>{
-        getUserInfo();
-        getImgSrc();
-    },[])
-
-    const getUserInfo = async () => {
-        let res = await fetch(`${HOST}/api/profile/${handle}`, {
-          method: "GET",
-        });
-        if (res.ok) {
-          let json = await res.json();
-          setInfo(json);
-        }
-      };
-      
-    const getImgSrc = async () => {
-        let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
-            method: "GET",
-        });
-        if (res.ok) {
-            let blob = await res.blob();
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                let base64data = reader.result;
-                setSrc(base64data);
-            };
-            reader.readAsDataURL(blob);
-        }
-    };
-      
-
+const Info = ({ info }) => {
     const subtitles = [
         { key: "school", title: "學校" },
         { key: "email", title: "電子信箱" },
@@ -46,14 +14,14 @@ const Profile = ({ params }) => {
     ];
 
     return(
-        <div className="mx-auto max-w-5xl flex p-5 shadow-2xl rounded-lg bg-white border-2">
+        <>
             <div className="mr-2 border-r-0 pr-2">
-                <img className={`w-52 h-52 object-cover rounded-full border-2`} src={imgsrc}/>
+                <img className={`w-52 h-52 object-cover rounded-full border-2`} src={info.img}/>
             </div>
             <div className="grow">
                 <div className="mb-2 border-b-2 pb-2">
                     <p className="text-base text-slate-400 ">{(info.role === 1)? "管理員" : "使用者"}</p>
-                    <p className="text-5xl font-medium text-black-700">{handle}</p>
+                    <p className="text-5xl font-medium text-black-700">{info.handle}</p>
                 </div>
                 {
                     subtitles.map((subtitle)=>(
@@ -64,8 +32,52 @@ const Profile = ({ params }) => {
                     ))
                 }
             </div>
-        </div>
+        </>
     )
+}
+
+
+const Profile = ({params})=>{
+    const handle = params.handle;
+
+    const [loaded, setLoaded] = useState(false);
+    const [profile, setProfile] = useState(null);
+
+    useEffect(()=>{
+        getInfo();
+    },[]);
+
+    const getInfo = async () =>{
+        const info_res = await fetch(`${HOST}/api/profile/${handle}`);
+        if(info_res.ok) {
+            const profile = await info_res.json();
+            setProfile(profile);
+
+            const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
+            if(img_res.ok){
+                const buffer = await img_res.blob(); 
+                const reader = new FileReader();
+                reader.onload = () =>{
+                    const base64 = reader.result;
+                    setProfile((old)=>({...old, img: base64, handle: handle}));
+                }
+                reader.readAsDataURL(buffer);
+            }
+        }
+        else{
+            setProfile(null)
+        }
+        setLoaded(true);
+    }
+    if( loaded && profile){
+        return (<Info info={profile}></Info>)
+    }
+    else if(loaded && !profile){
+        return (<NotFound></NotFound>)
+    }
+    else{
+        return (<Loading></Loading>)
+    }
 }
 
 export default Profile;
