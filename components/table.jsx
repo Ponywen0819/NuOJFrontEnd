@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Data }from '@/components/table_type';
+import { TableLoading } from '@/components/table_loading';
 
 const Header = ({width, lable = ''})=>{
     return(
@@ -12,14 +13,6 @@ const Header = ({width, lable = ''})=>{
         >{lable}</th>
     )
 }
-
-const Row = ({data, conf})=>(
-    <tr className="hover:bg-slate-100 border bg-white">
-        {
-            data.map((col, index)=><Data conf={conf[index]} data={col} key={`${data[0]}:${index}`}/>)
-        }
-    </tr>
-)
 
 const normalizeCol = (cols)=>{
     let remain = 100;
@@ -58,9 +51,16 @@ export const Table = ({cols, datas})=>{
                 </thead>
                 <tbody className="">
                     {
-                        datas.map(
-                            (data, index)=><Row data={data} conf={norma_cols} key={`${data[0]}:${index}`}/>
-                        )
+                        datas? (datas.map((data, index)=>(
+                            <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
+                            {
+                                data.map((col, index)=>(
+                                    <Data conf={norma_cols[index]} data={col} key={`${data[0]}:${index}`}/>
+                                ))
+                            }
+                            </tr>
+                        // <Row data={data} conf={norma_cols} key={`${data[0]}:${index}`}/>)
+                        ))):<TableLoading/>
                     }
                 </tbody>
             </table>

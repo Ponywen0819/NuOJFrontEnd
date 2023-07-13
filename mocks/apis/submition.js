@@ -22,6 +22,6 @@ const fake_submit = [
 
 export const submition = [
   rest.get(`${HOST}/api/submition`, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(fake_submit));
+    return res(ctx.status(200), ctx.delay(1000), ctx.json(fake_submit));
   }),
 ];

@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { HOST } from '@/setting';
 
 const ProblemList = () =>{
-    const [datas, setData] = useState([]);
+    const [datas, setData] = useState(null);
 
     useEffect(()=>{getList()},[])
 

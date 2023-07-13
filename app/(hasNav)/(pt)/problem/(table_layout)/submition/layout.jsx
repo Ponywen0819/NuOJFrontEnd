@@ -1,3 +1,5 @@
+import { RequireAuth } from '@/contexts/auth';
+
 export const metadata = {
     title: "繳交狀態"
 };

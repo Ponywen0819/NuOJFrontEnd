@@ -1,4 +1,4 @@
-import { RequireAuth } from '@/contexts/auth';
+
 import logo_min from '@/public/logo_min.png';
 
 export default function TableLayout({ children }) {

@@ -6,14 +6,12 @@ import { HOST } from '@/setting';
 
 
 const ProblemList = () =>{
-    const [datas, setData] = useState([]);
+    const [datas, setData] = useState(null);
 
     useEffect(()=>{getList()},[])
 
     const getList = async ()=>{
-        let res = await fetch(`${HOST}/api/submition`,{
-            method: "GET"
-        })
+        const res = await fetch(`${HOST}/api/submition`)
 
         if(res.ok){
             let json = await res.json();
@@ -26,7 +24,7 @@ const ProblemList = () =>{
                 submit.verdict.time,
                 submit.verdict.memory,
             ]))
-            setData(datas)
+            setData(datas);
         }   
     }
 
@@ -43,7 +41,7 @@ const ProblemList = () =>{
             ]}
             datas={datas}
         />
-    )
+    )   
 }
 
 export default ProblemList;
