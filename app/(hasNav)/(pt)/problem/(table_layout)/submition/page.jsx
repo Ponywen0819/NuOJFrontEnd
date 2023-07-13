@@ -40,6 +40,7 @@ const ProblemList = () =>{
                 {lable: "時長", type: "sec"}
             ]}
             datas={datas}
+            line_per_page={10}
         />
     )   
 }
