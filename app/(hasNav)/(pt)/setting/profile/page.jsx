@@ -149,11 +149,11 @@ const ImgForm = ({imgSrc, callback}) => {
     }
 
     return(
-        <div className='w-full h-full fixed bg-black/[.3] top-0 left-0 flex justify-center'>
+        <div className='fixed bg-black/[.3] inset-0 flex justify-center z-10 overflow-y-auto py-5'>
             <div className='max-w-xl w-1/2 my-auto shadow-2xl rounded-lg bg-white border-2 p-5 '>
                 <div className='w-full'>
                     <button className='ml-auto w-5 h-5 block'>
-                        <img src={img_x.src} className='w-5 h-5' onClick={()=>callback(false)}/>
+                        <img src={img_x.src} alt="" className='w-5 h-5' onClick={()=>callback(false)}/>
                     </button>
                 </div>
                 <div className='border-b-2 pb-2 mb-2'>
@@ -210,7 +210,8 @@ const SetProfile = () =>{
     };
 
     return(
-        <div className='shadow-2xl rounded-lg bg-white my-5 border-2 p-5'>
+        <>
+        <div className='shadow-2xl rounded-lg bg-white border-2 p-3'>
             <div className='border-b-2 pb-2 mb-2'>
                 <p className='pl-2 text-2xl font-medium'>設定個人資料</p>
             </div>
@@ -228,11 +229,13 @@ const SetProfile = () =>{
                     </div>
                 </div>
             </div>
-            {
-                imgpop && <ImgForm callback={setPop} imgSrc={imgSrc}></ImgForm>
-            }
+            
             <ProfileForm infos={info} callback={setInfo}/>
         </div>
+        {
+            imgpop && <ImgForm callback={setPop} imgSrc={imgSrc}></ImgForm>
+        }
+        </>
     )
 }
 

@@ -15,7 +15,7 @@ export default function SettingLayout({ children }) {
         <RequireAuth>
             <div className='mx-auto max-w-5xl flex'>
                 <SettingNav links={links} />
-                <section className='grow p-2'>
+                <section className='grow px-3'>
                     {children}
                 </section>
             </div>
