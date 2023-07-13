@@ -1,5 +1,6 @@
 
 import logo_min from '@/public/logo_min.png';
+import Image from 'next/image';
 
 export default function TableLayout({ children }) {
     const links = [
@@ -7,11 +8,15 @@ export default function TableLayout({ children }) {
     ]
 
     return (
-            <div className='flex'>   
-                {children}
-                <aside className="w-[20%] m-5  p-5 h-full bg-white rounded-xl">
-                    <img className="w-[50%] mx-auto" src={logo_min.src}/>
-                    <p className="text-2xl text-center p-5"> NuOJ Lab </p>
+            <div className='flex'>
+                <div className='w-4/5 px-3'>
+                    {children}
+                </div>
+                <aside className="w-[20%] px-3">
+                    <div className='bg-white h-full rounded-xl p-3'>
+                        <Image width={128} height={128} alt='' className="mx-auto" src={logo_min}/>
+                        <p className="text-2xl text-center p-5"> NuOJ Lab </p>
+                    </div>
                 </aside>
             </div>
     );

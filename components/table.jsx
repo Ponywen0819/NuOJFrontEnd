@@ -40,7 +40,7 @@ export const Table = ({cols, datas})=>{
     let norma_cols = normalizeCol(cols);
 
     return (datas)?(
-        <div className="w-4/5 m-5">
+        <div className="w-full">
             <table className="relative rounded-lg overflow-hidden w-full text-lg text-black text-center relative whitespace-nowrap leading-normal">
                 <thead className="bg-orange-200">
                     <tr className="">

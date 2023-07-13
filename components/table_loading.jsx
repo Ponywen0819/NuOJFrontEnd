@@ -6,7 +6,7 @@ export const TableLoading = ({len})=>{
     console.log(array, len)
 
     return(
-        <div className="w-4/5 m-5 h-48 bg-white rounded-lg">
+        <div className="w-full h-48 bg-white rounded-lg">
             <Loading></Loading>
         </div>
     )
