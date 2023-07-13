@@ -1,5 +1,10 @@
 import logo_min from "@/public/logo_min.png"
+import pony from '@/public/pony.jpg';
+import roy from '@/public/roy.jpg';
+import uriah from '@/public/uriah.jpg';
+
 import Link from 'next/link'
+import Image from 'next/image';
 
 import './about.css';
 
@@ -9,19 +14,22 @@ const About = () =>{
         {
             name: "黃漢軒",
             edu: "國立臺北科技大學 109 級資訊工程系",
-            img_url: "https://ntut-xuan.github.io/src/image/uriah2.jpg",
+            // img: "https://ntut-xuan.github.io/src/image/uriah2.jpg",
+            img : uriah,
             dutys:[ "System Design", "Backend Design", "Database Design", "Research and Development" ]
         },
         {
             name: "吳秉宸",
             edu: "國立臺北科技大學 109 級資訊工程系",
-            img_url: "https://cdn.discordapp.com/attachments/982659073017278527/996374011548274758/233D9288-77FC-43D9-B0D4-1ED24AB5A4C3.JPG",
+            // img: "https://cdn.discordapp.com/attachments/982659073017278527/996374011548274758/233D9288-77FC-43D9-B0D4-1ED24AB5A4C3.JPG",
+            img: roy,
             dutys:[ "Cyber Security", "Linux Engineer", "Research and Development" ]
         },
         {
             name: "溫紹傑",
             edu: "國立臺北科技大學 109 級資訊工程系",
-            img_url: "https://cdn.discordapp.com/attachments/982659073017278527/996384235315277885/IMG_8469.JPG",
+            // img: "https://cdn.discordapp.com/attachments/982659073017278527/996384235315277885/IMG_8469.JPG",
+            img: pony,
             dutys:[ "Frontend Design" ]
         }
     ]
@@ -39,7 +47,7 @@ const About = () =>{
                     {profiles.map((profile, profile_i)=>(
                         <div className="profile-container" key={profile_i}>
                             <div className="text-center">
-                                <img className="object-contain h-48 w-48 mx-auto" src={profile.img_url}/>
+                                <Image className="object-contain h-48 w-48 mx-auto" src={profile.img}/>
                             </div>
                             <div className="py-5">
                                 <p className="text-2xl"> {profile.name} </p>
