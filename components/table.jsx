@@ -39,7 +39,7 @@ const normalizeCol = (cols)=>{
 export const Table = ({cols, datas})=>{
     let norma_cols = normalizeCol(cols);
 
-    return(
+    return (datas)?(
         <div className="w-4/5 m-5">
             <table className="relative rounded-lg overflow-hidden w-full text-lg text-black text-center relative whitespace-nowrap leading-normal">
                 <thead className="bg-orange-200">
@@ -51,7 +51,7 @@ export const Table = ({cols, datas})=>{
                 </thead>
                 <tbody className="">
                     {
-                        datas? (datas.map((data, index)=>(
+                        (datas?.map((data, index)=>(
                             <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
                             {
                                 data.map((col, index)=>(
@@ -59,11 +59,12 @@ export const Table = ({cols, datas})=>{
                                 ))
                             }
                             </tr>
-                        // <Row data={data} conf={norma_cols} key={`${data[0]}:${index}`}/>)
-                        ))):<TableLoading/>
+                        )))
                     }
                 </tbody>
             </table>
         </div>
+    ):(
+        <TableLoading></TableLoading>
     )
 }
