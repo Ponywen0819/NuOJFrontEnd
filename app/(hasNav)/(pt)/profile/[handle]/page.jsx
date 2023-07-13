@@ -77,7 +77,7 @@ const Profile = ({params})=>{
     }
     else{
         return (<Loading></Loading>)
-    }
+    }   
 }
 
 export default Profile;

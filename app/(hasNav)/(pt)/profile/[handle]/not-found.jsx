@@ -1,8 +1,6 @@
 const ProfileNotFound = ()=>{
     return(
-        <div>
-            not-found
-        </div>
+        <p>not-found</p>
     )
 }
 

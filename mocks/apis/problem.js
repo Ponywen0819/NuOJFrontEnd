@@ -46,7 +46,7 @@ const fake_problems = [
 
 export const problem = [
   rest.get(`${HOST}/api/problem`, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(fake_problems));
+    return res(ctx.status(200), ctx.delay(1000), ctx.json(fake_problems));
   }),
 
   rest.get(`${HOST}/api/problem/:id`, (req, res, ctx) => {
