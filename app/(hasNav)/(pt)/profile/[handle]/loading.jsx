@@ -2,9 +2,9 @@ import "./profile.css"
 
 const ProfileLoading = ()=>{
     return(
-        <div className="w-full">
-            <div className="mx-auto w-fit h-full flex">
-                <div className="lds-spinner my-12">
+        <div className="w-full h-48">
+            <div className="mx-auto w-fit h-full flex flex-col justify-center">
+                <div className="lds-spinner">
                     <div/>
                     <div/>
                     <div/>
