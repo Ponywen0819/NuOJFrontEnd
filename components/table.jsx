@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
+
 import { Data }from '@/components/table_type';
 import { TableLoading } from '@/components/table_loading';
+import { Seleter } from "@/components/table_selecter";
+import { useState } from "react";
 
 const Header = ({width, lable = ''})=>{
     return(
@@ -36,34 +39,45 @@ const normalizeCol = (cols)=>{
 
 }
 
-export const Table = ({cols, datas})=>{
+export const Table = ({cols, datas, line_per_page})=>{
     let norma_cols = normalizeCol(cols);
+    const [index, setIndex] = useState(0);
+
+    const selectPage = (page) =>{
+        console.log(page, index)
+        if(page !== index){
+            setIndex(page);
+        }
+    }
 
     return (datas)?(
-        <div className="w-full">
-            <table className="relative rounded-lg overflow-hidden w-full text-lg text-black text-center relative whitespace-nowrap leading-normal">
-                <thead className="bg-orange-200">
-                    <tr className="">
-                        {
-                            norma_cols.map((col)=>Header({...col}))
-                        }   
-                    </tr>
-                </thead>
-                <tbody className="">
-                    {
-                        (datas?.map((data, index)=>(
-                            <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
+        <>
+            <div className="w-full rounded-lg overflow-hidden border-2">
+                <table className="relative  w-full text-lg border-0 text-black text-center whitespace-nowrap leading-normal">
+                    <thead className="bg-orange-200">
+                        <tr className="">
                             {
-                                data.map((col, index)=>(
-                                    <Data conf={norma_cols[index]} data={col} key={`${data[0]}:${index}`}/>
-                                ))
-                            }
-                            </tr>
-                        )))
-                    }
-                </tbody>
-            </table>
-        </div>
+                                norma_cols.map((col)=>Header({...col}))
+                            }   
+                        </tr>
+                    </thead>
+                    <tbody className="">
+                        {
+                            (datas.slice(index, index+line_per_page)?.map((data, index)=>(
+                                <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
+                                {
+                                    data.map((col, index)=>(
+                                        <Data conf={norma_cols[index]} data={col} key={`${data[0]}:${index}`}/>
+                                    ))
+                                }
+                                </tr>
+                            )))
+                        }
+                    </tbody>
+                </table> 
+            </div>
+            <Seleter index={index}  max={Math.ceil((datas.length) / line_per_page)} setpage={selectPage}/>
+        </>
     ):(
         <TableLoading></TableLoading>
     )

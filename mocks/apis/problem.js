@@ -1,48 +1,32 @@
 import { rest } from "msw";
 import { HOST } from "@/setting";
 
-const fake_problems = [
-  {
-    id: 1231,
+const fake_problems = [];
+let problemcount = 30;
+let id = 1234;
+while (problemcount--) {
+  fake_problems.push({
+    id: id,
     data: {
       content: {
-        title: "第一題拉",
-        description: "用來模擬的第一題拉",
-        input_description: "用來模擬的第一題拉",
-        output_description: "用來模擬的第一題拉",
-        note: "用來模擬的第一題拉",
+        title: `第${id}題拉`,
+        description: `用來模擬的第${id}題拉`,
+        input_description: `用來模擬的第${id}題拉`,
+        output_description: `用來模擬的第${id}題拉`,
+        note: `用來模擬的第${id}題拉`,
       },
       setting: {
-        time_limit: "first time limit",
-        memory_limit: "first mem limit",
+        time_limit: `用來模擬的第${id}題拉`,
+        memory_limit: `用來模擬的第${id}題拉`,
       },
       author: {
         user_uid: "some_uuid",
         handle: "pony",
       },
     },
-  },
-  {
-    id: 1232,
-    data: {
-      content: {
-        title: "第二題拉",
-        description: "用來模擬的第二題拉",
-        input_description: "用來模擬的第二題拉",
-        output_description: "用來模擬\n的第二題拉",
-        note: "用來模擬的第二題拉",
-      },
-      setting: {
-        time_limit: "second time limit",
-        memory_limit: "second mem limit",
-      },
-      author: {
-        user_uid: "some_uuid2",
-        handle: "ponycome",
-      },
-    },
-  },
-];
+  });
+  id++;
+}
 
 export const problem = [
   rest.get(`${HOST}/api/problem`, (req, res, ctx) => {

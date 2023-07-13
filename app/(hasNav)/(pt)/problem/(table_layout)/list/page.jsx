@@ -38,6 +38,7 @@ const ProblemList = () =>{
                 {lable: "題目標籤"}
             ]}
             datas={datas}
+            line_per_page={10}
         />
     )
 }
