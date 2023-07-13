@@ -4,6 +4,7 @@ import { HOST } from '@/setting';
 import { useContext, useEffect, useState } from 'react';
 import { auth_context } from '@/contexts/auth';
 import { error_swal, success_swal } from '@/components/notification';
+import Loading from '../loading';
 import img_x from './x.svg'
 
 const Input = ({val, title, callback})=>{
@@ -173,70 +174,62 @@ const ImgForm = ({imgSrc, callback}) => {
 
 const SetProfile = () =>{
     const auth = useContext(auth_context);
-    const user = auth.getUser();
-    const handle = user.handle;
-    const [info, setInfo] = useState({school:'', email: "",role: 0, bio: "" });
+    const handle = auth.getUser().handle;
     const [imgpop, setPop] = useState(false);
-    const [imgSrc, setSrc] = useState(null);
+    const [profile, setProfile] = useState(null);
 
     useEffect(()=>{
-        getUserInfo();
-        getImgSrc();
-    },[])
+        getInfo();
+    },[]);
 
-    const getUserInfo = async () => {
-        let res = await fetch(`${HOST}/api/profile/${handle}`, {
-          method: "GET",
-        });
-        if (res.ok) {
-          let json = await res.json();
-          setInfo(json);
-        }
-      };
-      
-    const getImgSrc = async () => {
-        let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
-            method: "GET",
-        });
-        if (res.ok) {
-            let blob = await res.blob();
-            let reader = new FileReader();
-            reader.onloadend = function () {
-                let base64data = reader.result;
-                setSrc(base64data);
-            };
-            reader.readAsDataURL(blob);
-        }
-    };
+    const getInfo = async () =>{
+        const info_res = await fetch(`${HOST}/api/profile/${handle}`);
+        if(info_res.ok) {
+            const profile = await info_res.json();
+            setProfile(profile);
 
-    return(
+            const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
+            if(img_res.ok){
+                const buffer = await img_res.blob(); 
+                const reader = new FileReader();
+                reader.onload = () =>{
+                    const base64 = reader.result;
+                    setProfile((old)=>({...old, img: base64, handle: handle}));
+                }
+                reader.readAsDataURL(buffer);
+            }
+        }
+        else{
+            setProfile(null)
+        }
+    }
+
+    return (profile)?
+    (
         <>
-        <div className='shadow-2xl rounded-lg bg-white border-2 p-3'>
             <div className='border-b-2 pb-2 mb-2'>
                 <p className='pl-2 text-2xl font-medium'>設定個人資料</p>
             </div>
             <div className='flex'>
                 <div className='mr-4'>
-                    <img className='w-52 h-52 object-cover rounded-full border-2' src={imgSrc}/>
+                    <img className='w-52 h-52 object-cover rounded-full border-2' src={profile.img}/>
                 </div>
                 <div className="grow flex flex-col justify-between py-5">
                     <div>
-                        <p className="text-base text-slate-400 ">{(info.role === 1)? "管理員" : "使用者"}</p>
-                        <p className="w-full text-center text-5xl font-medium text-black-700">{ user.handle }</p>
+                        <p className="text-base text-slate-400 ">{(profile.role === 1)? "管理員" : "使用者"}</p>
+                        <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
                     </div>
                     <div>
                         <button className='bg-orange-500 text-white p-2 rounded-lg' onClick={()=>setPop(true)}>上傳新大頭貼</button>
                     </div>
                 </div>
             </div>
-            
-            <ProfileForm infos={info} callback={setInfo}/>
-        </div>
-        {
-            imgpop && <ImgForm callback={setPop} imgSrc={imgSrc}></ImgForm>
-        }
+            <ProfileForm infos={profile} callback={setProfile}/>
+            {
+                imgpop && <ImgForm callback={setPop} imgSrc={profile.img}></ImgForm>
+            }
         </>
-    )
+    ):(<Loading></Loading>)
 }
 
 export default SetProfile;

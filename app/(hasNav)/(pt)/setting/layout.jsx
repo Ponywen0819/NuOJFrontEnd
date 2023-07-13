@@ -13,10 +13,12 @@ export default function SettingLayout({ children }) {
 
     return (
         <RequireAuth>
-            <div className='mx-auto max-w-5xl flex'>
+            <div className='mx-auto max-w-5xl flex '>
                 <SettingNav links={links} />
                 <section className='grow px-3'>
-                    {children}
+                    <div className='shadow-2xl rounded-lg bg-white border-2 p-3'>
+                        {children}
+                    </div>
                 </section>
             </div>
         </RequireAuth>
