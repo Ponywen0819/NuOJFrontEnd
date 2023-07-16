@@ -31,7 +31,7 @@ const UserDropDown = ({handle}) =>{
 
     const drops = [
         {title: "個人檔案", to: profile_url},
-        {title: "設定", to: "/setting"},
+        // {title: "設定", to: "/setting"},
     ]
 
     let element_class = "text-black border-b-2 border-white border-opacity-0 duration-500 hover:border-black hover:border-opacity-100 text-left"

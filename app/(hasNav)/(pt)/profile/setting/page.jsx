@@ -4,8 +4,8 @@ import { HOST } from '@/setting';
 import { useContext, useEffect, useState } from 'react';
 import { auth_context } from '@/contexts/auth';
 import { error_swal, success_swal } from '@/components/notification';
+import { useRouter } from 'next/navigation';
 import Loading from '../loading';
-import img_x from './x.svg'
 
 const Input = ({val, title, callback})=>{
     return(
@@ -23,9 +23,9 @@ const Input = ({val, title, callback})=>{
 const ProfileForm = ({infos, callback}) => {
     const auth = useContext(auth_context);
     const user = auth.getUser();
+    const router = useRouter();
 
     const [vals, setVal] = useState({});
-    const [isChange, setChange] = useState(false);
 
      const cols = [
         {key: "school", title: "學校", type: "text"},
@@ -74,7 +74,7 @@ const ProfileForm = ({infos, callback}) => {
     }
 
     return(
-        <div className='flex flex-col py-2'>
+        <div className='grow py-2 h-max'>
             {
                 cols.map((col)=>(
                     <Input 
@@ -85,20 +85,16 @@ const ProfileForm = ({infos, callback}) => {
                     />
                 ))
             }
-            {
-                isChange && (
-                    <div className='mx-auto'>
-                        <button 
-                            className='bg-orange-500 text-white p-2 rounded-lg mx-3'
-                            onClick={()=>handleProfileUpdate(vals)}
-                        >確認更改</button>
-                        <button 
-                            className='bg-gray-400 text-white p-2 rounded-lg mx-3' 
-                            onClick={restoreBackup}
-                        >取消</button>
-                    </div>
-                )
-            }
+            <div className='mx-auto w-fit'>
+                <button 
+                    className='bg-orange-500 text-white p-2 rounded-lg mx-3'
+                    onClick={()=>handleProfileUpdate(vals)}
+                >確認更改</button>
+                <button
+                    className='bg-gray-400 text-white p-2 rounded-lg mx-3' 
+                    onClick={()=>{router.push(`/profile/${user.handle}`)}}
+                >取消</button>
+            </div>
         </div>
     )
 }
@@ -153,8 +149,10 @@ const ImgForm = ({imgSrc, callback}) => {
         <div className='fixed bg-black/[.3] inset-0 flex justify-center z-10 overflow-y-auto py-5'>
             <div className='max-w-xl w-1/2 my-auto shadow-2xl rounded-lg bg-white border-2 p-5 '>
                 <div className='w-full'>
-                    <button className='ml-auto w-5 h-5 block'>
-                        <img src={img_x.src} alt="" className='w-5 h-5' onClick={()=>callback(false)}/>
+                    <button className='ml-auto w-5 h-5 block' onClick={()=>callback(false)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
                     </button>
                 </div>
                 <div className='border-b-2 pb-2 mb-2'>
@@ -207,27 +205,30 @@ const SetProfile = () =>{
     return (profile)?
     (
         <>
-            <div className='border-b-2 pb-2 mb-2'>
-                <p className='pl-2 text-2xl font-medium'>設定個人資料</p>
-            </div>
-            <div className='flex'>
-                <div className='mr-4'>
-                    <img className='w-52 h-52 object-cover rounded-full border-2' src={profile.img}/>
-                </div>
-                <div className="grow flex flex-col justify-between py-5">
-                    <div>
-                        <p className="text-base text-slate-400 ">{(profile.role === 1)? "管理員" : "使用者"}</p>
-                        <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
+            <div className='w-full'>
+                <p className='pl-2 text-2xl font-medium mb-2'>設定個人資料</p>
+                <div className='flex'>
+                    <div className='w-64'>
+                        <div className='w-52 h-52 mx-auto relative'>
+                            <img className='w-52 h-52 object-cover rounded-full border-2' src={profile.img}/>
+                            <button className='absolute mb-5 mr-5 bottom-0 right-0 bg-black p-2 rounded-lg text-white' onClick={()=>setPop(true)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                                </svg>
+                            </button>    
+                        </div>
+                        
+                        <div className='my-5'>
+                            <p className="text-base text-slate-400 ">{(profile.role === 1)? "管理員" : "使用者"}</p>
+                            <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
+                        </div>
                     </div>
-                    <div>
-                        <button className='bg-orange-500 text-white p-2 rounded-lg' onClick={()=>setPop(true)}>上傳新大頭貼</button>
-                    </div>
+                    <ProfileForm infos={profile} callback={setProfile}/>
                 </div>
-            </div>
-            <ProfileForm infos={profile} callback={setProfile}/>
-            {
+                {
                 imgpop && <ImgForm callback={setPop} imgSrc={profile.img}></ImgForm>
             }
+            </div>
         </>
     ):(<Loading></Loading>)
 }

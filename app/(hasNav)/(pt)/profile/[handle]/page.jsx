@@ -1,12 +1,17 @@
 "use client";
 
 import { HOST } from "@/setting";
-import Loading from './loading';
+import Loading from '../loading';
 import NotFound from './not-found';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { auth_context } from '@/contexts/auth';
+import { useRouter, usePathname } from 'next/navigation';
 // import { useState, useEffect } from 'react';
 
-const Info = ({ info }) => {
+const Info = ({ info, handle }) => {
+    const router = useRouter();
+    const auth_handle = useContext(auth_context).getUser().handle;;
+
     const subtitles = [
         { key: "school", title: "學校" },
         { key: "email", title: "電子信箱" },
@@ -16,7 +21,13 @@ const Info = ({ info }) => {
     return(
         <>
             <div className="mr-2 border-r-0 pr-2">
-                <img className={`w-52 h-52 object-cover rounded-full border-2`} src={info.img}/>
+                <img className={`w-52 h-52 object-cover rounded-full border-2 mb-2`} src={info.img}/>
+                {
+
+                    (auth_handle === handle) && <button 
+                        onClick={()=>router.replace("/profile/setting")}
+                        className="rounded-lg py-1 mx-auto w-fit px-2 block text-lg text-slate-400 border-2">設定個人檔案</button>
+                }
             </div>
             <div className="grow">
                 <div className="mb-2 border-b-2 pb-2">
@@ -36,9 +47,8 @@ const Info = ({ info }) => {
     )
 }
 
-
 const Profile = ({params})=>{
-    const handle = params.handle;
+    const handle = params.handle
 
     const [loaded, setLoaded] = useState(false);
     const [profile, setProfile] = useState(null);
@@ -70,7 +80,7 @@ const Profile = ({params})=>{
         setLoaded(true);
     }
     if( loaded && profile){
-        return (<Info info={profile}></Info>)
+        return (<Info info={profile} handle={handle}></Info>)
     }
     else if(loaded && !profile){
         return (<NotFound></NotFound>)

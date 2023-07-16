@@ -1,7 +1,3 @@
-import Link from 'next/link';
-import LogoMin from '@/public/logo_min.png'
-import Image from 'next/image';
-
 const ProfileNotFound = ()=>{
     return(
         <div className="text-center mx-auto h-48 flex flex-col justify-center">
