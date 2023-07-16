@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { HOST } from "@/setting";
+import { navigate_context } from "@/contexts/navigate";
+import { Loading } from "@/components/loading";
 
 export const auth_context = createContext(null);
 
@@ -83,8 +85,12 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const RequireAuth = ({ children, loadingElement = <p>loading</p> }) => {
+export const RequireAuth = ({
+  children,
+  loadingElement = <Loading></Loading>,
+}) => {
   const auth = useContext(auth_context);
+  const navigate = useContext(navigate_context);
   const user = auth.getUser();
   const location = usePathname();
   const router = useRouter();
@@ -94,6 +100,7 @@ export const RequireAuth = ({ children, loadingElement = <p>loading</p> }) => {
   } else if (user.state === -1) {
     return loadingElement;
   } else {
+    navigate.record(location);
     router.replace("/auth/login");
   }
 };

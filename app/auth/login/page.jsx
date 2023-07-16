@@ -11,14 +11,14 @@ import {success_swal, error_swal, show_mail_confirm_swal } from '@/components/no
 const Login = ()=>{
     const color = useContext(color_context);
     const auth = useContext(auth_context);
-    const from = useContext(navigate_context); 
+    const navigate = useContext(navigate_context); 
     const router = useRouter();
 
     const handleLogin = async (info) => {
         let StateCode = await auth.signin(info);
         if(StateCode === 200) {
             success_swal("登入成功").then(()=>{
-                const url = from.get() || "/";
+                const url = navigate.get() || "/";
                 router.push(url);
             });
         }
