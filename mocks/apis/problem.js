@@ -2,7 +2,7 @@ import { rest } from "msw";
 import { HOST } from "@/setting";
 
 const fake_problems = [];
-let problemcount = 30;
+let problemcount = 25;
 let id = 1234;
 while (problemcount--) {
   fake_problems.push({

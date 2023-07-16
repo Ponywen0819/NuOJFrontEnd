@@ -49,6 +49,7 @@ export const Table = ({cols, datas, line_per_page})=>{
             setIndex(page);
         }
     }
+    const offset = index * line_per_page;
 
     return (datas)?(
         <>
@@ -63,7 +64,7 @@ export const Table = ({cols, datas, line_per_page})=>{
                     </thead>
                     <tbody className="">
                         {
-                            (datas.slice(index, index+line_per_page)?.map((data, index)=>(
+                            (datas.slice(offset , offset+line_per_page)?.map((data, index)=>(
                                 <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
                                 {
                                     data.map((col, index)=>(
