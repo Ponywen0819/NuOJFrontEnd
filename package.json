@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "mathjax-full": "^3.2.2",
+    "mathjax-react": "^2.0.1",
     "msw": "^1.2.2",
     "next": "^13.4.8",
     "react": "^18.2.0",

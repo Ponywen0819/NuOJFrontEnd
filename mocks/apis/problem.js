@@ -10,9 +10,9 @@ while (problemcount--) {
     data: {
       content: {
         title: `第${id}題拉`,
-        description: `用來模擬的第${id}題拉`,
-        input_description: `用來模擬的第${id}題拉`,
-        output_description: `用來模擬的第${id}題拉`,
+        description: `$\\frac{1}{2}$用來模擬的第${id}題拉`,
+        input_description: `用來模擬的第${id}題拉 $\\frac{1}{2}$`,
+        output_description: `用來模擬 $\\frac{1}{2}$ 的第${id}題拉`,
         note: `用來模擬的第${id}題拉`,
       },
       setting: {
