@@ -56,7 +56,7 @@ const User = () =>{
 
     let element_class = "text-white text-2xl border-b-2 border-white border-opacity-0 duration-500 hover:border-white hover:border-opacity-100"
     return(
-        <div className="flex gap-20 items-center min-h-[7vh] justify-end w-[20%]">
+        <div className="flex gap-20 items-center justify-end w-fit">
             {
                 (user.state === 1)?(
                     <div onMouseEnter={()=>setDrop(true)} onMouseLeave={()=>setDrop(false)} className="relative">
