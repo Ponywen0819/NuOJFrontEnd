@@ -1,6 +1,5 @@
-import { AuthProvider } from "@/contexts/auth";
 import { MockProvider } from '@/mocks/provider';
-import { NavigateProvider } from '@/contexts/navigate';
+import { Providers } from '@/contexts/root';
 
 import LogoWhite from '@/public/logo-white.svg';
 
@@ -21,16 +20,19 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const enable = process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
+
   return (
     <html lang="en">
       <body className="w-full bg-gray-100 bg-opacity-80 min-h-screen">
-        <MockProvider>
-          <NavigateProvider>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </NavigateProvider>
-        </MockProvider>
+        {
+          enable? 
+            <MockProvider>
+              <Providers>{children}</Providers>
+            </MockProvider>:
+            <Providers>{children}</Providers>
+        }
+        
       </body>
     </html>
   );
