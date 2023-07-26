@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { Table } from '@/components/table';
+import { SlideFade } from '@chakra-ui/react';
 import { HOST } from '@/setting';
+import { Loading } from '@/components/loading';
 
 
 const ProblemList = () =>{
     const [datas, setData] = useState(null);
-
     useEffect(()=>{getList()},[])
 
     const getList = async ()=>{
@@ -29,19 +30,22 @@ const ProblemList = () =>{
     }
 
     return(
-        <Table
-            cols={[
-                {lable: "提交 ID", width: 10},
-                {lable: "題目名稱", width: 20},
-                {lable: "提交人", type: "link"},
-                {lable: "提交時間", type: "time"},
-                {lable: "狀態", type: "status"},
-                {lable: "記憶體", type: "mem"},
-                {lable: "時長", type: "sec"}
-            ]}
-            datas={datas}
-            line_per_page={10}
-        />
+        (datas)?(
+            <SlideFade in={datas} reverse={true} unmountOnExit={true}>
+                <Table
+                    cols={[
+                        {lable: "提交 ID", width: 10},
+                        {lable: "題目名稱", width: 20},
+                        {lable: "提交人", type: "link"},
+                        {lable: "提交時間", type: "time"},
+                        {lable: "狀態", type: "status"},
+                        {lable: "記憶體", type: "mem"},
+                        {lable: "時長", type: "sec"}
+                    ]}
+                    datas={datas}
+                    line_per_page={10}
+                />
+            </SlideFade>):(<Loading/>)
     )   
 }
 

@@ -51,7 +51,7 @@ export const Table = ({cols, datas, line_per_page})=>{
     }
     const offset = index * line_per_page;
 
-    return (datas)?(
+    return(
         <>
             <div className="w-full rounded-lg overflow-hidden border-2">
                 <table className="relative  w-full text-lg border-0 text-black text-center whitespace-nowrap leading-normal">
@@ -64,7 +64,7 @@ export const Table = ({cols, datas, line_per_page})=>{
                     </thead>
                     <tbody className="">
                         {
-                            (datas.slice(offset , offset+line_per_page)?.map((data, index)=>(
+                            datas && (datas.slice(offset , offset+line_per_page)?.map((data, index)=>(
                                 <tr className="hover:bg-slate-100 border bg-white" key={`${data[0]}:${index}`}>
                                 {
                                     data.map((col, index)=>(
@@ -77,9 +77,6 @@ export const Table = ({cols, datas, line_per_page})=>{
                     </tbody>
                 </table> 
             </div>
-            <Seleter index={index}  max={Math.ceil((datas.length) / line_per_page)} setpage={selectPage}/>
-        </>
-    ):(
-        <TableLoading></TableLoading>
-    )
+        <Seleter index={index}  max={datas? Math.ceil((datas.length) / line_per_page) : 1} setpage={selectPage}/>
+    </>);
 }
