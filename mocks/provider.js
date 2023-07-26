@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 async function initMocks() {
   const { worker } = await import("./browser");
@@ -9,15 +9,10 @@ async function initMocks() {
 
 export const MockProvider = ({ children }) => {
   const [loaded, setLoad] = useState(false);
-  const enable = process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
 
   useEffect(() => {
-    if (enable) {
-      initMocks().then(() => setLoad(true));
-    }
+    initMocks().then(() => setLoad(true));
   }, []);
 
-  return !enable || loaded ? children : "";
+  return loaded ? children : "";
 };
-
-export {};
