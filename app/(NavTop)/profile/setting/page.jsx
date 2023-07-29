@@ -11,10 +11,10 @@ import Loading from '../loading';
 
 const Input = ({val, title, callback})=>{
     return(
-        <div className='flex py-5'>
-            <p className='w-32 text-base text-slate-400 '>{title}</p>
+        <div className='flex py-2'>
+            <p className='w-24 text-base text-slate-400 '>{title}</p>
             <textarea 
-                className='w-full p-2 border-2 rounded-lg' 
+                className='grow p-2 border-2 rounded-lg min-h-[64px]' 
                 value={val}
                 onChange={(e)=>{ callback(e.target.value) }}
             />
@@ -76,7 +76,8 @@ const ProfileForm = ({infos, callback}) => {
     }
 
     return(
-        <div className='grow py-2 h-max'>
+        <div className='grow py-2 flex flex-col justify-between'>
+            <div>
             {
                 cols.map((col)=>(
                     <Input 
@@ -87,6 +88,7 @@ const ProfileForm = ({infos, callback}) => {
                     />
                 ))
             }
+            </div>
             <div className='mx-auto w-fit'>
                 <button 
                     className='bg-orange-500 text-white p-2 rounded-lg mx-3'
