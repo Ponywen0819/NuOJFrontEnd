@@ -24,11 +24,14 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="w-full bg-gray-100 bg-opacity-80 min-h-screen">
+      <body className="bg-gray-100 bg-opacity-80 min-h-screen">
+      {/* <body className="min-h-screen"> */}
         {
           enable? 
             <MockProvider>
-              <Providers>{children}</Providers>
+              <Providers>
+                  {children}
+              </Providers>
             </MockProvider>:
             <Providers>{children}</Providers>
         }

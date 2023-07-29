@@ -204,30 +204,34 @@ const SetProfile = () =>{
         }
     }
 
-    return (profile)?
-    (
-        <>
-            <div className='w-full'>
-                <p className='pl-2 text-2xl font-medium mb-2'>設定個人資料</p>
-                <div className='flex'>
-                    <div className='w-64'>
-                        <div className='w-52 h-52 mx-auto relative'>
-                            <img className='w-52 h-52 object-cover rounded-full border-2' src={profile.img}/>
-                            <button className='absolute bottom-3 right-3 bg-black w-10 h-10 rounded-full text-white' onClick={()=>setPop(true)}>
-                                <EditIcon mx={'auto'}/>
-                            </button>
+    return(
+        <>  
+            <ScaleFade in={profile} unmountOnExit={true}>
+                <div className="flex p-5 shadow-2xl rounded-lg bg-white border-2">
+                    <div className='w-full'>
+                        <p className='pl-2 text-2xl font-medium mb-2'>設定個人資料</p>
+                        <div className='flex'>
+                            <div className='w-64'>
+                                <div className='w-52 h-52 mx-auto relative'>
+                                    <img className='w-52 h-52 object-cover rounded-full border-2' src={profile?.img}/>
+                                    <button className='absolute bottom-3 right-3 bg-black w-10 h-10 rounded-full text-white' onClick={()=>setPop(true)}>
+                                        <EditIcon mx={'auto'}/>
+                                    </button>
+                                </div>
+                                <div className='my-5'>
+                                    <p className="text-base text-slate-400 ">{(profile?.role === 1)? "管理員" : "使用者"}</p>
+                                    <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
+                                </div>
+                            </div>
+                            <ProfileForm infos={profile} callback={setProfile}/>
                         </div>
-                        <div className='my-5'>
-                            <p className="text-base text-slate-400 ">{(profile.role === 1)? "管理員" : "使用者"}</p>
-                            <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
-                        </div>
+                        <ImgForm callback={setPop} imgSrc={profile?.img} display={imgpop}/>
                     </div>
-                    <ProfileForm infos={profile} callback={setProfile}/>
                 </div>
-                <ImgForm callback={setPop} imgSrc={profile.img} display={imgpop}/>
-            </div>
+            </ScaleFade>
+            {(profile)?"":(<Loading/>)}
         </>
-    ):(<Loading></Loading>)
+    )
 }
 
 export default SetProfile;

@@ -9,7 +9,7 @@ while (problemcount--) {
     id: id,
     data: {
       content: {
-        title: `第${id}題拉`,
+        title: `${parseInt(Math.random() * 100)}第${id}題拉`,
         description: `$\\frac{1}{2}$用來模擬的第${id}題拉`,
         input_description: `用來模擬的第${id}題拉 $\\frac{1}{2}$`,
         output_description: `用來模擬 $\\frac{1}{2}$ 的第${id}題拉`,
@@ -38,7 +38,7 @@ export const problem = [
     for (const problem of fake_problems) {
       console.log(problem);
       if (problem.id === id) {
-        return res(ctx.status(200), ctx.json(problem));
+        return res(ctx.status(200), ctx.delay(1000), ctx.json(problem));
       }
     }
 
