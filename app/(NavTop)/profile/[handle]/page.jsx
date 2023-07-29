@@ -1,7 +1,7 @@
 "use client";
 
 import { HOST } from "@/setting";
-import Loading from '../loading';
+import { Loading } from '@/components/loading';
 import NotFound from './not-found';
 import { useEffect, useState, useContext } from "react";
 import { auth_context } from '@/contexts/auth';
@@ -82,23 +82,13 @@ const Profile = ({params})=>{
     }
     return(
         <>
-            <ScaleFade in={loaded}>
-                <Info info={profile} handle={handle}></Info>
-                {(!profile ) && (<NotFound/>)}
+            <ScaleFade in={loaded} unmountOnExit={true}>
+                {profile?(<Info info={profile} handle={handle}/>):(<NotFound/>)}
             </ScaleFade>
             {( !loaded && !profile ) && (<Loading/>)}
         </>
         
     )
-    if( loaded && profile ){
-        return (<Info info={profile} handle={handle}></Info>)
-    }
-    else if( loaded && !profile ){
-        return (<NotFound></NotFound>)
-    }
-    else{
-        return (<Loading></Loading>)
-    }   
 }
 
 export default Profile;

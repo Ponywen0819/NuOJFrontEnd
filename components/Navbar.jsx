@@ -19,7 +19,9 @@ export const Navbar = ({ links })=>{
                     links && links.map((link)=>(<Link className={link_class} href={link.href}>{link.lable}</Link>))
                 }
             </div>
-            <User/>
+            <div className='flex'>
+                <User/>
+            </div>
         </nav>
     )
 }
