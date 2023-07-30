@@ -68,13 +68,6 @@ export const profile = [
   rest.put(`${HOST}/api/profile/:handle/avatar`, async (req, res, ctx) => {
     const handle = req.params.handle;
     if (handle === user_pony.handle) {
-      const text = await req.text();
-
-      const mime = req.headers.get("content-type");
-
-      user_pony.img.buff = imageBuffer;
-      user_pony.img.mime = mime;
-
       return res(ctx.status(200));
       // return req.passthrough();
     } else {

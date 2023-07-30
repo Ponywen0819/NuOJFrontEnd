@@ -24,7 +24,6 @@ const Info = ({ info, handle }) => {
             <div className="mr-2 border-r-0 pr-2">
                 <img className={`w-52 h-52 object-cover rounded-full border-2 mb-2`} src={info?.img}/>
                 {
-
                     (auth_handle === handle) && <button 
                         onClick={()=>router.replace("/profile/setting")}
                         className="rounded-lg py-1 mx-auto w-fit px-2 block text-lg text-slate-400 border-2">設定個人檔案</button>
