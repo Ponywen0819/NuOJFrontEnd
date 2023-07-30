@@ -13,10 +13,10 @@
     content: " ";
     display: block;
     position: absolute;
-    top: 3px;
-    left: 37px;
-    width: 6px;
-    height: 18px;
+    top: 0px;
+    left: 39px;
+    width: 2px;
+    height: 20px;
     border-radius: 20%;
     background: black;
   }

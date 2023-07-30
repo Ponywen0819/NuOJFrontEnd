@@ -3,13 +3,13 @@ import { OauthProvider } from '@/contexts/oauth';
 
 const AuthLayout = ({ children })=>{
     return(
-        <section className='min-h-screen'>
+        <main className='min-h-screen'>
             <OauthProvider>
                 <ColorProvider>
                     {children}
                 </ColorProvider>
             </OauthProvider>
-        </section>
+        </main>
     )
 }
 

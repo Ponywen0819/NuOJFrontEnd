@@ -1,11 +1,12 @@
 "use client";
 
 import { HOST } from "@/setting";
-import Loading from '../loading';
+import { Loading } from '@/components/loading';
 import NotFound from './not-found';
 import { useEffect, useState, useContext } from "react";
 import { auth_context } from '@/contexts/auth';
 import { useRouter, usePathname } from 'next/navigation';
+import { ScaleFade } from '@chakra-ui/react';
 // import { useState, useEffect } from 'react';
 
 const Info = ({ info, handle }) => {
@@ -19,11 +20,10 @@ const Info = ({ info, handle }) => {
     ];
 
     return(
-        <>
+        <div className="flex p-5 shadow-2xl rounded-lg bg-white border-2">
             <div className="mr-2 border-r-0 pr-2">
-                <img className={`w-52 h-52 object-cover rounded-full border-2 mb-2`} src={info.img}/>
+                <img className={`w-52 h-52 object-cover rounded-full border-2 mb-2`} src={info?.img}/>
                 {
-
                     (auth_handle === handle) && <button 
                         onClick={()=>router.replace("/profile/setting")}
                         className="rounded-lg py-1 mx-auto w-fit px-2 block text-lg text-slate-400 border-2">設定個人檔案</button>
@@ -31,11 +31,11 @@ const Info = ({ info, handle }) => {
             </div>
             <div className="grow">
                 <div className="mb-2 border-b-2 pb-2">
-                    <p className="text-base text-slate-400 ">{(info.role === 1)? "管理員" : "使用者"}</p>
-                    <p className="text-5xl font-medium text-black-700">{info.handle}</p>
+                    <p className="text-base text-slate-400 ">{(info?.role === 1)? "管理員" : "使用者"}</p>
+                    <p className="text-5xl font-medium text-black-700">{info?.handle}</p>
                 </div>
                 {
-                    subtitles.map((subtitle)=>(
+                    info && subtitles.map((subtitle)=>(
                         <div key={subtitle.key} className="pb-2">
                             <p className="text-sm text-slate-400 ">{subtitle.title}</p>
                             <p className="text-base text-slate-900 break-words">{info[subtitle.key]}</p>
@@ -43,7 +43,7 @@ const Info = ({ info, handle }) => {
                     ))
                 }
             </div>
-        </>
+        </div>
     )
 }
 
@@ -79,15 +79,15 @@ const Profile = ({params})=>{
         }
         setLoaded(true);
     }
-    if( loaded && profile){
-        return (<Info info={profile} handle={handle}></Info>)
-    }
-    else if(loaded && !profile){
-        return (<NotFound></NotFound>)
-    }
-    else{
-        return (<Loading></Loading>)
-    }   
+    return(
+        <>
+            <ScaleFade in={loaded} unmountOnExit={true}>
+                {profile?(<Info info={profile} handle={handle}/>):(<NotFound/>)}
+            </ScaleFade>
+            {( !loaded && !profile ) && (<Loading/>)}
+        </>
+        
+    )
 }
 
 export default Profile;
