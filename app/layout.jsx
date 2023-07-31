@@ -35,7 +35,6 @@ export default function RootLayout({ children }) {
             </MockProvider>:
             <Providers>{children}</Providers>
         }
-        
       </body>
     </html>
   );

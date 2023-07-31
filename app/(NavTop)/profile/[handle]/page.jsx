@@ -47,7 +47,7 @@ const Info = ({ info, handle }) => {
     )
 }
 
-const Profile = ({params})=>{
+const Profile = ({ params })=>{
     const handle = params.handle
 
     const [loaded, setLoaded] = useState(false);

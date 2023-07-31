@@ -53,7 +53,6 @@ const ProblemDetail = ({ params })=>{
         }
     }
 
-
     const lines = [
         {key: "description", lable: '題目敘述'},
         {key: "input_description", lable: '輸入說明'},
@@ -64,8 +63,8 @@ const ProblemDetail = ({ params })=>{
     switch (data.status){
         case 1:
             return(
-                <div className="py-5">
-                    <div className="w-3/4 mx-auto h-fit rounded border-2 shadow flex flex-col p-10 gap-10 bg-white mb-5">
+                <div className="flex gap-5 h-full">
+                    <div className="w-1/2 rounded-lg border-2 shadow flex flex-col p-10 gap-10 bg-white ">
                         <div className="text-center">
                             <p id="title" className="text-4xl font-medium my-2"> {data?.title} </p>
                             <p id="TL-text" className="text-lg font-medium my-2"> 程式運行時間限制（TL）：{data?.tl} 秒</p>
@@ -78,9 +77,6 @@ const ProblemDetail = ({ params })=>{
                                         <p className="text-xl font-semibold my-5">{line.lable}</p>
                                         {
                                             data?.[line.key].split("\n").map((l,index)=>(
-                                                // <p key={`${line.key}:${index}`} class="py-1"> {l} </p>
-                                                // <MathCompoment text={l} />
-                                                // <MathComponent tex=''></MathComponent>
                                                 <TexSupport key={`${line.key}:${index}`} text={l}/>
                                             ))
                                         }
@@ -89,9 +85,16 @@ const ProblemDetail = ({ params })=>{
                             })
                         }
                     </div>
-                    <div className="w-3/4 mx-auto border-2 text-lg flex flex-col gap-10 p-10 shadow bg-white">
-                        <textarea id="code_area" className="resize-none w-full h-20"></textarea>
-                        <button className="bg-blue-700 w-full delay-50 p-2 hover:bg-blue-500 rounded text-white text-2xl"> 提交 </button>
+                    <div className="w-1/2 h-full border-2 rounded-lg text-lg flex flex-col gap-10 p-10 shadow bg-white">
+                        
+                        <div className='w-fit mx-auto'>
+                            <button 
+                                className="inline-block bg-orange-700 w-32 delay-100 py-2 hover:bg-orange-500 rounded-lg text-white mx-5"
+                            > 提交 </button>
+                            <button 
+                                className="inline-block bg-orange-700 w-32 delay-100 py-2 hover:bg-orange-500 rounded-lg text-white mx-5"
+                            > 上傳檔案 </button>
+                        </div>
                     </div>
                 </div>
             )
