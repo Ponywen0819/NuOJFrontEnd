@@ -48,18 +48,18 @@ const ProblemDetail = ({ params })=>{
                         <>
                             <div className="w-1/2 border-2 rounded-lg shadow bg-white flex flex-col">
                                 <Tabs isLazy colorScheme={"orange"}>
-                                  <TabList marginBottom={"24px"}>
-                                    <Tab>題目敘述</Tab>
-                                    <Tab>繳交狀態</Tab>
-                                  </TabList>
-                                  <TabPanels>
-                                    <TabPanel>
-                                        <DocArea data={data}/>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <SubmitionArea id={id}/>
-                                    </TabPanel>
-                                  </TabPanels>
+                                    <TabList marginBottom={"24px"}>
+                                        <Tab>題目敘述</Tab>
+                                        <Tab>繳交狀態</Tab>
+                                    </TabList>
+                                    <TabPanels>
+                                        <TabPanel>
+                                            <DocArea data={data}/>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            <SubmitionArea id={id}/>
+                                        </TabPanel>
+                                    </TabPanels>
                                 </Tabs>
                             </div>
                             <div className="w-1/2 border-2 rounded-lg shadow bg-white flex flex-col">
