@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Loading } from '@/components/loading';
 import NotFound from './not-found';
 import { HOST } from '@/setting';
@@ -12,6 +12,7 @@ import { SubmitArea } from './components/submit_area';
 const ProblemDetail = ({ params })=>{
     let id = params.id;
     const [data, setData] = useState(null);
+    const code_ref = useRef();
 
     useEffect(()=>{
         getInfo()
@@ -38,22 +39,18 @@ const ProblemDetail = ({ params })=>{
         }
     }
 
-    
-
     return(
         <>
-            <SlideFade in={data} className='h-full'>
-                <div className="flex gap-5 h-full">
-                    {
-                        (data?.status)?(
-                            <>
-                                <DocArea/>
-                                <SubmitArea/>
-                            </>
-                        ):
-                        (<NotFound/>)
-                    }
-                </div>
+            <SlideFade in={data} className="flex gap-5 w-full grow" unmountOnExit={true}>
+                {
+                    (data?.status)?(
+                        <>
+                            <DocArea data={data}/>
+                            <SubmitArea id={id} code_ref={code_ref}/>
+                        </>
+                    ):
+                    (<NotFound/>)
+                }
             </SlideFade>
             {(data)? "" : (<Loading/>)}
         </>

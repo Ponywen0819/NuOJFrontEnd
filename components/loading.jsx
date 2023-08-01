@@ -18,7 +18,6 @@ export const Loading = ()=>{
                     <div/>
                     <div/>
                 </div>
-                <p className="w-fit text-center"></p>
             </div>
         </div>
         
