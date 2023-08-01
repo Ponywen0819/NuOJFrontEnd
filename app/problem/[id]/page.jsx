@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'react';
 import { Loading } from '@/components/loading';
 import NotFound from './not-found';
 import { HOST } from '@/setting';
-
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import { SlideFade } from '@chakra-ui/react';
-import { DocArea } from './components/doc_area';
-import { SubmitArea } from './components/submit_area';
+import { DocArea } from './components/doc';
+import { SubmitArea } from './components/submit';
+import { SubmitionArea } from './components/submition';
 
 const ProblemDetail = ({ params })=>{
     let id = params.id;
@@ -45,8 +46,25 @@ const ProblemDetail = ({ params })=>{
                 {
                     (data?.status)?(
                         <>
-                            <DocArea data={data}/>
-                            <SubmitArea id={id} code_ref={code_ref}/>
+                            <div className="w-1/2 border-2 rounded-lg shadow bg-white flex flex-col">
+                                <Tabs isLazy colorScheme={"orange"}>
+                                  <TabList marginBottom={"24px"}>
+                                    <Tab>題目敘述</Tab>
+                                    <Tab>繳交狀態</Tab>
+                                  </TabList>
+                                  <TabPanels>
+                                    <TabPanel>
+                                        <DocArea data={data}/>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <SubmitionArea id={id}/>
+                                    </TabPanel>
+                                  </TabPanels>
+                                </Tabs>
+                            </div>
+                            <div className="w-1/2 border-2 rounded-lg shadow bg-white flex flex-col">
+                                <SubmitArea id={id} code_ref={code_ref}/>
+                            </div>
                         </>
                     ):
                     (<NotFound/>)

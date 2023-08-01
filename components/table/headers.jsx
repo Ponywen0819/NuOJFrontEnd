@@ -48,7 +48,7 @@ const HeaderColumn = ({config, order})=>{
                 className='mx-auto w-fit overflow-x-auto block flex items-center gap-1'
                 onClick={()=>updateOrder(key)}
             >
-                <span className='text-lg font-semibold' >{text}</span>
+                <span className='text-lg font-semibold whitespace-nowrap'>{text}</span>
                 <div className='inline-block w-4'>
                     {renderBtn()}
                 </div>

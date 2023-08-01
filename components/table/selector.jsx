@@ -10,8 +10,9 @@ import { table_context } from './table';
 export const Selector = ()=>{
     const { index, pageSize , dataCount, updatePageIndex } = useContext(table_context);
     const max = Math.ceil(dataCount / pageSize);
+    console.log(max)
     const buff = new Array(max).fill(0);
-    return(
+    return (max > 1)? (
         <div className='w-full py-3 bg-white' >
             <div className='mx-auto w-fit flex justify-center gap-1'>
                 <div className='w-8'>
@@ -33,5 +34,5 @@ export const Selector = ()=>{
                 </div>
             </div>
         </div>
-    );
+    ): '';
 }

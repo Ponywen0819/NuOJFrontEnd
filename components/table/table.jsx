@@ -30,7 +30,8 @@ const normalizeCol = (cols)=>{
 export const Table = ({
     rawconfig,
     rawdata,
-    pageSize
+    pageSize,
+    styleConfig
 })=>{
     const [datas, setDatas] = useState(rawdata || []);
     const [index, setIndex] = useState(0);
@@ -96,7 +97,7 @@ export const Table = ({
     const offset = index * pageSize;
     return(
         <table_context.Provider value={context}>
-            <div role='table' className='rounded-lg overflow-x-hidden border-2 w-full divide-y'>
+            <div role='table' className='rounded-lg overflow-x-hidden border-2 w-full h-full divide-y'>
                 <Header/>
                 <Body datas={datas.slice(offset, offset + pageSize )}/>
                 <Selector/>

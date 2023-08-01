@@ -29,7 +29,7 @@ export const DocArea = ({ data = {} })=>{
     ]
 
     return( 
-        <div className="w-1/2 rounded-lg border-2 shadow flex flex-col p-10 gap-10 bg-white ">
+        <>
             <div className="text-center">
                 <p id="title" className="text-4xl font-medium my-2"> {data?.title} </p>
                 <p id="TL-text" className="text-lg font-medium my-2"> 程式運行時間限制（TL）：{data?.tl} 秒</p>
@@ -49,6 +49,6 @@ export const DocArea = ({ data = {} })=>{
                     )
                 })
             }
-        </div>
+        </>
     );
 }
