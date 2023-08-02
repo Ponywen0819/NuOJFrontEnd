@@ -1,34 +1,98 @@
-import { useContext, cloneElement } from 'react';
+import { useContext, cloneElement, useLayoutEffect, useEffect } from 'react';
 import { table_context } from './table';
+import { getValidChildren } from './utils/reactChildren';
+import { quickSort } from './utils/sort';
 
-export const Body = ({datas})=>{
-    // const { datas } = useContext(table_context);
+export const Body = ({
+    children,
+    pageSize
+})=>{
+    const { index, max, order, updateMax } = useContext(table_context);
+    const validChildren = getValidChildren(children).map((child)=>{
+        const valid = getValidChildren(child.props.children);
+        return cloneElement(
+            child,
+            { 
+                ...child.props,
+                represent: valid[ order?.index || 0 ].props?.children
+            },
+            valid
+        )
+    })
+
+    const orderedChilren = order?(
+        (order.ascending)?(
+            quickSort(validChildren, (a, b)=>(
+                a.props.represent > b.props.represent 
+            ))
+        ):(
+            quickSort(validChildren, (a, b)=>(
+                a.props.represent  < b.props.represent 
+            ))
+        )
+    ):(validChildren);
+
+    const lowwerBound = pageSize?(
+        index * pageSize
+    ):0;
+
+    const upperBound = pageSize?(
+        lowwerBound + pageSize
+    ):orderedChilren.length;
+    const slicedChildren = orderedChilren.slice(lowwerBound, upperBound);
+    
+    // console.log(slicedChildren)
+
+    useLayoutEffect(()=>{
+        updateMax(pageSize?Math.ceil(orderedChilren.length / pageSize): 0)
+    },[]);
 
     return(
         <div role='table body' className='divide-y'>
-            {datas.map(( data )=>( <Row data={data}/> ))}
+            { slicedChildren }
         </div>
     )
 }
 
-const Row = ({ data })=>{
-    const { config } = useContext(table_context);
+export const Row = ({
+    children
+})=>{
+    const { widths } = useContext(table_context);
+    const validChildren = getValidChildren(children);
+
+    const Normalized = validChildren.filter((_, index)=>
+        widths[index]
+    ).map((child, index)=>(
+        cloneElement(
+            child,
+            {
+                width: widths[index],
+                ...child.props,
+            },
+            child.props.children
+        )
+    ))
 
     return(
         <div role='table row' className='hover:bg-slate-100 bg-white block flex'>
-            {config.map(( column_config )=>( <Cell data={data[column_config.key]} config={column_config}/> ))}
+            { Normalized }
         </div>
     )
 }
 
-const Cell = ({ data, config })=>{
-    const { render, width } = config;
-    const cell =  cloneElement((render || <p/>), data, (data?.text || data))
-
+export const Cell = ({
+    width,
+    as = (<p/>),
+    children,
+    ...props
+ })=>{
+    const cell =  cloneElement(as, props, children)
     return(
         <div     
-            className={`py-3 inline-block  ${width || ''}`}
-            style={width && {width: `${width}\%`}} 
+            className={`py-3 inline-block`}
+            style={{
+                width
+            }}
         >
             <div className='mx-auto block w-fit'>
                 { cell }

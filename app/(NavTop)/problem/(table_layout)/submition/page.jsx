@@ -2,12 +2,24 @@
 
 import { useState, useEffect } from 'react';
 // import { Table } from '@/components/table';
-import { Table } from '@/components/table/table';
+// import { Table } from '@/components/table/table';
+import { 
+    Table, 
+    Header, 
+    HeaderColumn, 
+    Body, 
+    Row, 
+    Cell, 
+    Selector
+} from '@/components/table';
+import {
+    Date,
+    Time
+} from '@/components/table/types';
 import { SlideFade } from '@chakra-ui/react';
 import { HOST } from '@/setting';
 import { Loading } from '@/components/loading';
 import Link from 'next/link';
-import { Time, Sec} from '@/components/table/types';
 
 
 
@@ -24,59 +36,49 @@ const ProblemList = () =>{
                 id: submit.id, 
                 problem: submit.problem,
                 handle: { text: submit.user.handle , href: `/profile/${submit.user.handle}`},
-                date: {data: submit.date},
+                date: submit.date,
                 verdict: submit.verdict.verdict,
-                time: {data: submit.verdict.time},
+                time: submit.verdict.time,
                 memory: submit.verdict.memory,
             }))
             setData(datas);
         }
     }
 
+    const link_class = 'border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1'
+
     return(
         (datas)?(
-            <SlideFade in={datas} reverse={true} unmountOnExit={true}>
-                <Table
-                    rawconfig={[
-                        {
-                            key: "id",
-                            text: "提交 ID", 
-                            width: 10
-                        },
-                        {
-                            key: "problem",
-                            text: "題目名稱",
-                            width: 20
-                        },
-                        {
-                            key: "handle",
-                            text: "提交人", 
-                            render: (<Link/>),
-                        },
-                        {
-                            key: "date",
-                            text: "提交時間", 
-                            render: (<Time></Time>),
-                        },
-                        {
-                            key: "verdict",
-                            text: "狀態", 
-                            type: "status"
-                        },
-                        {
-                            key: "memory",
-                            text: "記憶體", 
-                            type: "mem"
-                        },
-                        {
-                            key: "time",
-                            text: "時長", 
-                            render: (<Sec/>)
-                        }
-                    ]}
-                    rawdata={datas}
-                    pageSize={10}
-                />
+            <SlideFade in={datas} unmountOnExit={true}>
+                <Table>
+                    <Header height='64px'>
+                        <HeaderColumn width = {'10%'} >題目 ID</HeaderColumn>
+                        <HeaderColumn width='20%'>題目名稱</HeaderColumn>
+                        <HeaderColumn>提交人</HeaderColumn>
+                        <HeaderColumn>提交時間</HeaderColumn>
+                        <HeaderColumn>狀態</HeaderColumn>
+                        <HeaderColumn>記憶體</HeaderColumn>
+                        <HeaderColumn>時長</HeaderColumn>
+                    </Header>
+                    <Body
+                        pageSize={30}
+                    >
+                        {datas.map((data)=>(
+                            <Row>
+                                <Cell>{data.id}</Cell>
+                                <Cell>{data.problem}</Cell>
+                                <Cell as={<Link/>} href={data.handle.href} className={link_class}>
+                                    {data.handle.text}
+                                </Cell>
+                                <Cell as={<Date/>}>{data.date}</Cell>
+                                <Cell>{data.verdict}</Cell>
+                                <Cell as={<Time/>}>{data.time}</Cell>
+                                <Cell>{data.memory}</Cell>
+                            </Row>
+                        ))}
+                    </Body>
+                    <Selector/>
+                </Table>
             </SlideFade>):(<Loading/>)
     )   
 }
