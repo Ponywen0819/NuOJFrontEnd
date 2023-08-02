@@ -8,11 +8,11 @@ import { table_context } from './table';
 
 
 export const Selector = ({
-    unmountOnZero = false
+    unmountAtOne = false
 })=>{
     const { max, index, updateIndex } = useContext(table_context);
     const buff = new Array(max).fill(0);
-    return (unmountOnZero && max === 0)? "":(
+    return (unmountAtOne && max === 1)? "":(
         <div className='w-full py-3 bg-white' >
             <div className='mx-auto w-fit flex justify-center gap-1'>
                 <div className='w-8'>
@@ -36,7 +36,7 @@ export const Selector = ({
                     ))
                 }
                 <div className='w-8'>
-                    <Fade in={(index !== (max - 1))}  unmountOnExit={true}>
+                    <Fade in={(index < (max - 1))}  unmountOnExit={true}>
                         <IconButton 
                             size={"sm"} 
                             icon={<ChevronRightIcon/>} 

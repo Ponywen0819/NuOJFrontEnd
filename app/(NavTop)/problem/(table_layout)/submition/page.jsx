@@ -49,7 +49,7 @@ const ProblemList = () =>{
 
     return(
         (datas)?(
-            <SlideFade in={datas} unmountOnExit={true}>
+            <SlideFade in={datas} unmountOnExit={false}>
                 <Table>
                     <Header height='64px'>
                         <HeaderColumn width = {'10%'} >題目 ID</HeaderColumn>

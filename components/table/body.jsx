@@ -7,14 +7,14 @@ export const Body = ({
     children,
     pageSize
 })=>{
-    const { index, max, order, updateMax } = useContext(table_context);
+    const { index, order, updateMax } = useContext(table_context);
     const validChildren = getValidChildren(children).map((child)=>{
         const valid = getValidChildren(child.props.children);
         return cloneElement(
             child,
             { 
                 ...child.props,
-                represent: valid[ order?.index || 0 ].props?.children
+                represent: valid?.[ order?.index || 0 ]?.props?.children || ''
             },
             valid
         )
@@ -44,7 +44,7 @@ export const Body = ({
     // console.log(slicedChildren)
 
     useLayoutEffect(()=>{
-        updateMax(pageSize?Math.ceil(orderedChilren.length / pageSize): 0)
+        updateMax(pageSize?Math.ceil(orderedChilren.length / pageSize): 1)
     },[]);
 
     return(

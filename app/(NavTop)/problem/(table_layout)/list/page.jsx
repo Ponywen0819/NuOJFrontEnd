@@ -43,7 +43,7 @@ const ProblemList = () =>{
     const link_class = 'border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1'
 
     return datas?(
-        // <SlideFade in={datas} reverse={true} unmountOnExit={true}>
+        <SlideFade in={datas} reverse={true} unmountOnExit={true}>
             <Table>
                 <Header height='64px'>
                     <HeaderColumn
@@ -70,7 +70,7 @@ const ProblemList = () =>{
                 </Body>
                 <Selector/>
             </Table>
-        // </SlideFade>
+        </SlideFade>
     ):(<Loading/>)
 }
 
