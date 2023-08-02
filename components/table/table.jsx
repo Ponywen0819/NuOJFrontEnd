@@ -76,7 +76,7 @@ export const Table = ({
         <table_context.Provider value={context}>
             <div 
                 role='table' 
-                className='overflow-x-hidden'
+                className='overflow-x-hidden divide-y'
                 style={{
                     borderWidth,
                     borderColor,
