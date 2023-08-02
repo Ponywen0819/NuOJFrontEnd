@@ -1,106 +1,91 @@
-import { useEffect, createContext, useState } from 'react';
-import { Header } from './headers';
-import { Body } from './body';
-import { Selector } from './selector';
-import { quickSort } from './sort';
+import { createContext, useState } from 'react';
+
 
 export const table_context = createContext(null);
 
-
-const normalizeCol = (cols)=>{
-    let remain = 100;
-    let len =  cols.length;
-    cols.map((col)=>{
-        if(col.width){
-            remain = remain - col.width;
-            len --;
-        }
-    });
-
-    let remain_w = Math.round( remain / len);
-    let new_cols= cols.map((col)=>{
-        let new_col = {...col};
-        new_col.width = col.width || remain_w;
-        return new_col
-    })
-
-    return new_cols;
-}
-
 export const Table = ({
-    rawconfig,
-    rawdata,
-    pageSize,
-    styleConfig
+    children,
+    borderWidth = '2px',
+    borderColor = '#E2E8F0',
+    borderRadius = "0.5rem",
+    width = '100%',
+    height = '100%',
 })=>{
-    const [datas, setDatas] = useState(rawdata || []);
-    const [index, setIndex] = useState(0);
-    const [order, setOrder] = useState(null);
-    const [loading, setState] = useState(true);
-    const config = normalizeCol(rawconfig)
-    const dataCount = datas.length;
+    const [ widths, setWidths ] = useState([]);
+    const [ order, setOrder ] = useState(null);
+    const [ index, setIndex ] = useState(0);
+    const [ max, setMax ] =useState(0);
 
-    useEffect(()=>{setDatas(rawdata || [])},[rawdata]);
-
-    const updatePageIndex = (index)=>{
-        if(index <= 0) setIndex(0);
-        else if((pageSize * index) >= dataCount) setIndex(Math.ceil(dataCount / pageSize) -1);
-        else setIndex(index);
+    const updateData = (new_data) =>{
+        setDatas(new_data);
     }
 
-    const updateOrder = (new_key) =>{
+    const updateWidth = (raw)=>{
+            const { remain, count } = raw.reduce((a, c)=>{
+                const { remain, count } = a;
+                const num = parseInt(c.slice(0, -1));
+                return {remain: remain - num, count: (num)?count: count + 1};
+            }, { remain: 100, count: 0 });
+            const defaultWidth = `${Math.round(remain / count)}%`;
+
+            setWidths(raw.map((element)=>{
+                if(element === '0%'){
+                     return defaultWidth
+                }
+                else{
+                    return element;
+                }
+            }));
+    }
+
+    const updateOrder = (new_index) =>{
         if(order){
-            const { key, ascending, descending } = order;
-            if((new_key === key) && ascending){
-                setOrder({key: new_key, ascending: false, descending: true});
-                setDatas(quickSort(datas,(a,b) => {
-                    const com_a = a[new_key]?.text || a[new_key];
-                    const com_b = b[new_key]?.text || b[new_key];
-                    return com_a > com_b;
-                }));
-            } 
-            else if((new_key === key) && descending){
-                setOrder({key: new_key, ascending: true, descending: false});
-                setDatas(quickSort(datas, (a,b) => {
-                    const com_a = a[new_key]?.text || a[new_key];
-                    const com_b = b[new_key]?.text || b[new_key];
-                    return com_a < com_b;
-                }));
-            } 
+            if(order.index === new_index ){
+                setOrder((old)=>({index: new_index, ascending: !old.ascending}));
+            }
             else {
                 setOrder(null)
-                setDatas(rawdata||[]);
             }
         }
         else{
-            setOrder({key: new_key, ascending: false, descending: true})
-            setDatas(quickSort(datas, (a,b) => {
-                const com_a = a[new_key]?.text || a[new_key];
-                const com_b = b[new_key]?.text || b[new_key];
-                return com_a > com_b;
-            }));
+            setOrder({index: new_index, ascending: false});
         }
+    }
 
+    const updateMax = (new_val) =>{
+        setMax(new_val);
+    }
+
+    const updateIndex = (new_index) =>{
+        setIndex(new_index);
     }
 
     const context = {
-        updatePageIndex, 
+        updateData,
+        updateWidth, 
         updateOrder, 
-        datas, 
-        config, 
-        index, 
-        pageSize, 
-        dataCount, 
-        order
+        updateMax,
+        updateIndex,
+        widths,
+        order,
+        index,
+        max
     }
 
-    const offset = index * pageSize;
     return(
         <table_context.Provider value={context}>
-            <div role='table' className='rounded-lg overflow-x-hidden border-2 w-full h-full divide-y'>
-                <Header/>
-                <Body datas={datas.slice(offset, offset + pageSize )}/>
-                <Selector/>
+            <div 
+                role='table' 
+                className='overflow-x-hidden'
+                style={{
+                    borderWidth,
+                    borderColor,
+                    borderRadius,
+                    width,
+                    height,
+                }}
+            >
+                { children }
             </div>
         </table_context.Provider>
     );

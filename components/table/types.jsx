@@ -1,11 +1,13 @@
-export const Time = ({data}) =>{
-    const year = data.slice(0, 4);
-    const month = data.slice(4, 6);
-    const day = data.slice(6, 8);
-    const hour = data.slice(9,11);
-    const minumn = data.slice(11, 13)
-    const sec = data.slice(13, 15);
-    const utc = parseInt(data.slice(15, 18));
+export const Date = ({
+    children
+}) =>{
+    const year = children.slice(0, 4);
+    const month = children.slice(4, 6);
+    const day = children.slice(6, 8);
+    const hour = children.slice(9,11);
+    const minumn = children.slice(11, 13)
+    const sec = children.slice(13, 15);
+    const utc = parseInt(children.slice(15, 18));
     
     return (
         <p className="text-sm">
@@ -17,8 +19,10 @@ export const Time = ({data}) =>{
     );
 }
 
-export const Sec = ({data}) => {
-    let total = parseInt(data);
+export const Time = ({
+    children
+}) => {
+    let total = parseInt(children);
     let output = '';
 
     while(total){

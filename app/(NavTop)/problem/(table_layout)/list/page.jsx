@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 // import { Table } from '@/components/table';
-import { Table } from '@/components/table/table';
+import { Table, Header, HeaderColumn, Body, Row, Cell, Selector } from '@/components/table';
 import { useEffect } from 'react';
 import { SlideFade } from '@chakra-ui/react';
 import Link from 'next/link';
@@ -28,8 +28,14 @@ const ProblemList = () =>{
             let json = await res.json();
             let datas = json.map((problem)=>({
                 id: problem.id, 
-                title: { text: problem.data.content.title, href: `/problem/${problem.id}`},
-                author: { text: problem.data.author.handle, href: `/profile/${problem.data.author.handle}`},
+                title: { 
+                    text: problem.data.content.title, 
+                    href: `/problem/${problem.id}`
+                },
+                author: { 
+                    text: problem.data.author.handle, 
+                    href: `/profile/${problem.data.author.handle}`
+                },
             }))
             setData(datas)
         }   
@@ -38,34 +44,32 @@ const ProblemList = () =>{
 
     return datas?(
         <SlideFade in={datas} reverse={true} unmountOnExit={true}>
-            <Table
-                rawconfig={[
-                    {
-                        text: "題目 ID", 
-                        key: "id", 
-                        width: 10
-                    },
-                    {
-                        text: "題目名稱", 
-                        key: "title", 
-                        type: "link",
-                        render: (<Link className={link_class}/>)
-                    },
-                    {
-                        text: "題目作者", 
-                        key: "author", 
-                        type: "link",
-                        width: 10,
-                        render: (<Link className={link_class}/>),
-                    },
-                    {
-                        text: "題目標籤", 
-                        key: "lable"
-                    }
-                ]}
-                rawdata={datas}
-                pageSize={10}
-            />
+            <Table>
+                <Header height='64px'>
+                    <HeaderColumn
+                        width = {'10%'}
+                    >題目 ID</HeaderColumn>
+                    <HeaderColumn>題目名稱</HeaderColumn>
+                    <HeaderColumn>題目作者</HeaderColumn>
+                    <HeaderColumn>題目標籤</HeaderColumn>
+                </Header>
+                <Body
+                    pageSize={30}
+                >
+                    {datas.map((data)=>(
+                        <Row>
+                            <Cell>{data.id}</Cell>
+                            <Cell as={<Link/>} href={data.title.href} className={link_class}>
+                                {data.title.text}
+                            </Cell>
+                            <Cell as={<Link/>} href={data.author.href} className={link_class}>
+                                {data.author.text}
+                            </Cell>
+                        </Row>
+                    ))}
+                </Body>
+                <Selector/>
+            </Table>
         </SlideFade>
     ):(<Loading/>)
 }
