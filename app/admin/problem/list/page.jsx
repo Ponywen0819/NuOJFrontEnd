@@ -13,15 +13,18 @@ import {
     Subnav,
     Tab
 } from '@/components/subnav';
-import { error_swal } from '@/components/notification';
+import { error_swal, success_swal } from '@/components/notification';
 import { IconButton } from '@chakra-ui/react'
-import { EditIcon } from '@chakra-ui/icons';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { HOST } from '@/setting';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 
 import logo_min from '@/public/logo_min.png';
 import { useRouter } from 'next/navigation';
+
+
 
 const ListPage = ()=>{
     const [problems, setProblems] = useState(null);
@@ -44,6 +47,18 @@ const ListPage = ()=>{
         setProblems(problems);
     }
 
+    const deleteProblem = async (id)=>{
+        const res = await fetch(`${HOST}/api/problem/${id}`, {
+            method: "DELETE"
+        })
+
+        if(!res.ok){
+            error_swal("出現預期外的錯誤")
+        }
+        setProblems((old)=>old.filter((problem)=>(problem.id !== id)))
+        success_swal("刪除成功")
+    }
+
     return(
         <>
             <Subnav>
@@ -64,13 +79,36 @@ const ListPage = ()=>{
                                 <Row key={problem.id}>
                                     <Cell>{problem.id}</Cell>
                                     <Cell>{problem.title}</Cell>
-                                    <Cell 
-                                        as={<IconButton/>} 
-                                        icon={<EditIcon/>}
-                                        onClick = {()=>{
-                                            router.push(`/admin/problem/edit/${problem.id}`)
-                                        }}
-                                    ></Cell>
+                                    <Cell>
+                                        <IconButton 
+                                            icon={<EditIcon/>}
+                                            onClick = {()=>{
+                                                router.push(`/admin/problem/edit/${problem.id}`)
+                                            }}
+                                        />
+                                        <IconButton
+                                            icon={<DeleteIcon/>}
+                                            onClick = {()=>{
+                                                Swal.fire({
+                                                    title: "是否刪除",
+                                                    showCancelButton: true,
+                                                    confirmButtonText: '確認',
+                                                    cancelButtonText: '取消',
+                                                    confirmButtonColor: 'rgb(249 115 22)',
+                                                    cancelButtonColor: 'rgb(156 163 175)',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        Swal.fire({
+                                                          title: '處理中',
+                                                          timerProgressBar: true,
+                                                          showConfirmButton: false,
+                                                        })
+                                                        deleteProblem(problem.id);
+                                                    }
+                                                })
+                                            }}
+                                        />
+                                    </Cell>
                                 </Row>
                             ))
                         }

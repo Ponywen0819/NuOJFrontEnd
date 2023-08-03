@@ -52,4 +52,15 @@ export const problem = [
 
     return res(ctx.status(403));
   }),
+
+  rest.delete(`${HOST}/api/problem/:id`, (req, res, ctx) => {
+    const id = parseInt(req.params.id);
+    for (const problem of fake_problems) {
+      if (problem.header.problem_pid === id) {
+        return res(ctx.status(200), ctx.delay(1000));
+      }
+    }
+
+    return res(ctx.status(403));
+  }),
 ];
