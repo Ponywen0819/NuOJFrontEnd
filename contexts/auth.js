@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     if (!verify_data) return;
     const { handle, email } = verify_data;
 
-    const profile = getProfile(handle);
+    const profile = await getProfile(handle);
     if (!profile) return;
 
     setUser({
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getProfile = async (handle) => {
-    const res = await fetch(`${HOST}/api/profile${handle}`);
+    const res = await fetch(`${HOST}/api/profile/${handle}`);
 
     if (!res.ok) {
       setUser({ islogin: false });

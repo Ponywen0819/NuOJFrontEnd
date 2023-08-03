@@ -3,7 +3,7 @@ import monkey from "../img/coding_monkey.jpeg";
 import { HOST } from "@/setting";
 
 const user_pony = {
-  role: 0,
+  role: 1,
   userid: 1,
   handle: "pony",
   img: {
