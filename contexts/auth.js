@@ -107,16 +107,14 @@ export const RequireAuth = ({
   children,
   loadingElement = <Loading></Loading>,
 }) => {
-  const auth = useContext(auth_context);
+  const { user } = useContext(auth_context);
   const navigate = useContext(navigate_context);
-  const user = auth.getUser();
   const location = usePathname();
   const router = useRouter();
 
-  if (user.state === 1) {
-    return children;
-  } else if (user.state === -1) {
-    return loadingElement;
+  if (user) {
+    if (user.isLogin) return children;
+    else return loadingElement;
   } else {
     navigate.record(location);
     router.replace("/auth/login");

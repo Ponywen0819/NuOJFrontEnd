@@ -12,8 +12,8 @@ import { ProfileForm } from './components/profileForm';
 export const profile_context = createContext(null);
 
 const SetProfile = () =>{
-    const auth = useContext(auth_context);
-    const handle = auth.getUser().handle;
+    const { user } = useContext(auth_context);
+    const { handle } = user;
     const [imgFormPop, setPop] = useState(false);
     const [profile, setProfile] = useState(null);
 
