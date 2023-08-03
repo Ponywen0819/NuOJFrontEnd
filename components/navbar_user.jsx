@@ -48,7 +48,7 @@ export const User = () =>{
                             >個人檔案</MenuItem>
                             { 
                                 user.role ? 
-                                <MenuItem onClick={()=>router.push(`/profile/${user?.handle}`)}>管理員介面</MenuItem> :
+                                <MenuItem onClick={()=>router.push(`/admin/problem/list`)}>管理員介面</MenuItem> :
                                 ''
                             }
                             <MenuItem onClick={handleLogout}>登出</MenuItem>
