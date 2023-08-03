@@ -7,6 +7,7 @@ import { auth_context } from '@/contexts/auth';
 import { success_swal, error_swal } from '@/components/notification';
 import { Menu, MenuButton, MenuItem, MenuList, IconButton } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { Loading } from '@/components/loading';
 
 export const User = () =>{
     const path = usePathname();
@@ -25,32 +26,42 @@ export const User = () =>{
         }
     }
 
-
+    console.log(user)
     const element_class = "text-white text-xl border-b-2 border-white border-opacity-0 duration-500 hover:border-white hover:border-opacity-100 ml-10"
     return(
         <div className="flex items-center justify-end w-fit">
-            {(user && user.isLogin)?(
-                <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      aria-label='User menu'
-                      colorScheme='whiteAlpha'
-                      icon={<HamburgerIcon />}
-                      variant='outline'
-                      borderWidth={'1px'}
-                    />
-                    <MenuList>
-                        <MenuItem 
-                            onClick={()=>router.push(`/profile/${user?.handle}`)}
-
-                        >個人檔案</MenuItem>
-                        <MenuItem onClick={handleLogout}>登出</MenuItem>
-                    </MenuList>
-                </Menu>):(
-                <>
-                    <Link className={element_class} href="/auth/login"> 登入 </Link>
-                    <Link className={element_class} href="/auth/registe"> 註冊 </Link>
-                </>)}
+            {
+                (user)?(
+                    (user.isLogin) ?(
+                    <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          aria-label='User menu'
+                          colorScheme='whiteAlpha'
+                          icon={<HamburgerIcon />}
+                          variant='outline'
+                          borderWidth={'1px'}
+                        />
+                        <MenuList>
+                            <MenuItem 
+                                onClick={()=>router.push(`/profile/${user?.handle}`)}
+                            >個人檔案</MenuItem>
+                            { 
+                                user.role ? 
+                                <MenuItem onClick={()=>router.push(`/profile/${user?.handle}`)}>管理員介面</MenuItem> :
+                                ''
+                            }
+                            <MenuItem onClick={handleLogout}>登出</MenuItem>
+                        </MenuList>
+                    </Menu> ):(
+                    <>
+                        <Link className={element_class} href="/auth/login"> 登入 </Link>
+                        <Link className={element_class} href="/auth/registe"> 註冊 </Link>
+                    </>)
+                ):(
+                    <Loading/>
+                )
+            }
         </div>
     )
 }
