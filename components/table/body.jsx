@@ -45,7 +45,7 @@ export const Body = ({
 
     useLayoutEffect(()=>{
         updateMax(pageSize?Math.ceil(orderedChilren.length / pageSize): 1)
-    },[]);
+    },[orderedChilren.length]);
 
     return(
         <div role='table body' className='divide-y'>
