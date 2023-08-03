@@ -27,14 +27,14 @@ const ProblemList = () =>{
         if(res.ok){
             let json = await res.json();
             let datas = json.map((problem)=>({
-                id: problem.id, 
+                id: problem.header.problem_pid, 
                 title: { 
-                    text: problem.data.content.title, 
-                    href: `/problem/${problem.id}`
+                    text: problem.header.title, 
+                    href: `/problem/${problem.header.problem_pid}`
                 },
                 author: { 
-                    text: problem.data.author.handle, 
-                    href: `/profile/${problem.data.author.handle}`
+                    text: problem.author.handle, 
+                    href: `/profile/${problem.author.handle}`
                 },
             }))
             setData(datas)

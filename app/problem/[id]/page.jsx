@@ -25,13 +25,13 @@ const ProblemDetail = ({ params })=>{
         if(res.ok){
             let json = await res.json();
             let info = {
-                "description": json.data.content.description,
-                "input_description": json.data.content.input_description,
-                "output_description": json.data.content.output_description,
-                "note": json.data.content.note,
-                "title": json.data.content.title,
-                "tl": json.data.setting.time_limit,
-                "ml": json.data.setting.memory_limit
+                "description": json.content.description,
+                "input_description": json.content.input_description,
+                "output_description": json.content.output_description,
+                "note": json.content.note,
+                "title": json.content.title,
+                "tl": json.content.time_limit,
+                "ml": json.content.memory_limit
             }
             setData({...info, status:1});
         }
