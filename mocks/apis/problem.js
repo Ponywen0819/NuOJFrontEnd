@@ -34,9 +34,19 @@ export const problem = [
   rest.get(`${HOST}/api/problem/:id`, (req, res, ctx) => {
     const id = parseInt(req.params.id);
     for (const problem of fake_problems) {
-      console.log(problem);
       if (problem.header.problem_pid === id) {
         return res(ctx.status(200), ctx.delay(1000), ctx.json(problem));
+      }
+    }
+
+    return res(ctx.status(403));
+  }),
+
+  rest.put(`${HOST}/api/problem/:id`, (req, res, ctx) => {
+    const id = parseInt(req.params.id);
+    for (const problem of fake_problems) {
+      if (problem.header.problem_pid === id) {
+        return res(ctx.status(200), ctx.delay(1000));
       }
     }
 

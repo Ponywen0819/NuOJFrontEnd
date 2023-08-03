@@ -21,9 +21,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import logo_min from '@/public/logo_min.png';
+import { useRouter } from 'next/navigation';
 
 const ListPage = ()=>{
     const [problems, setProblems] = useState(null);
+    const router = useRouter();
 
     useEffect(()=>{ getProblems() }, []);
 
@@ -36,8 +38,8 @@ const ListPage = ()=>{
 
         const json = await res.json();
         const problems = json.map((problem)=>({
-            id : problem.id,
-            title : problem.data.content.title,
+            id : problem.header.problem_pid,
+            title : problem.header.title,
         }))
         setProblems(problems);
     }
@@ -65,7 +67,9 @@ const ListPage = ()=>{
                                     <Cell 
                                         as={<IconButton/>} 
                                         icon={<EditIcon/>}
-                                        onClick = {()=>{console.log(problem.id)}}
+                                        onClick = {()=>{
+                                            router.push(`/admin/problem/edit/${problem.id}`)
+                                        }}
                                     ></Cell>
                                 </Row>
                             ))
