@@ -69,7 +69,7 @@ export const auth = [
   }),
 
   rest.post(`${HOST}/api/auth/verify_jwt`, async (req, res, ctx) => {
-    let jwt = await req.cookies?.jwt;
+    let jwt = req.cookies?.jwt;
     if (jwt === "ya") {
       return res(
         ctx.status(200),

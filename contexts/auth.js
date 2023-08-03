@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useLayoutEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -12,66 +12,84 @@ export const auth_context = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isInitial, setInitial] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getInfo();
   }, []);
 
   const getInfo = async () => {
-    let jwt = Cookies.get("jwt");
-    if (jwt) {
-      let res = await fetch(`${HOST}/api/auth/verify_jwt`, {
-        method: "POST",
-      });
-      if (res.ok) {
-        let json = await res.json();
-        setUser(json.data);
-      }
-    }
-    setInitial(true);
+    const verify_data = await getJwtDecode();
+    if (!verify_data) return;
+    const { handle, email } = verify_data;
+
+    const profile = getProfile(handle);
+    if (!profile) return;
+
+    setUser({
+      isLogin: true,
+      handle,
+      email,
+      ...profile,
+    });
   };
 
-  const getUser = () => {
-    if (isInitial) {
-      if (user) return { state: 1, ...user };
-      else return { state: 0 };
-    } else {
-      return { state: -1 };
+  const getProfile = async (handle) => {
+    const res = await fetch(`${HOST}/api/profile${handle}`);
+
+    if (!res.ok) {
+      setUser({ islogin: false });
+      return;
     }
+
+    const json = await res.json();
+    return json;
+  };
+
+  const getJwtDecode = async () => {
+    const jwt = Cookies.get("jwt");
+    if (!jwt) {
+      setUser({ islogin: false });
+      return;
+    }
+
+    const res = await fetch(`${HOST}/api/auth/verify_jwt`, {
+      method: "POST",
+    });
+
+    if (!res.ok) {
+      setUser({ islogin: false });
+      return;
+    }
+
+    const { data } = await res.json();
+
+    return data;
   };
 
   const signin = async ({ account, password }) => {
-    let res;
-    try {
-      res = await fetch(`${HOST}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          account: account,
-          password: password,
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await fetch(`${HOST}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        account: account,
+        password: password,
+      }),
+    });
 
     if (res.ok) {
       getInfo();
+    } else {
+      setUser({ isLogin: false });
     }
 
     return res.status;
   };
 
   const signout = async () => {
-    let res;
-    try {
-      res = await fetch(`${HOST}/api/auth/logout`, { method: "POST" });
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await fetch(`${HOST}/api/auth/logout`, { method: "POST" });
+
     Cookies.remove("jwt");
     if (res.ok) {
       setUser(null);
@@ -79,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     return res.status;
   };
 
-  let context = { getUser, signin, signout };
+  let context = { user, signin, signout };
   return (
     <auth_context.Provider value={context}>{children}</auth_context.Provider>
   );
