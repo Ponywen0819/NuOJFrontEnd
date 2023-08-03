@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 import { HOST } from '@/setting';
 import { Loading } from '@/components/loading';
-
+import { Subnav, Tab } from '@/components/subnav';
 
 
 const ProblemList = () =>{
@@ -42,36 +42,43 @@ const ProblemList = () =>{
     }
     const link_class = 'border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1'
 
-    return datas?(
-        <SlideFade in={datas} reverse={true} unmountOnExit={true}>
-            <Table>
-                <Header height='64px'>
-                    <HeaderColumn
-                        width = {'10%'}
-                    >題目 ID</HeaderColumn>
-                    <HeaderColumn>題目名稱</HeaderColumn>
-                    <HeaderColumn>題目作者</HeaderColumn>
-                    <HeaderColumn>題目標籤</HeaderColumn>
-                </Header>
-                <Body
-                    pageSize={30}
-                >
-                    {datas.map((data)=>(
-                        <Row>
-                            <Cell>{data.id}</Cell>
-                            <Cell as={<Link/>} href={data.title.href} className={link_class}>
-                                {data.title.text}
-                            </Cell>
-                            <Cell as={<Link/>} href={data.author.href} className={link_class}>
-                                {data.author.text}
-                            </Cell>
-                        </Row>
-                    ))}
-                </Body>
-                <Selector/>
-            </Table>
-        </SlideFade>
-    ):(<Loading/>)
+    return(
+        <>
+            <Subnav>
+                <Tab href={'/problem/list'} isActive={true}>題目列表</Tab>
+                <Tab href={'/problem/submition'}  >提交狀態</Tab>
+            </Subnav>
+            <SlideFade in={datas}>
+                <Table>
+                    <Header height='64px'>
+                        <HeaderColumn
+                            width = {'10%'}
+                        >題目 ID</HeaderColumn>
+                        <HeaderColumn>題目名稱</HeaderColumn>
+                        <HeaderColumn>題目作者</HeaderColumn>
+                        <HeaderColumn>題目標籤</HeaderColumn>
+                    </Header>
+                    <Body
+                        pageSize={30}
+                    >
+                        {datas?.map((data)=>(
+                            <Row>
+                                <Cell>{data.id}</Cell>
+                                <Cell as={<Link/>} href={data.title.href} className={link_class}>
+                                    {data.title.text}
+                                </Cell>
+                                <Cell as={<Link/>} href={data.author.href} className={link_class}>
+                                    {data.author.text}
+                                </Cell>
+                            </Row>
+                        ))}
+                    </Body>
+                    <Selector/>
+                </Table>
+            </SlideFade>
+            {datas? '' : <Loading/>}
+        </>
+    )
 }
 
 export default ProblemList;

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-// import { Table } from '@/components/table';
-// import { Table } from '@/components/table/table';
 import { 
     Table, 
     Header, 
@@ -12,16 +10,17 @@ import {
     Cell, 
     Selector
 } from '@/components/table';
+
 import {
     Date,
     Time
 } from '@/components/table/types';
+
 import { SlideFade } from '@chakra-ui/react';
 import { HOST } from '@/setting';
 import { Loading } from '@/components/loading';
 import Link from 'next/link';
-
-
+import { Subnav, Tab } from '@/components/subnav';
 
 const ProblemList = () =>{
     const [datas, setData] = useState(null);
@@ -48,8 +47,12 @@ const ProblemList = () =>{
     const link_class = 'border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1'
 
     return(
-        (datas)?(
-            <SlideFade in={datas} unmountOnExit={false}>
+        <>
+            <Subnav>
+                <Tab href={'/problem/list'} >題目列表</Tab>
+                <Tab href={'/problem/submition'} isActive={true} >提交狀態</Tab>
+            </Subnav>
+            <SlideFade in={datas}>
                 <Table>
                     <Header height='64px'>
                         <HeaderColumn width = {'10%'} >題目 ID</HeaderColumn>
@@ -63,7 +66,7 @@ const ProblemList = () =>{
                     <Body
                         pageSize={30}
                     >
-                        {datas.map((data)=>(
+                        {datas?.map((data)=>(
                             <Row>
                                 <Cell>{data.id}</Cell>
                                 <Cell>{data.problem}</Cell>
@@ -79,7 +82,9 @@ const ProblemList = () =>{
                     </Body>
                     <Selector/>
                 </Table>
-            </SlideFade>):(<Loading/>)
+            </SlideFade>
+            { datas ? '' : <Loading/> }
+        </>
     )   
 }
 
