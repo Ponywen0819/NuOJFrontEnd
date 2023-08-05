@@ -1,5 +1,5 @@
 import { RequireAuth } from '@/contexts/auth';
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/navbar/navbar';
 
 const ProblemDetailLayout = ({ children }) =>{
     return(
