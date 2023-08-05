@@ -18,8 +18,6 @@ export const Navbar = ()=>{
         <Box
             as='nav'
             w={'100%'}
-            position={'absolute'}
-            top={'0'}
         >
             <Container
                 display={'flex'}

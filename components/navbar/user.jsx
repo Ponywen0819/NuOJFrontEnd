@@ -35,7 +35,7 @@ export const UserOption = () => {
             <MenuItem as={MenuLink} href={`/profile/${handle}`}>
                 個人檔案
             </MenuItem>
-            <MenuItem as={MenuLink} href={`/profile/${handle}`}>
+            <MenuItem as={MenuLink} href={`/admin/problem/list`}>
                 管理員頁面
             </MenuItem>
             <MenuDivider/>

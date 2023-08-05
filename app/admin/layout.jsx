@@ -13,10 +13,7 @@ const AdminLayout = ({ children })=>{
     return(
         <>
             <header className='bg-black'>
-                <Navbar links={[
-                    {href: '/problem/list', lable: `問題`},
-                    {href: '/about', lable: '關於'}
-                ]}/>
+                <Navbar/>
             </header>
             <main className="mx-auto max-w-7xl py-10 px-4">
                 {

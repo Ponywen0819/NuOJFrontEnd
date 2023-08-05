@@ -9,10 +9,7 @@ const Index = ()=>{
     return (
         <>
             <header className='absolute z-10 top-0 w-full'>
-                <Navbar links={[
-                    {href: '/problem/list', lable: `問題`},
-                    {href: '/about', lable: '關於'}
-                ]}/>
+                <Navbar/>
             </header>
             <div className={`min-h-screen w-full bg-cover`} style={{ backgroundImage: `url(${IndexImg.src})`}}>
                 <div className="absolute h-full w-full bg-gray-900 bg-opacity-80"/>
