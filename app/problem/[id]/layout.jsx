@@ -5,10 +5,7 @@ const ProblemDetailLayout = ({ children }) =>{
     return(
         <div className='flex flex-col min-h-[800px] h-screen'>
             <header className='bg-black'>
-                <Navbar links={[
-                    {href: '/problem/list', lable: `問題`},
-                    {href: '/about', lable: '關於'}
-                ]}/>
+                <Navbar/>
             </header>
             <main className="py-10 px-4 grow flex flex-col">
                 <RequireAuth>
