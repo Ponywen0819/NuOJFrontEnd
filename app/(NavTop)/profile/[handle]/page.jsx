@@ -11,7 +11,7 @@ import { ScaleFade } from '@chakra-ui/react';
 
 const Info = ({ info, handle }) => {
     const router = useRouter();
-    const auth_handle = useContext(auth_context).getUser().handle;;
+    const auth_handle = useContext(auth_context).user?.handle;
 
     const subtitles = [
         { key: "school", title: "學校" },

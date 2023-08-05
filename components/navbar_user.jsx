@@ -7,15 +7,15 @@ import { auth_context } from '@/contexts/auth';
 import { success_swal, error_swal } from '@/components/notification';
 import { Menu, MenuButton, MenuItem, MenuList, IconButton } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { Loading } from '@/components/loading';
 
 export const User = () =>{
     const path = usePathname();
-    const auth = useContext(auth_context);
+    const { user, signout } = useContext(auth_context);
     const router = useRouter();
-    const user = auth.getUser();
 
     const handleLogout = async () =>{
-        let state_code = await auth.signout();
+        const state_code = await signout();
         if(state_code !== 200) {
             error_swal("發生錯誤","發生預期外的錯誤導致無法登出！");
         }
@@ -26,34 +26,42 @@ export const User = () =>{
         }
     }
 
-
     const element_class = "text-white text-xl border-b-2 border-white border-opacity-0 duration-500 hover:border-white hover:border-opacity-100 ml-10"
     return(
         <div className="flex items-center justify-end w-fit">
-            {(user.state === 1)?(
-                <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      aria-label='User menu'
-                      colorScheme='whiteAlpha'
-                      icon={<HamburgerIcon />}
-                      variant='outline'
-                      borderWidth={'1px'}
-                    />
-                    <MenuList>
-                        <MenuItem 
-                            onClick={()=>router.push(`/profile/${user?.handle}`)}
-
-                        >個人檔案</MenuItem>
-                        <MenuItem onClick={handleLogout}>登出</MenuItem>
-                    </MenuList>
-                </Menu>):
-                (
-                    <>
-                        <Link className={element_class} href="/auth/login"> 登入 </Link>
-                        <Link className={element_class} href="/auth/registe"> 註冊 </Link>
-                    </>
-                )}
+            {
+                (user)?(
+                    (user.isLogin) ?(
+                        <Menu>
+                            <MenuButton
+                              as={IconButton}
+                              aria-label='User menu'
+                              colorScheme='whiteAlpha'
+                              icon={<HamburgerIcon />}
+                              variant='outline'
+                              borderWidth={'1px'}
+                            />
+                            <MenuList>
+                                <MenuItem 
+                                    onClick={()=>router.push(`/profile/${user?.handle}`)}
+                                >個人檔案</MenuItem>
+                                { 
+                                    user.role ? 
+                                    <MenuItem onClick={()=>router.push(`/admin/problem/list`)}>管理員介面</MenuItem> :
+                                    ''
+                                }
+                                <MenuItem onClick={handleLogout}>登出</MenuItem>
+                            </MenuList>
+                        </Menu> ):(
+                        <>
+                            <Link className={element_class} href="/auth/login"> 登入 </Link>
+                            <Link className={element_class} href="/auth/registe"> 註冊 </Link>
+                        </>
+                    )
+                ):(
+                    <Loading/>
+                )
+            }
         </div>
     )
 }
