@@ -43,11 +43,14 @@ const Index = ()=>{
                     <Box>
                         <Heading as={'h1'} textAlign={'center'}> 
                             Welcome to
-                            <Box as='span' color={'orange.400'}> NuOJ!</Box>
+                            <Box as='span' color={'orange.500'}> NuOJ!</Box>
                         </Heading>
-                        <Text textAlign={'center'}>一款來自 國立臺北科技大學 的線上程式評測系統</Text>
-                        <Text textAlign={'center'}>
-                            系統正在進行開發中，你可以追蹤<Link href='https://github.com/ntut-xuan/NuOJ'>我們的開發進度</Link>
+                        <Text textAlign={'center'} fontWeight={'bold'}>一款來自 國立臺北科技大學 的線上程式評測系統</Text>
+                        <Text textAlign={'center'} fontWeight={'bold'}>
+                            系統正在進行開發中，你可以追蹤
+                            <Link href='https://github.com/ntut-xuan/NuOJ' color={'orange.500'}>
+                                我們的開發進度
+                            </Link>
                         </Text>
                     </Box>
                     <Flex
@@ -66,8 +69,8 @@ const Index = ()=>{
                             />
                         </Link>
                         <Box as='footer' padding={4}>
-                            <Text color={'whiteAlpha.900'} textAlign={'center'}>
-                                <Box as='span' color={'orange.400'}>
+                            <Text color={'whiteAlpha.900'} textAlign={'center'} fontWeight={'bold'}>
+                                <Box as='span' color={'orange.500'}>
                                     2023
                                 </Box>
                                 , NuOJ Team.
