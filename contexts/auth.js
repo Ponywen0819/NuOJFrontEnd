@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
     Cookies.remove("jwt");
     if (res.ok) {
-      setUser(null);
+      setUser({ isLogin: false });
     }
     return res.status;
   };
