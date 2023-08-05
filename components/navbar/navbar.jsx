@@ -8,8 +8,10 @@ import {
 } from '@/components/chakra';
 import { User } from '@/components/navbar/user';
 import { NavLink } from '@/components/navbar/link';
+import { Options } from '@/components/navbar/option';
 import NextLink from 'next/link';
 import logo from '@/public/logo-white.svg';
+
 
 export const Navbar = ()=>{
     return(
@@ -21,7 +23,6 @@ export const Navbar = ()=>{
         >
             <Container
                 display={'flex'}
-                alignItems={'center'}
                 height={16}
                 maxW={'container.xl'}
             >  
@@ -30,7 +31,11 @@ export const Navbar = ()=>{
                         <Image alt='logo' height={12} src={logo.src}/>
                     </Link>
                 </Flex>
-                <Box
+                <Flex 
+                    display={{base: 'none', lg: 'flex'}}
+                    direction={'row'} 
+                    align={'center'} 
+                    flex={1} 
                     marginLeft={12}
                 >
                     <Stack 
@@ -41,10 +46,18 @@ export const Navbar = ()=>{
                         <NavLink href='/problem/list'>問題</NavLink>
                         <NavLink href='/about'>關於</NavLink>
                     </Stack>
-                </Box>
-                <Box flex={1}>
-                    <User/>
-                </Box>
+                    <Box flex={1}>
+                        <User/>
+                    </Box>
+                </Flex>         
+                <Flex
+                    display={{base: 'flex', lg: 'none'}}
+                    flex={1}
+                    align={'center'}
+                    justify={'end'}
+                >
+                    <Options/>
+                </Flex>
             </Container>
         </Box>
     )

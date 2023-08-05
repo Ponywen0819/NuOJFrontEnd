@@ -1,4 +1,5 @@
 import { Link } from '@/components/chakra';
+import { forwardRef } from 'react';
 import NextLink from 'next/link';
 
 export const NavLink = ({
@@ -22,3 +23,14 @@ export const NavLink = ({
         </Link>
     )
 }
+
+export const MenuLink = forwardRef((props, ref) => (
+    <Link 
+        ref={ref} 
+        as={NextLink} 
+        _hover={{
+            "textDecoration": "none"
+        }} 
+        {...props} 
+    />
+))
