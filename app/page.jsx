@@ -1,36 +1,81 @@
 import { Navbar } from '@/components/navbar';
-
+import {
+    Box,
+    Flex,
+    Heading,
+    Text,
+    Link,
+    Image
+} from '@/components/chakra';
 import IndexImg from '@/public/index.jpg';
 import ntut_logo from '@/public/ntut_logo.png';
-import Image from 'next/image';
 
 
 const Index = ()=>{
     return (
         <>
-            <header className='absolute z-10 top-0 w-full'>
+            <Box
+                as='header'
+                position={'absolute'}
+                top={0}
+                w={'100%'}
+                zIndex={50}
+            >
                 <Navbar/>
-            </header>
-            <div className={`min-h-screen w-full bg-cover`} style={{ backgroundImage: `url(${IndexImg.src})`}}>
-                <div className="absolute h-full w-full bg-gray-900 bg-opacity-80"/>
-                <div className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] text-center w-[80%]">
-                    <p className="text-white text-5xl m-5 hover:text-gray-400 font-medium "> Welcome to NuOJ! </p>
-                    <p className="text-white text-2xl m-5 hover:text-gray-400"> 一款來自 國立臺北科技大學 的線上程式評測系統 </p>
-                    <p className="text-white text-2xl m-5 hover:text-gray-400"> 系統正在進行開發中，你可以追蹤<a className="text-orange-500" href="/dev_progress">我們的開發進度</a></p>
-                </div>
-                <div className="absolute bottom-14 w-full" id="icon">
-                    <div className="w-full flex justify-center">
-                        <div className="p-3 w-fit duration-500 bg-white hover:bg-slate-400">
-                            <a href="https://ntut.edu.tw">
-                                <Image src={ntut_logo}/>
-                            </a>
-                        </div>
-                    </div>
-                    <div className="w-fit mx-auto m-5">
-                        <p className="text-white"> 2023, NuOJ Team. </p>
-                    </div>
-                </div>
-            </div>
+            </Box>
+            <Flex
+                as='main'
+                minH={'800px'}
+                height={'100vh'}
+                w={'100%'}
+                bgPosition={'center'}
+                backgroundSize={'cover'}
+                backgroundImage={`url(${IndexImg.src})`}
+            >
+                <Flex
+                    flex={1}
+                    direction={'column'}
+                    backgroundColor={'rgba(0,0,0,0.6)'}
+                    justify={'end'}
+                    align={'center'}
+                    color={'whiteAlpha.900'}
+                >
+                    <Box>
+                        <Heading as={'h1'} textAlign={'center'}> 
+                            Welcome to
+                            <Box as='span' color={'orange.400'}> NuOJ!</Box>
+                        </Heading>
+                        <Text textAlign={'center'}>一款來自 國立臺北科技大學 的線上程式評測系統</Text>
+                        <Text textAlign={'center'}>
+                            系統正在進行開發中，你可以追蹤<Link href='https://github.com/ntut-xuan/NuOJ'>我們的開發進度</Link>
+                        </Text>
+                    </Box>
+                    <Flex
+                        h={'50%'}
+                        direction={'column'}
+                        justify={'center'}
+                    >
+                        <Link
+                            href="https://ntut.edu.tw"
+                            backgroundColor={'whiteAlpha.900'}
+                        >
+                            <Image
+                                alt='NTUT' 
+                                src={ntut_logo.src} 
+                                height={12}
+                            />
+                        </Link>
+                        <Box as='footer' padding={4}>
+                            <Text color={'whiteAlpha.900'} textAlign={'center'}>
+                                <Box as='span' color={'orange.400'}>
+                                    2023
+                                </Box>
+                                , NuOJ Team.
+                            </Text>
+                        </Box>
+                    </Flex>
+                </Flex>
+            </Flex>
         </>
     )
 };
