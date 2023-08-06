@@ -16,7 +16,11 @@ import {
     Time
 } from '@/components/table/types';
 
-import { SlideFade } from '@chakra-ui/react';
+import {
+    SlideFade,
+    Box
+} from '@/components/chakra';
+
 import { HOST } from '@/setting';
 import { Loading } from '@/components/loading';
 import Link from 'next/link';
@@ -53,35 +57,39 @@ const ProblemList = () =>{
                 <Tab href={'/problem/submition'} isActive={true} >提交狀態</Tab>
             </Subnav>
             <SlideFade in={datas}>
-                <Table>
-                    <Header height='64px'>
-                        <HeaderColumn width = {'10%'} >題目 ID</HeaderColumn>
-                        <HeaderColumn width='20%'>題目名稱</HeaderColumn>
-                        <HeaderColumn>提交人</HeaderColumn>
-                        <HeaderColumn>提交時間</HeaderColumn>
-                        <HeaderColumn>狀態</HeaderColumn>
-                        <HeaderColumn>記憶體</HeaderColumn>
-                        <HeaderColumn>時長</HeaderColumn>
-                    </Header>
-                    <Body
-                        pageSize={30}
-                    >
-                        {datas?.map((data)=>(
-                            <Row>
-                                <Cell>{data.id}</Cell>
-                                <Cell>{data.problem}</Cell>
-                                <Cell as={<Link/>} href={data.handle.href} className={link_class}>
-                                    {data.handle.text}
-                                </Cell>
-                                <Cell as={<Date/>}>{data.date}</Cell>
-                                <Cell>{data.verdict}</Cell>
-                                <Cell as={<Time/>}>{data.time}</Cell>
-                                <Cell>{data.memory}</Cell>
-                            </Row>
-                        ))}
-                    </Body>
-                    <Selector/>
-                </Table>
+                <Box width={'100%'} overflowX={'auto'}>
+                    <Box width={{base: 'container.lg', lg: '100%'}}>
+                        <Table>
+                            <Header height='64px'>
+                                <HeaderColumn width = {'10%'} >題目 ID</HeaderColumn>
+                                <HeaderColumn width='20%'>題目名稱</HeaderColumn>
+                                <HeaderColumn>提交人</HeaderColumn>
+                                <HeaderColumn>提交時間</HeaderColumn>
+                                <HeaderColumn>狀態</HeaderColumn>
+                                <HeaderColumn>記憶體</HeaderColumn>
+                                <HeaderColumn>時長</HeaderColumn>
+                            </Header>
+                            <Body
+                                pageSize={30}
+                            >
+                                {datas?.map((data)=>(
+                                    <Row>
+                                        <Cell>{data.id}</Cell>
+                                        <Cell>{data.problem}</Cell>
+                                        <Cell as={<Link/>} href={data.handle.href} className={link_class}>
+                                            {data.handle.text}
+                                        </Cell>
+                                        <Cell as={<Date/>}>{data.date}</Cell>
+                                        <Cell>{data.verdict}</Cell>
+                                        <Cell as={<Time/>}>{data.time}</Cell>
+                                        <Cell>{data.memory}</Cell>
+                                    </Row>
+                                ))}
+                            </Body>
+                            <Selector/>
+                        </Table>
+                    </Box>
+                </Box>
             </SlideFade>
             { datas ? '' : <Loading/> }
         </>

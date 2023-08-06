@@ -1,22 +1,52 @@
 import logo_min from '@/public/logo_min.png';
-import Image from 'next/image';
+import {
+    Box,
+    Flex,
+    Center,
+    Text,
+    Image,
+    Container
+} from '@/components/chakra';
 
-import { Subnav } from '@/components/subnav';
 
 export default function TableLayout({ children }) {
     return (
             <>
-                <div className='flex gap-3'>
-                    <div className='grow'>
+                <Flex 
+                    gap={3}
+                >
+                    <Box 
+                        as='section' 
+                        flex={1}
+                        overflowX={'auto'}
+                    >
                         {children}
-                    </div>
-                    <aside className="w-72 h-fit">
-                        <div className='bg-white w-full rounded-xl p-3'>
-                            <Image width={128} height={128} alt='' className="mx-auto" src={logo_min}/>
-                            <p className="text-2xl text-center p-5"> NuOJ Lab </p>
-                        </div>
-                    </aside>
-                </div>
+                    </Box>
+                    <Container 
+                        as='aside'
+                        display={{base: 'none', lg: 'block'}}
+                        w={'fit-content'}
+                        p={0}
+                    >
+                        <Center 
+                            w={64} 
+                            h={64} 
+                            backgroundColor={"whiteAlpha.900"}
+                            borderRadius={'lg'}
+                            boxShadow={'sm'}
+                        >
+                            <Box>
+                                <Image 
+                                    alt='aside logo' 
+                                    width={"128px"} 
+                                    height={"128px"} 
+                                    src={logo_min.src}
+                                />
+                                <Text align={'center'}>NuOJ lab.</Text>
+                            </Box>
+                        </Center>
+                    </Container>
+                </Flex>
             </>
             
     );

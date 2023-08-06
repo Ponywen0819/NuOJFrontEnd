@@ -2,10 +2,21 @@
 
 import { useState } from 'react';
 // import { Table } from '@/components/table';
-import { Table, Header, HeaderColumn, Body, Row, Cell, Selector } from '@/components/table';
+import { 
+    Table, 
+    Header, 
+    HeaderColumn, 
+    Body, 
+    Row, 
+    Cell, 
+    Selector 
+} from '@/components/table';
+import {
+    Box,
+} from '@/components/chakra';
 import { useEffect } from 'react';
 import { SlideFade } from '@chakra-ui/react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 
 import { HOST } from '@/setting';
 import { Loading } from '@/components/loading';
@@ -49,32 +60,36 @@ const ProblemList = () =>{
                 <Tab href={'/problem/submition'}  >提交狀態</Tab>
             </Subnav>
             <SlideFade in={datas}>
-                <Table>
-                    <Header height='64px'>
-                        <HeaderColumn
-                            width = {'10%'}
-                        >題目 ID</HeaderColumn>
-                        <HeaderColumn>題目名稱</HeaderColumn>
-                        <HeaderColumn>題目作者</HeaderColumn>
-                        <HeaderColumn>題目標籤</HeaderColumn>
-                    </Header>
-                    <Body
-                        pageSize={30}
-                    >
-                        {datas?.map((data)=>(
-                            <Row>
-                                <Cell>{data.id}</Cell>
-                                <Cell as={<Link/>} href={data.title.href} className={link_class}>
-                                    {data.title.text}
-                                </Cell>
-                                <Cell as={<Link/>} href={data.author.href} className={link_class}>
-                                    {data.author.text}
-                                </Cell>
-                            </Row>
-                        ))}
-                    </Body>
-                    <Selector/>
-                </Table>
+                <Box width={'100%'} overflowX={'auto'}>
+                    <Box width={{base: 'container.lg', lg: '100%'}}>
+                        <Table>
+                            <Header height='64px'>
+                                <HeaderColumn
+                                    width = {'10%'}
+                                >題目 ID</HeaderColumn>
+                                <HeaderColumn>題目名稱</HeaderColumn>
+                                <HeaderColumn>題目作者</HeaderColumn>
+                                <HeaderColumn>題目標籤</HeaderColumn>
+                            </Header>
+                            <Body
+                                pageSize={30}
+                            >
+                                {datas?.map((data)=>(
+                                    <Row>
+                                        <Cell>{data.id}</Cell>
+                                        <Cell as={<NextLink/>} href={data.title.href} className={link_class}>
+                                            {data.title.text}
+                                        </Cell>
+                                        <Cell as={<NextLink/>} href={data.author.href} className={link_class}>
+                                            {data.author.text}
+                                        </Cell>
+                                    </Row>
+                                ))}
+                            </Body>
+                            <Selector/>
+                        </Table>
+                    </Box>
+                </Box>
             </SlideFade>
             {datas? '' : <Loading/>}
         </>
