@@ -1,14 +1,27 @@
 import { Navbar } from '@/components/navbar';
+import { 
+    Box,
+    Container
+} from '@/components/chakra';
 
 const PaddingTop = ({ children })=>{
     return(
         <>
-            <header className='bg-black'>
+            <Box
+                as='header' 
+                w={'100%'} 
+                backgroundColor={"blackAlpha.900"}
+            >
                 <Navbar/>
-            </header>
-            <main className="mx-auto max-w-7xl py-10 px-4">
+            </Box>
+            <Container
+                as='main'
+                maxW={'container.xl'}
+                paddingX={4}
+                paddingY={6}
+            >
                 {children}
-            </main>    
+            </Container>
         </>
     )
 }
