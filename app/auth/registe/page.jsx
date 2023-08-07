@@ -14,6 +14,7 @@ import {
     Stack,
     FormControl,
     FormLabel,
+    FormErrorMessage,
     Input,
     Divider,
     Button,
@@ -26,13 +27,24 @@ import Swal from "sweetalert2";
 import logo_min from '@/public/logo_min.png'
 
 const Registe = () =>{
-    const color = useContext(color_context);    
+    const color = useContext(color_context);
     const { github_oauth_url, google_oauth_url } = useContext(oauth_context);
     const router = useRouter();
-    const { register, handleSubmit } = useForm();
+    const { 
+        register, 
+        handleSubmit,
+        setError,
+        formState : { errors, isSubmitting } 
+    } = useForm();
+    
     
     const handleRegister = async (data) => {
-        const { handle, email, password } = data;
+        const { handle, email, password, passwordCheck } = data;
+        if( password !== passwordCheck){
+            setError('passwordCheck',   { type: "check", message: "密碼不一致" })
+            setError('password',   { type: "check", message: "密碼不一致" })
+            return;
+        }
         let res = await fetch(`${HOST}/api/auth/register`, {
             "method": "POST",
             headers: {
@@ -94,24 +106,41 @@ const Registe = () =>{
                         marginX={'auto'}
                     />
                 </Link>
-                <FormControl>
+                <FormControl isInvalid={errors.handle}>
                     <FormLabel>帳號</FormLabel>
-                    <Input type='account' placeholder='請輸入 Handle' {...register("handle")}/>
+                    <Input type='account'
+                        placeholder='請輸入 Handle' 
+                        {...register("handle",{ required: true})}
+                    />
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={errors.email}>
                     <FormLabel>電子信箱</FormLabel>
-                    <Input type='email' placeholder='請輸入電子信箱' {...register("email")}/>
-                </FormControl>
-                <FormControl>
+                    <Input 
+                        type='email' 
+                        placeholder='請輸入電子信箱' 
+                        {...register("email",{ 
+                            required: true,
+                            pattern: /^[A-Za-z0-9]+@[A-Za-z0-9]+/ 
+                        })}
+                    />
+                </FormControl >
+                <FormControl isInvalid={errors.password}>
                     <FormLabel>密碼</FormLabel>
-                    <Input type='password' placeholder='請輸入密碼' {...register("password")}/>
+                    <Input type='password' placeholder='請輸入密碼' {...register("password",{ required: true })}/>
+                    <FormErrorMessage>
+                        {errors.passwordCheck && errors.passwordCheck.message}
+                    </FormErrorMessage>
                 </FormControl>
-                <FormControl>
+                <FormControl isInvalid={errors.passwordCheck}>
                     <FormLabel>密碼確認</FormLabel>
-                    <Input type='password' placeholder='請再次輸入密碼' {...register("passwordCheck")}/>
+                    <Input type='password' placeholder='請再次輸入密碼' {...register("passwordCheck",{ required: true })}/>
+                    <FormErrorMessage>
+                        {errors.password && errors.password.message}
+                    </FormErrorMessage>
                 </FormControl>
                 <Button
                     type='submit'
+                    isLoading={isSubmitting}
                     backgroundColor={`${color}.300`}
                     _hover={{
                         backgroundColor : `${color}.500`,
@@ -122,8 +151,8 @@ const Registe = () =>{
                     <Divider/>
                     <AbsoluteCenter>或</AbsoluteCenter>
                 </Box>
-                { github_oauth_url ? <Button>使用 github 註冊</Button> : ''}
-                { google_oauth_url ? <Button>使用 google 註冊</Button> : ''}
+                { github_oauth_url ? <Button isLoading={isSubmitting}>使用 github 註冊</Button> : ''}
+                { google_oauth_url ? <Button isLoading={isSubmitting}>使用 google 註冊</Button> : ''}
                 <Text align={'center'}>
                     已擁有帳號？
                     <Link as={NextLink} href='/auth/login' color={`${color}.400`}> 登入 </Link>
