@@ -4,7 +4,8 @@ import { Providers } from '@/contexts/root';
 import LogoWhite from '@/public/logo-white.svg';
 import {
   Box
-} from '@/components/chakra';``
+} from '@/components/chakra';
+import './global.css';
 
 export const metadata = {
   title: {

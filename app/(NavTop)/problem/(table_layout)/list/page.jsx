@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-// import { Table } from '@/components/table';
 import { 
-    Table, 
+    Table,
     Header, 
     HeaderColumn, 
     Body, 
