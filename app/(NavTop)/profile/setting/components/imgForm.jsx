@@ -1,28 +1,53 @@
-import { SlideFade, IconButton } from '@chakra-ui/react';
-import { SmallCloseIcon, EditIcon } from '@chakra-ui/icons';
-import { error_swal, success_swal } from '@/components/notification';
-import { useContext, useState } from 'react';
-import { profile_context } from '../page';
+'use client';
+
+import {
+    Box,
+    Flex,
+    Image,
+    Stack,
+    Container,
+    Center,
+    Text,
+    SlideFade,
+    IconButton,
+    SmallCloseIcon,
+    Button
+} from '@/components/chakra';
+import { useState } from 'react';
 import { HOST } from '@/setting';
+import { success_swal, error_swal } from '@/components/notification';
 
-const InputForm = () =>{
-    const { imgFormPop, setPop, profile, uploadProfile} = useContext(profile_context);
-    const { handle, img } = profile || {};
-    const [imgBuff, setBuff] = useState(null);
+export const ImgForm = ({ 
+    initial,
+    handle,
+    close,
+    updateImg
+})=>{
+    const [img, setImg] = useState(initial);
 
-    const Close = ()=>{
-        setPop(false);
-        setBuff(null);
+    const selectImg = () =>{
+        const file_input = document.createElement("input")
+        file_input.type = "file"
+        file_input.accept = "image/*"
+        file_input.onchange = e => {
+            const image = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = readerEvent => {
+                setImg(readerEvent.target.result);
+            }
+            reader.readAsDataURL(image)
+        }
+        file_input.click();
     }
 
     const handleUpdate = async () =>{
-        if(!imgBuff){
-            success_swal("大頭照並未更改").then(Close);
+        if(!img){
+            success_swal("大頭照並未更改").then(()=>close());
             return
         }
 
-        const imageBuffer = await fetch(imgBuff).then((res) =>res.arrayBuffer());
-        const mime = imgBuff?.match(/:(.*?);/)[1];
+        const imageBuffer = await fetch(img).then((res) =>res.arrayBuffer());
+        const mime = img?.match(/:(.*?);/)[1];
         
         let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
             method: "PUT",
@@ -33,78 +58,70 @@ const InputForm = () =>{
             body: imageBuffer
         })
         if(res.ok){
-            uploadProfile({img: imgBuff})
-            success_swal("大頭照更改成功").then(Close);
+            success_swal("大頭照更改成功").then(()=>{
+                updateImg(img)
+                close()
+            });
         }
         else{
             error_swal("大頭照上傳失敗");
         }
     }
 
-    const updateImg = () =>{
-        const file_input = document.createElement("input")
-        file_input.type = "file"
-        file_input.accept = "image/*"
-        file_input.onchange = e => {
-            const image = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = readerEvent => {
-                setBuff(readerEvent.target.result);
-            }
-            reader.readAsDataURL(image)
-        }
-        file_input.click();
-    }
-
-    return(
-        <SlideFade in={imgFormPop} unmountOnExit={true}>
-            <div className={`fixed bg-black/[.3] inset-0 flex justify-center z-10 overflow-y-auto py-5`}>
-                <div className='max-w-xl w-1/2 my-auto shadow-2xl rounded-lg bg-white border-2 p-5 '>
-                    <div className='w-full'>
-                        <IconButton size={"sm"} icon={<SmallCloseIcon/>} onClick={Close}/>
-                    </div>
-                    <div className='border-b-2 pb-2 mb-2'>
-                        <p className='text-2xl font-medium text-center'>請上傳新圖片</p>
-                    </div>
-                    <div className='my-10'>
-                        <img className='w-52 h-52 object-cover mx-auto rounded-full border-2' alt='avater image' src={imgBuff || img}/>
-                    </div>
-
-                    <div className='w-fit mx-auto'>
-                        <button className='bg-orange-500 text-white p-2 rounded-lg mx-3' onClick={handleUpdate}>確認更改</button>
-                        <button className='bg-gray-400 text-white p-2 rounded-lg mx-3' onClick={updateImg}>上傳圖片</button>
-                    </div>
-                </div>
-            </div>
-        </SlideFade>
-    )
-}
-
-const DisplayTable = () =>{
-    const { profile, setPop } = useContext(profile_context);
-    const { role, img, handle } = profile || {};
-
-    return(
-        <div className='w-64'>
-            <div className='w-52 h-52 mx-auto relative'>
-                <img className='w-52 h-52 object-cover rounded-full border-2' src={img}/>
-                <button className='absolute bottom-3 right-3 bg-black w-10 h-10 rounded-full text-white' onClick={()=>setPop(true)}>
-                    <EditIcon mx={'auto'}/>
-                </button>
-            </div>
-            <div className='my-5'>
-                <p className="text-base text-slate-400 ">{(role === 1)? "管理員" : "使用者"}</p>
-                <p className="w-full text-center text-5xl font-medium text-black-700">{ handle }</p>
-            </div>
-        </div>
-    )
-}
-
-export const ImgForm = ()=>{
     return(
         <>
-            <DisplayTable/>
-            <InputForm/>
+            <Center
+                position={'fixed'}
+                inset={0}
+                backgroundColor={'blackAlpha.400'}
+                overflowY={'auto'}
+                paddingX={3}
+                paddingY={5}
+            >
+                <Stack
+                    gap={3}
+                    paddingX={3}
+                    paddingY={5}
+                    position={'relative'}
+                    backgroundColor = {'white'}
+                    boxShadow={'sm'}
+                    borderRadius={'lg'}
+                >
+                    <IconButton
+                        icon={<SmallCloseIcon/>}
+                        backgroundColor={'whiteAlpha.100'}
+                        isRound={true}
+                        position={'absolute'}
+                        top={2}
+                        right={2}
+                        marginLeft={'auto'} 
+                        display={'block'}
+                        onClick={close}
+                    />
+                    <Image 
+                        alt='avater preview' 
+                        src={img}
+                        rounded={'full'}
+                        fit={'cover'}
+                        boxSize={{base: "3xs", lg: 'xs'}}
+                    />
+                    <Container w={'fit-content'} display={'flex'} gap={3}>
+                        <Button
+                            backgroundColor={'orange.400'}
+                            color={'whiteAlpha.800'}
+                            borderRadius={'lg'}
+                            onClick={handleUpdate}
+                        >確認更改</Button>
+                        <Button
+                            backgroundColor={'gray.400'}
+                            color={'whiteAlpha.800'}
+                            borderRadius={'lg'}
+                            onClick={selectImg}
+                        >變更圖片</Button>
+                    </Container>
+                </Stack>
+            </Center>
         </>
     )
 }
+

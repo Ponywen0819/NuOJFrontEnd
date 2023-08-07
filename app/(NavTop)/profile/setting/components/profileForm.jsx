@@ -25,25 +25,16 @@ export const ProfileForm = ({
         handleSubmit,
     } = useForm();
 
-    const handleProfileUpdate = async () => {
-        const vals = records.reduce((acc, curr)=>{
-            const { key, ref } = curr
-            acc[key] = ref.current.value;
-            return acc;
-        },{})
-
+    const handleProfileUpdate = async (data) => {
         let res = await fetch(`${HOST}/api/profile/${handle}`,{
             method: "POST",
-            body: JSON.stringify(vals),
+            body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" }
         })
         if(res.ok){
-            success_swal("更新成功").then(()=>{
-                uploadProfile(vals)
-                router.push(`/profile/${handle}`)
-            })
+            success_swal("更新成功");
         }
-        else error_swal("上傳發生問題")
+        else error_swal("上傳發生問題");
     }
 
     return(
@@ -51,8 +42,8 @@ export const ProfileForm = ({
             as='form'
             onSubmit={handleSubmit(handleProfileUpdate)}
             flex={1}
+            height={'fit-content'}
             gap={3}
-            justify={'space-between'}
             direction={'column'}
             boxShadow={'sm'}
             backgroundColor={'whiteAlpha.900'}
@@ -101,8 +92,6 @@ export const ProfileForm = ({
                     onClick={()=>router.push(`/profile/${handle}`)}
                     height={10}
                     paddingX={4}
-                    verticalAlign={'middle'}
-                    display={'block'}
                     backgroundColor={'gray.400'}
                     color={'whiteAlpha.800'}
                     borderRadius={'lg'}
