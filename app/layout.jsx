@@ -2,9 +2,10 @@ import { MockProvider } from '@/mocks/provider';
 import { Providers } from '@/contexts/root';
 
 import LogoWhite from '@/public/logo-white.svg';
-
-import "./global.css";
-
+import {
+  Box
+} from '@/components/chakra';
+import './global.css';
 
 export const metadata = {
   title: {
@@ -24,8 +25,11 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="bg-gray-100 bg-opacity-80 min-h-screen">
-      {/* <body className="min-h-screen"> */}
+      <Box 
+        as='body'
+        backgroundColor={'rgb(241 245 249)'}
+        minH={'100vh'}
+      >
         {
           enable? 
             <MockProvider>
@@ -35,7 +39,7 @@ export default function RootLayout({ children }) {
             </MockProvider>:
             <Providers>{children}</Providers>
         }
-      </body>
+      </Box>
     </html>
   );
 }

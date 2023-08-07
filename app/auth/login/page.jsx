@@ -1,18 +1,45 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import { Form } from '@/components/form';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { color_context } from '@/contexts/color';
 import { auth_context } from '@/contexts/auth';
 import { navigate_context } from '@/contexts/navigate';
-import {success_swal, error_swal, show_mail_confirm_swal } from '@/components/notification';
+import { oauth_context } from '@/contexts/oauth';
+import { 
+    success_swal, 
+    error_swal, 
+    show_mail_confirm_swal 
+} from '@/components/notification';
+import { useForm } from 'react-hook-form';
+import {
+    Box,
+    Text,
+    AbsoluteCenter,
+    Stack,
+    FormControl,
+    FormLabel,
+    Input,
+    Divider,
+    Button,
+    Image,
+    Link
+} from '@/components/chakra';
+
+import logo_min from '@/public/logo_min.png'
+import NextLink from 'next/link';
+
 
 const Login = ()=>{
     const color = useContext(color_context);
     const auth = useContext(auth_context);
     const navigate = useContext(navigate_context); 
+    const { github_oauth_url, google_oauth_url } = useContext(oauth_context);
     const router = useRouter();
+    const {
+        register,
+        handleSubmit
+    } = useForm();
 
     const handleLogin = async (info) => {
         let StateCode = await auth.signin(info);
@@ -39,29 +66,63 @@ const Login = ()=>{
     }
 
     return(
-        // ["bg-blue-300", "bg-orange-300", "bg-purple-300", "bg-red-300"];
-        <div className={`min-h-screen bg-${color}-300 flex `}>
-            <Form
-                title={"登入"}
-                inputs={[
-                    {
-                        key: "account",
-                        type: "text",
-                        placeholder: "帳號或電子信箱"
-                    },
-                    {
-                        key: "password",
-                        type: "password",
-                        placeholder: "密碼"
-                    }
-                ]}
-                color={color}
-                feet={[
-                    {url: "/auth/registe", content: "沒有帳號嗎？點此註冊"}
-                ]}
-                callback={handleLogin}
-            />
-        </div>
+        <Box
+            backgroundColor={`${color}.300`}
+            position={'fixed'}
+            inset={0}
+            paddingX={3}
+            paddingY={5}
+            overflowY={'auto'}
+        >
+            <Stack 
+                as={'form'}
+                onSubmit={handleSubmit(handleLogin)}
+                position={'relative'}
+                width={'sm'}
+                boxShadow={'sm'}
+                boxSizing='border-box'
+                marginX={'auto'}
+                borderRadius={'lg'}
+                backgroundColor={"white"}
+                paddingX={3}
+                paddingY={5}
+            >   
+                <Link as={NextLink} href='/'>
+                    <Image 
+                        alt='Logo' 
+                        src={logo_min.src} 
+                        boxSize={16}
+                        marginX={'auto'}
+                    />
+                </Link>
+                <FormControl>
+                    <FormLabel>帳號</FormLabel>
+                    <Input type='account' placeholder='請輸入 Handle' {...register("account")}/>
+                </FormControl>
+                <FormControl>
+                    <FormLabel>密碼</FormLabel>
+                    <Input type='password' placeholder='請輸入密碼' {...register("password")}/>
+                </FormControl>
+                <Button
+                    type='submit'
+                    backgroundColor={`${color}.300`}
+                    _hover={{
+                        backgroundColor : `${color}.500`,
+                        color: `white`
+                    }}
+                >登入</Button>
+                <Box position={'relative'} marginY={3}>
+                    <Divider/>
+                    <AbsoluteCenter>或</AbsoluteCenter>
+                </Box>
+                { github_oauth_url ? <Button>使用 github 登入</Button> : ''}
+                { google_oauth_url ? <Button>使用 google 登入</Button> : ''}
+                <Text align={'center'}>
+                    尚未擁有帳號？
+                    <Link as={NextLink} href='/auth/registe' color={`${color}.400`}> 註冊 </Link>
+                </Text>
+            </Stack>
+        </Box>
     )
 }
 

@@ -5,52 +5,124 @@ import { Loading } from '@/components/loading';
 import NotFound from './not-found';
 import { useEffect, useState, useContext } from "react";
 import { auth_context } from '@/contexts/auth';
-import { useRouter, usePathname } from 'next/navigation';
-import { ScaleFade } from '@chakra-ui/react';
-// import { useState, useEffect } from 'react';
+import{
+    SlideFade,
+    Box,
+    Flex,
+    Heading,
+    Text,
+    Image,
+    Link,
+    Divider,
+    Stack
+} from '@/components/chakra'
+import NextLink from 'next/link';
 
 const Info = ({ info, handle }) => {
-    const router = useRouter();
     const auth_handle = useContext(auth_context).user?.handle;
-
-    const subtitles = [
-        { key: "school", title: "學校" },
-        { key: "email", title: "電子信箱" },
-        { key: "bio", title: "個人介紹" }
-    ];
+    const { img, role, email, school, bio } = info;
 
     return(
-        <div className="flex p-5 shadow-2xl rounded-lg bg-white border-2">
-            <div className="mr-2 border-r-0 pr-2">
-                <img className={`w-52 h-52 object-cover rounded-full border-2 mb-2`} src={info?.img}/>
-                {
-                    (auth_handle === handle) && <button 
-                        onClick={()=>router.replace("/profile/setting")}
-                        className="rounded-lg py-1 mx-auto w-fit px-2 block text-lg text-slate-400 border-2">設定個人檔案</button>
-                }
-            </div>
-            <div className="grow">
-                <div className="mb-2 border-b-2 pb-2">
-                    <p className="text-base text-slate-400 ">{(info?.role === 1)? "管理員" : "使用者"}</p>
-                    <p className="text-5xl font-medium text-black-700">{info?.handle}</p>
-                </div>
-                {
-                    info && subtitles.map((subtitle)=>(
-                        <div key={subtitle.key} className="pb-2">
-                            <p className="text-sm text-slate-400 ">{subtitle.title}</p>
-                            <p className="text-base text-slate-900 break-words">{info[subtitle.key]}</p>
-                        </div>
-                    ))
-                }
-            </div>
-        </div>
+        <Flex
+            direction={{base: "column", lg: 'row'}}
+            gap={3}
+        >
+            <Stack 
+                backgroundColor={'whiteAlpha.900'}
+                borderRadius={'lg'}
+                boxShadow={'sm'}
+                paddingX={3}
+                paddingY={5}
+            >
+                <Flex
+                    direction={{base: 'row',lg: 'column'}}
+                    gap={3}
+                >
+                    <Image 
+                        alt="user avater"
+                        boxSize={{base: "3xs", lg: 'xs'}}
+                        borderRadius={'full'}
+                        src={img}
+                    />
+                    <Flex 
+                        flex={1} 
+                        direction={'column'} 
+                        justify={'space-between'}
+                    >
+                        <Text
+                            w={'100%'}
+                            fontSize={'xl'}
+                            fontWeight={'bold'}
+                            color={'gray.400'}
+                            align={'left'}
+                        >{role?"管理員" : "使用者"}</Text>
+                        <Text
+                            fontWeight={'bold'}
+                            fontSize={'5xl'}
+                            align={{base: 'center', lg: 'left'}}
+                        >{handle}</Text>
+                        {
+                            (auth_handle === handle)?(
+                                <Link
+                                    as={NextLink} 
+                                    href="/profile/setting"
+                                    display={'block'}
+                                    width={'100%'}
+                                    borderWidth={"1px"}
+                                    borderRadius={'lg'}
+                                    borderColor={'gray.300'}
+                                    color={'gray.300'}
+                                    textAlign={'center'}
+                                    fontSize={'xl'}
+                                >修改個人資料</Link>
+                            ):('')
+                        }
+                    </Flex>
+                </Flex>
+            </Stack>
+            <Stack 
+                flex={1}
+                height={'fit-content'}
+                backgroundColor={'whiteAlpha.900'}
+                borderRadius={'lg'}
+                boxShadow={'sm'}
+                paddingX={3}
+                paddingY={5}
+                gap={3}
+            >
+                <Heading as={'h1'}>個人資訊</Heading>
+                <Divider marginY={3}/>
+                <Box>
+                    <Heading 
+                        as={'h2'}
+                        fontSize={'xl'} 
+                        color={'gray.400'}
+                    >學校</Heading>
+                    <Text fontSize={'2xl'} mt={2}>{school}</Text>    
+                </Box>
+                <Box>
+                    <Heading 
+                        as={'h2'}
+                        fontSize={'xl'} 
+                        color={'gray.400'}
+                    >電子郵件</Heading>
+                    <Text fontSize={'2xl'} mt={2}>{email}</Text>    
+                </Box>
+                <Box>
+                    <Heading 
+                        as={'h2'} 
+                        fontSize={'xl'}
+                        color={'gray.400'}
+                    >自我介紹</Heading>
+                    <Text fontSize={'2xl'} mt={2}>{bio}</Text>    
+                </Box>
+            </Stack>
+        </Flex>
     )
 }
 
 const Profile = ({ params })=>{
-    const handle = params.handle
-
-    const [loaded, setLoaded] = useState(false);
+    const handle = params.handle;
     const [profile, setProfile] = useState(null);
 
     useEffect(()=>{
@@ -59,32 +131,40 @@ const Profile = ({ params })=>{
 
     const getInfo = async () =>{
         const info_res = await fetch(`${HOST}/api/profile/${handle}`);
-        if(info_res.ok) {
-            const profile = await info_res.json();
-            setProfile(profile);
+        if(!info_res.ok){
+            setProfile({notFound: true});
+            return;
+        }
+        const profile = await info_res.json();
 
-            const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
-            if(img_res.ok){
-                const buffer = await img_res.blob(); 
-                const reader = new FileReader();
-                reader.onload = () =>{
-                    const base64 = reader.result;
-                    setProfile((old)=>({...old, img: base64, handle: handle}));
-                }
-                reader.readAsDataURL(buffer);
-            }
+        const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
+        if(!img_res.ok){
+            setProfile({notFound: true});
+            return;
         }
-        else{
-            setProfile(null)
+        const blob = await img_res.blob();
+        const reader = new FileReader();
+        reader.onload = () =>{
+            const base64 = reader.result;
+            setProfile({
+                img: base64, 
+                handle: handle,
+                ...profile
+            });
         }
-        setLoaded(true);
+        reader.readAsDataURL(blob);
     }
+
     return(
         <>
-            <ScaleFade in={loaded} unmountOnExit={true}>
-                {profile?(<Info info={profile} handle={handle}/>):(<NotFound/>)}
-            </ScaleFade>
-            {( !loaded && !profile ) && (<Loading/>)}
+            <SlideFade in={profile} unmountOnExit={true}>
+                {
+                    (profile && profile.notFound)?(
+                    <NotFound/>):(
+                    <Info info={profile} handle={handle}/>
+                )}
+            </SlideFade>
+            {( !profile ) && (<Loading/>)}
         </>
         
     )

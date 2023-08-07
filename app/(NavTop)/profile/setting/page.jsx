@@ -3,8 +3,16 @@
 import { HOST } from '@/setting';
 import { useContext, useEffect, useState, createContext } from 'react';
 import { auth_context } from '@/contexts/auth';
-import { useRouter } from 'next/navigation';
-import { ScaleFade } from '@chakra-ui/react';
+import { 
+    ScaleFade,
+    Flex,
+    Box,
+    Image,
+    Stack,
+    Text,
+    IconButton,
+    EditIcon
+} from '@/components/chakra';
 import { Loading } from '@/components/loading';
 import { ImgForm } from './components/imgForm';
 import { ProfileForm } from './components/profileForm';
@@ -22,61 +30,102 @@ const SetProfile = () =>{
     },[]);
 
     const getInfo = async () =>{
-        let temp = {}
-
         const info_res = await fetch(`${HOST}/api/profile/${handle}`);
-        if(info_res.ok) {
-            const profile = await info_res.json();
-            temp = profile;
+        if(!info_res.ok){
+            setProfile({notFound: true});
+            return;
+        }
+        const profile = await info_res.json();
 
-            const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
-            if(img_res.ok){
-                const buffer = await img_res.blob(); 
-                const reader = new FileReader();
-                reader.onload = () =>{
-                    const base64 = reader.result;
-                    setProfile((old)=>({...temp, img: base64, handle: handle}));
-                }
-                reader.readAsDataURL(buffer);
-            }
+        const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
+        if(!img_res.ok){
+            setProfile({notFound: true});
+            return;
         }
-        else{
-            setProfile(null)
+        const blob = await img_res.blob();
+        const reader = new FileReader();
+        reader.onload = () =>{
+            const base64 = reader.result;
+            setProfile({
+                img: base64, 
+                handle: handle,
+                ...profile
+            });
         }
+        reader.readAsDataURL(blob);
     }
 
-    const uploadProfile = (newprofile) =>{
-        setProfile((old)=>{
-            Object.keys(newprofile).reduce((_, curr) =>{
-                old[curr] = newprofile[curr]
-            }, 0);
-            return old;
-        })
-    }
-
-    const context = {
-        imgFormPop,
-        profile,
-        setPop,
-        uploadProfile
-    };
+    const { img, role } = profile || {}
 
     return(
         <>  
-            <profile_context.Provider value={context}>
-                <ScaleFade in={profile} unmountOnExit={true}>
-                    <div className="p-5 shadow-2xl rounded-lg bg-white border-2">
-                        <p className='pl-2 text-2xl font-medium mb-2'>設定個人資料</p>
-                        <div className='flex'>
-                            <ImgForm/>
-                            <ProfileForm cols={[
-                                { key: "school", title: "學校" },
-                                { key: "bio", title: "自我介紹" }
-                            ]}/>
-                        </div>
-                    </div>
-                </ScaleFade>
-            </profile_context.Provider>
+            <ScaleFade in={profile} unmountOnExit={true}>
+                <Flex direction={{base: "column", lg: 'row'}} gap={3}>
+                    <Stack
+                        backgroundColor={'whiteAlpha.900'}
+                        borderRadius={'lg'}
+                        boxShadow={'sm'}
+                        paddingX={3}
+                        paddingY={5}
+                    >
+                        <Flex
+                            direction={{base: 'row',lg: 'column'}}
+                            gap={3}
+                        >   
+                            <Box position={'relative'} boxSize={{base: "3xs", lg: 'xs'}}>
+                                <Image 
+                                    alt="user avater"
+                                    boxSize={{base: "3xs", lg: 'xs'}}
+                                    fit={'cover'}
+                                    borderRadius={'full'}
+                                    src={img}
+                                />
+                                <IconButton 
+                                    icon={<EditIcon/>}
+                                    position={'absolute'}
+                                    bottom={{base: 3, lg: 6}}
+                                    right={{base: 3, lg: 6}}
+                                    backgroundColor={'blackAlpha.900'}
+                                    color={'whiteAlpha.900'}
+                                    isRound={true}
+                                    onClick={()=>setPop(true)}
+                                />
+                            </Box>
+                            <Flex 
+                                flex={1} 
+                                direction={'column'} 
+                                justify={'space-between'}
+                            >
+                                <Text
+                                    w={'100%'}
+                                    fontSize={'xl'}
+                                    fontWeight={'bold'}
+                                    color={'gray.400'}
+                                    align={'left'}
+                                >{role?"管理員" : "使用者"}</Text>
+                                <Text
+                                    fontWeight={'bold'}
+                                    fontSize={'5xl'}
+                                    align={{base: 'center', lg: 'left'}}
+                                >{handle}</Text>
+                            </Flex>
+                        </Flex>
+                    </Stack>
+                    <ProfileForm initial={profile} handle={handle}/>
+                </Flex>
+            </ScaleFade>
+            {imgFormPop? 
+                <ImgForm 
+                    initial={img} 
+                    handle={handle} 
+                    close={()=>setPop(false)} 
+                    updateImg ={(newImg)=>{
+                        setProfile((old)=>{
+                            old.img = newImg;
+                            return old;
+                        })
+                    }}
+                /> : ''}
             {(profile)?"":(<Loading/>)}
         </>
     )
