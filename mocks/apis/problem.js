@@ -31,6 +31,10 @@ export const problem = [
     return res(ctx.status(200), ctx.delay(1000), ctx.json(fake_problems));
   }),
 
+  rest.post(`${HOST}/api/problem`, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.delay(1000), ctx.json(fake_problems));
+  }),
+
   rest.get(`${HOST}/api/problem/:id`, (req, res, ctx) => {
     const id = parseInt(req.params.id);
     for (const problem of fake_problems) {
