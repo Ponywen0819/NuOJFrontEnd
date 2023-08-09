@@ -1,21 +1,24 @@
 'use client'
 
 import { Navbar } from '@/components/navbar';
-import { useContext } from 'react';
 import { auth_context } from '@/contexts/auth';
-import Loading from './loading';
+import {
+    Box,
+    Container,
+} from '@/components/chakra';
 import { redirect } from 'next/navigation';
+import { useContext } from 'react';
+import Loading from './loading';
 
 const AdminLayout = ({ children })=>{
     const { user } = useContext(auth_context);
 
-
     return(
         <>
-            <header className='bg-black'>
+            <Box as='header' backgroundColor={'blackAlpha.900'}>
                 <Navbar/>
-            </header>
-            <main className="mx-auto max-w-7xl py-10 px-4">
+            </Box>
+            <Container as='main' paddingX={3} paddingY={5} maxW={'container.xl'}>
                 {
                     (user) ?(
                         (user.role)?(
@@ -27,7 +30,7 @@ const AdminLayout = ({ children })=>{
                         <Loading/>
                     )
                 }
-            </main>
+            </Container>
         </>
     )
 }
