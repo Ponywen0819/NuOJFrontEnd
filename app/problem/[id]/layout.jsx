@@ -1,18 +1,65 @@
+'use client';
+
 import { RequireAuth } from '@/contexts/auth';
 import { Navbar } from '@/components/navbar';
+import {
+    Stack,
+    Box,
+    Flex,
+    Tabs,
+    Tab,
+    TabList,
+    TabPanels,
+    TabPanel
+} from '@/components/chakra';
+import useSWR from 'swr';
+import { HOST } from '@/setting';
 
-const ProblemDetailLayout = ({ children }) =>{
+const fetcher = async url => {
+    const res = await fetch(url)
+    if (!res.ok) {
+      const error = new Error('An error occurred while fetching the data.')
+      error.info = await res.json()
+      error.status = res.status
+      throw error
+    }
+
+    return res.json()
+}
+
+const ProblemDetailLayout = (props) =>{
+    const {
+        doc,
+        submit,
+        submition,
+        params
+    } = props;
+    const { id } = params;
+
+    useSWR(`${HOST}/api/problem/${id}`, fetcher, { suspense: true });
+
     return(
-        <div className='flex flex-col min-h-[800px] h-screen'>
-            <header className='bg-black'>
-                <Navbar/>
-            </header>
-            <main className="py-10 px-4 grow flex flex-col">
-                <RequireAuth>
-                    {children}
-                </RequireAuth>
-            </main>   
-        </div>
+        <Flex as={'main'} flex={1} gap={3} paddingX={3} paddingY={5}>
+            <Box w={'50%'} boxShadow={'sm'} rounded={'lg'} backgroundColor={'white'}>
+                <Tabs isLazy>
+                    <TabList>
+                        <Tab>題目說明</Tab>
+                        <Tab>提交狀態</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel>
+                            { doc }
+                        </TabPanel>
+                        <TabPanel>
+                            { submition }
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            </Box>
+            <Box w={"50%"} boxShadow={'sm'} rounded={'lg'} backgroundColor={'white'}>
+                { submit }
+            </Box>
+        </Flex>
     )
 }
 

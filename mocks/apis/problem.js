@@ -43,7 +43,12 @@ export const problem = [
       }
     }
 
-    return res(ctx.status(403));
+    return res(
+      ctx.status(400),
+      ctx.json({
+        message: "Invalid problem ID.",
+      })
+    );
   }),
 
   rest.put(`${HOST}/api/problem/:id`, (req, res, ctx) => {
