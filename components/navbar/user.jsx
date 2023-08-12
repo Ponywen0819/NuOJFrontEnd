@@ -11,7 +11,6 @@ import {
     MenuList, 
     MenuDivider,
     IconButton,
-    Stack,
     Flex
 } from '@chakra-ui/react';
 import { NavLink, MenuLink } from '@/components/navbar/link';
@@ -55,19 +54,7 @@ export const UserOption = () => {
 
 
 export const User = () =>{
-    const { user, signout }= useContext(auth_context);
-    const handle = user?.handle;
-    const router = useRouter()
-
-    const handleSighout = async () =>{
-        const state = await signout();
-        if(state !== 200){
-            error_swal("出現未知問題");
-            return;
-        }
-
-        success_swal("已登出").then(()=>router.push('/'))
-    }
+    const { user }= useContext(auth_context);
 
     const isLogin = (user && user.isLogin);
     const notLogin = ( user && !user.isLogin);
