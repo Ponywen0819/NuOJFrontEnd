@@ -8,7 +8,6 @@ import {
 } from '@/components/chakra';
 import { User } from '@/components/navbar/user';
 import { NavLink } from '@/components/navbar/link';
-import { Options } from '@/components/navbar/option';
 import NextLink from 'next/link';
 import logo from '@/public/logo-white.svg';
 
