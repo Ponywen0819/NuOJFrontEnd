@@ -30,13 +30,14 @@ export const Navbar = ()=>{
                     </Link>
                 </Flex>
                 <Flex 
-                    display={{base: 'none', lg: 'flex'}}
+                    // display={{base: 'none', lg: 'flex'}}
                     direction={'row'} 
                     align={'center'} 
                     flex={1} 
                     marginLeft={12}
                 >
-                    <Stack 
+                    <Stack
+                        display={{base: 'none', lg : 'flex'}}
                         direction={'row'}
                         align={'center'}
                         gap={10}
@@ -47,14 +48,6 @@ export const Navbar = ()=>{
                     <Box flex={1}>
                         <User/>
                     </Box>
-                </Flex>         
-                <Flex
-                    display={{base: 'flex', lg: 'none'}}
-                    flex={1}
-                    align={'center'}
-                    justify={'end'}
-                >
-                    <Options/>
                 </Flex>
             </Container>
         </Box>

@@ -12,6 +12,7 @@ import {
     MenuDivider,
     IconButton,
     Stack,
+    Flex
 } from '@chakra-ui/react';
 import { NavLink, MenuLink } from '@/components/navbar/link';
 import { HamburgerIcon } from '@chakra-ui/icons';
@@ -52,44 +53,81 @@ export const UserOption = () => {
 
 } 
 
-const UserMenu = () => {
-    return(
-        <Menu isLazy>
-            <MenuButton 
-                as={IconButton}
-                icon={<HamburgerIcon/>}
-                rounded={'lg'}
-                variant="outline"
-                aria-label="Options"
-                colorScheme='whiteAlpha'
-            />
-            <MenuList>
-                <UserOption/>
-            </MenuList>
-        </Menu>
-    )
-}
-
 
 export const User = () =>{
-    const { user }= useContext(auth_context);
+    const { user, signout }= useContext(auth_context);
+    const handle = user?.handle;
+    const router = useRouter()
+
+    const handleSighout = async () =>{
+        const state = await signout();
+        if(state !== 200){
+            error_swal("出現未知問題");
+            return;
+        }
+
+        success_swal("已登出").then(()=>router.push('/'))
+    }
 
     const isLogin = (user && user.isLogin);
     const notLogin = ( user && !user.isLogin);
-    const element_class = "text-white text-xl border-b-2 border-white border-opacity-0 duration-500 hover:border-white hover:border-opacity-100 ml-10"
     return(
-        <Stack width={'fit-content'} marginLeft={'auto'} direction={'row'} gap={10} align={'center'}>
-            {
-                isLogin && <UserMenu/>
-            }
-            {
-                notLogin && (
-                    <>
-                        <NavLink href={'/auth/login'}>登入</NavLink>
-                        <NavLink href={'/auth/registe'}>註冊</NavLink>
-                    </>
-                )
-            }
-        </Stack>
+        <Flex width={'fit-content'} marginLeft={'auto'} gap={10} align={'center'}>
+            <Flex display={{base: 'none', lg: 'flex'}} gap={10}>
+                { notLogin && <NavLink href={'/auth/login'}>登入</NavLink>}
+                { notLogin && <NavLink href={'/auth/registe'}>註冊</NavLink>}
+                { isLogin &&(
+                    <Menu isLazy>
+                        <MenuButton 
+                            as={IconButton}
+                            icon={<HamburgerIcon/>}
+                            rounded={'lg'}
+                            variant="outline"
+                            aria-label="Options"
+                            colorScheme='whiteAlpha'
+                        />
+                        <MenuList>
+                            <UserOption/>
+                        </MenuList>
+                    </Menu>
+                )}
+            </Flex>
+            <Flex display={{base: 'flex', lg: 'none'}}>
+                <Menu isLazy>
+                    <MenuButton 
+                        as={IconButton}
+                        icon={<HamburgerIcon/>}
+                        rounded={'lg'}
+                        variant="outline"
+                        aria-label="Options"
+                        colorScheme='whiteAlpha'
+                    />
+                    <MenuList>
+                        <MenuItem as={MenuLink} href={'/problem/list'}>
+                            題目
+                        </MenuItem>
+                        <MenuItem as={MenuLink} href={`/about`}>
+                            關於
+                        </MenuItem>
+                        <MenuDivider/>
+                        { isLogin && (
+                            <>
+                                <UserOption/>
+                            </>
+                        )}
+                        { notLogin && (
+                            <>
+                                <MenuItem as={MenuLink} href={'/auth/login'}>
+                                    登入
+                                </MenuItem>
+                                <MenuItem as={MenuLink} href={`/auth/registe`}>
+                                    註冊
+                                </MenuItem>
+                            </>
+                        )}
+                    </MenuList>
+                </Menu>
+            </Flex>
+        </Flex>
     )
 }
