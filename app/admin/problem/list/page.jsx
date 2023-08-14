@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react';
 import logo_min from '@/public/logo_min.png';
 import { useRouter } from 'next/navigation';
 import { Loading } from '@/components/loading';
-
+import useSWR from 'swr';
 
 const DeleteButton = ({ id, OnDelete}) =>{
     const deleteProblem = async ()=>{
@@ -75,28 +75,49 @@ const DeleteButton = ({ id, OnDelete}) =>{
     )
 }
 
+const fetcher = (...arg) => fetch(...arg).then((res)=>{
+    if(!res.ok){
+        const error = new Error("error on fetching problem list")
+        error.message = "can't get problem list"
+        throw error;
+    }
+    return res.json()
+}).then((json)=>{
+    return json.map((problem)=>({
+        id : problem.header.problem_pid,
+        title : problem.header.title,
+    }))
+})
 
-const ListPage = ()=>{
-    const [problems, setProblems] = useState(null);
+const List = () =>{
+    const { data: problems, mutate } = useSWR(`${HOST}/api/problem`, fetcher, { suspense: true});
     const router = useRouter();
 
-    useEffect(()=>{ getProblems() }, []);
+    return(problems?.map((problem)=>(
+        <Row key={problem.id}>
+            <Cell>{problem.id}</Cell>
+            <Cell>{problem.title}</Cell>
+            <Cell>
+                <IconButton 
+                    icon={<EditIcon/>}
+                    color={'blackAlpha.900'}
+                    backgroundColor={'whiteAlpha.900'}
+                    onClick = {()=>{
+                        router.push(`/admin/problem/edit/${problem.id}`);
+                    }}
+                />
+                <DeleteButton 
+                    id={problem.id}
+                    OnDelete={()=>{
+                        mutate(problems.filter((element)=>element.id !== problem.id), {revalidate: false});
+                    }}
+                />
+            </Cell>
+        </Row>
+    )))
+}
 
-    const getProblems = async () =>{
-        const res = await fetch(`${HOST}/api/problem`);
-        if(!res.ok){
-            error_swal("取得題目出現問題");
-            return;
-        }
-
-        const json = await res.json();
-        const problems = json.map((problem)=>({
-            id : problem.header.problem_pid,
-            title : problem.header.title,
-        }))
-        setProblems(problems);
-    }
-
+const ListPage = ()=>{
     return(
         <>
             <Subnav>
@@ -105,7 +126,7 @@ const ListPage = ()=>{
             </Subnav>
             <Flex gap={3}>
                 <Box as='section' flex={1} overflowX={'auto'}>
-                    <SlideFade in={problems}>
+                    <SlideFade in={true}>
                         <Box width={{base: 'container.lg', lg:"100%"}}>
                         <Table height='fit-content'>
                             <Header>
@@ -114,34 +135,12 @@ const ListPage = ()=>{
                                 <HeaderColumn width='20%'>操作</HeaderColumn>
                             </Header>
                             <Body pageSize={10}>
-                                {problems?.map((problem)=>(
-                                    <Row key={problem.id}>
-                                        <Cell>{problem.id}</Cell>
-                                        <Cell>{problem.title}</Cell>
-                                        <Cell>
-                                            <IconButton 
-                                                icon={<EditIcon/>}
-                                                color={'blackAlpha.900'}
-                                                backgroundColor={'whiteAlpha.900'}
-                                                onClick = {()=>{
-                                                    router.push(`/admin/problem/edit/${problem.id}`);
-                                                }}
-                                            />
-                                            <DeleteButton 
-                                                id={problem.id}
-                                                OnDelete={()=>{
-                                                    setProblems((old)=>old.filter((element)=>element.id !== problem.id));
-                                                }}
-                                            />
-                                        </Cell>
-                                    </Row>
-                                ))}
+                                <List/>
                             </Body>
                             <Selector/>
                         </Table>
                         </Box>
                     </SlideFade>
-                    {problems? '' : (<Loading/>)}
                 </Box>
                 <Box 
                     as='aside'
