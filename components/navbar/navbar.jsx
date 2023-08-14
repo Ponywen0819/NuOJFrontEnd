@@ -6,6 +6,7 @@ import {
     Image,
     Link
 } from '@/components/chakra';
+import { pages } from './options';
 import { User } from '@/components/navbar/user';
 import { NavLink } from '@/components/navbar/link';
 import NextLink from 'next/link';
@@ -40,9 +41,10 @@ export const Navbar = ()=>{
                         direction={'row'}
                         align={'center'}
                         gap={10}
-                    >
-                        <NavLink href='/problem/list'>問題</NavLink>
-                        <NavLink href='/about'>關於</NavLink>
+                    >   
+                        {pages.map(({title, href})=>(
+                            <NavLink key={href} href={href}>{title}</NavLink>
+                        ))}
                     </Stack>
                     <Box flex={1}>
                         <User/>

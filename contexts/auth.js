@@ -14,36 +14,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useLayoutEffect(() => {
-    getInfo();
+    getJwtDecode();
   }, []);
-
-  const getInfo = async () => {
-    const verify_data = await getJwtDecode();
-    if (!verify_data) return;
-    const { handle, email } = verify_data;
-
-    const profile = await getProfile(handle);
-    if (!profile) return;
-
-    setUser({
-      isLogin: true,
-      handle,
-      email,
-      ...profile,
-    });
-  };
-
-  const getProfile = async (handle) => {
-    const res = await fetch(`${HOST}/api/profile/${handle}`);
-
-    if (!res.ok) {
-      setUser({ islogin: false });
-      return;
-    }
-
-    const json = await res.json();
-    return json;
-  };
 
   const getJwtDecode = async () => {
     const jwt = Cookies.get("jwt");
@@ -58,12 +30,17 @@ export const AuthProvider = ({ children }) => {
 
     if (!res.ok) {
       setUser({ islogin: false });
-      return;
+      return res.status;
     }
 
     const { data } = await res.json();
-
-    return data;
+    const { handle, email } = data;
+    setUser({
+      isLogin: true,
+      handle,
+      email,
+    });
+    return res.status;
   };
 
   const signin = async ({ account, password }) => {
@@ -78,13 +55,11 @@ export const AuthProvider = ({ children }) => {
       }),
     });
 
-    if (res.ok) {
-      getInfo();
-    } else {
-      setUser({ isLogin: false });
+    if (!res.ok) {
+      return res.ok;
     }
-
-    return res.status;
+    const status = await getJwtDecode();
+    return status;
   };
 
   const signout = async () => {
