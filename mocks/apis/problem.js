@@ -28,7 +28,7 @@ while (problemcount--) {
 
 export const problem = [
   rest.get(`${HOST}/api/problem`, (req, res, ctx) => {
-    return res(ctx.status(200), ctx.delay(1000), ctx.json(fake_problems));
+    return res(ctx.status(200), ctx.delay(2000), ctx.json(fake_problems));
   }),
 
   rest.post(`${HOST}/api/problem`, (req, res, ctx) => {
@@ -43,7 +43,12 @@ export const problem = [
       }
     }
 
-    return res(ctx.status(403));
+    return res(
+      ctx.status(400),
+      ctx.json({
+        message: "Invalid problem ID.",
+      })
+    );
   }),
 
   rest.put(`${HOST}/api/problem/:id`, (req, res, ctx) => {

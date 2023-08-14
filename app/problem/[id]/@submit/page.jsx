@@ -1,7 +1,9 @@
+'use client';
+
 import Editor from '@monaco-editor/react';
 import { success_swal, error_swal} from '@/components/notification';
 import { Loading } from '@/components/loading';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button } from '@chakra-ui/react'
 import { CheckIcon, ChevronDownIcon } from '@chakra-ui/icons';
 
@@ -39,13 +41,13 @@ const Select = ({ options = [], len, callback })=>{
     )
 }
 
-export const SubmitArea = ({ code_ref, id })=>{
+export const SubmitArea = ({ id })=>{
     const support_len = [
         { text: "C++14 (g++)", val: "cpp", default: "// write your answer here"},
         { text: "Python 3.8.4", val: 'python', default: "# write your answer here"},
     ]
     const [len, setLen] = useState(support_len[0]);
-
+    const code_ref = useRef(null);
     useEffect(()=>{
         code_ref.current?.setValue(len.default || '');
     },[len])
@@ -134,3 +136,5 @@ export const SubmitArea = ({ code_ref, id })=>{
         </div>
     )
 }
+
+export default SubmitArea;
