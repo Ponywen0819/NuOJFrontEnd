@@ -1,9 +1,7 @@
 "use client";
 
 import { HOST } from "@/setting";
-import { Loading } from '@/components/loading';
-import NotFound from './error';
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import { auth_context } from '@/contexts/auth';
 import{
     SlideFade,
