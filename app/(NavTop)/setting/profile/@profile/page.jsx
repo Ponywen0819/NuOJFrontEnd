@@ -1,6 +1,6 @@
+'use client';
+
 import { error_swal, success_swal } from '@/components/notification';
-import { useContext, useRef, useEffect } from 'react';
-import { profile_context } from '../page';
 import{
     FormControl,
     FormLabel,
@@ -14,16 +14,19 @@ import{
 import { useForm } from "react-hook-form"
 import { useRouter } from 'next/navigation';
 import { HOST } from '@/setting';
+import { useContext } from 'react';
+import { auth_context } from '@/contexts/auth';
+import useSWR from 'swr';
 
-export const ProfileForm = ({ 
-    initial,
-    handle
-}) => {
+const fetcher = (...arg) => fetch(...arg).then((v)=>v.json());
+
+export const ProfileForm = () => {
+    const { user } = useContext(auth_context);
+    const { handle } = user;
+    const { data: profile, mutate } = useSWR(`${HOST}/api/profile/${handle}`, fetcher, { suspense: true});
     const router = useRouter()
-    const {
-        register,
-        handleSubmit,
-    } = useForm();
+
+    const { register, handleSubmit } = useForm();
 
     const handleProfileUpdate = async (data) => {
         let res = await fetch(`${HOST}/api/profile/${handle}`,{
@@ -31,10 +34,13 @@ export const ProfileForm = ({
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" }
         })
-        if(res.ok){
-            success_swal("更新成功");
+        if(!res.ok){
+            error_swal("上傳發生問題");
+            return;
         }
-        else error_swal("上傳發生問題");
+        
+        success_swal("更新成功");
+        mutate({ ...profile, ...data});
     }
 
     return(
@@ -61,7 +67,7 @@ export const ProfileForm = ({
                     <FormLabel>學校</FormLabel>
                     <Input
                         type='text'
-                        defaultValue={initial.school}
+                        defaultValue={profile.school}
                         id='school'
                         {...register('school')}
                     />
@@ -71,7 +77,7 @@ export const ProfileForm = ({
                     <Input 
                         type='text'
                         id='bio'
-                        defaultValue={initial.bio}
+                        defaultValue={profile.bio}
                         {...register('bio')}
                     />
                 </FormControl>
@@ -100,3 +106,5 @@ export const ProfileForm = ({
         </Flex>
     )
 }
+
+export default ProfileForm

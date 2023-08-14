@@ -1,8 +1,5 @@
-"use client";
+'use client';
 
-import { HOST } from '@/setting';
-import { useContext, useEffect, useState, createContext } from 'react';
-import { auth_context } from '@/contexts/auth';
 import { 
     ScaleFade,
     Flex,
@@ -13,54 +10,49 @@ import {
     IconButton,
     EditIcon
 } from '@/components/chakra';
-import { Loading } from '@/components/loading';
-import { ImgForm } from './components/imgForm';
-import { ProfileForm } from './components/profileForm';
+import { RequireAuth } from '@/contexts/auth';
+import { createContext, useContext, useState } from 'react';
+import { auth_context } from '@/contexts/auth';
+import useSWR from 'swr';
+import { HOST } from '@/setting';
 
-export const profile_context = createContext(null);
+const fetcher = (...arg) => fetch(...arg).then((res)=>res.json());
 
-const SetProfile = () =>{
+const imgFetcher = (...arg) => fetch(...arg).then((res)=>{
+    if(!res.ok){
+        const error = new Error("error on fetching user information")
+        error.message = "User Image Not Found"
+        throw error;
+    }
+    return res.blob();
+}).then((blob)=> new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>{
+        const base64 = reader.result;
+        resolve(base64);
+    }
+    reader.readAsDataURL(blob);
+}))
+
+export const img_context = createContext(null);
+
+const SettingContext = (props) =>{
+    const [ imgPop, setPop ] = useState(false);
     const { user } = useContext(auth_context);
     const { handle } = user;
-    const [imgFormPop, setPop] = useState(false);
-    const [profile, setProfile] = useState(null);
+    const { data: profileInfo } = useSWR(`${HOST}/api/profile/${handle}`, fetcher, { suspense: true });
+    const { data: imgSrc } = useSWR(`${HOST}/api/profile/${handle}/avatar`, imgFetcher, {suspense: true});
+    const isAdmin = profileInfo.role;
 
-    useEffect(()=>{
-        getInfo();
-    },[]);
-
-    const getInfo = async () =>{
-        const info_res = await fetch(`${HOST}/api/profile/${handle}`);
-        if(!info_res.ok){
-            setProfile({notFound: true});
-            return;
-        }
-        const profile = await info_res.json();
-
-        const img_res = await fetch(`${HOST}/api/profile/${handle}/avatar`);
-        if(!img_res.ok){
-            setProfile({notFound: true});
-            return;
-        }
-        const blob = await img_res.blob();
-        const reader = new FileReader();
-        reader.onload = () =>{
-            const base64 = reader.result;
-            setProfile({
-                img: base64, 
-                handle: handle,
-                ...profile
-            });
-        }
-        reader.readAsDataURL(blob);
-    }
-
-    const { img, role } = profile || {}
+    const {
+        profile,
+        image
+    } = props;
 
     return(
-        <>  
-            <ScaleFade in={profile} unmountOnExit={true}>
-                <Flex direction={{base: "column", lg: 'row'}} gap={3}>
+        <>
+            <ScaleFade in={true}>
+                <Flex direction={{base: 'column', lg: 'row'}} gap={3}>
                     <Stack
                         backgroundColor={'whiteAlpha.900'}
                         borderRadius={'lg'}
@@ -78,7 +70,7 @@ const SetProfile = () =>{
                                     boxSize={{base: "3xs", lg: 'xs'}}
                                     fit={'cover'}
                                     borderRadius={'full'}
-                                    src={img}
+                                    src={imgSrc}
                                 />
                                 <IconButton 
                                     icon={<EditIcon/>}
@@ -102,7 +94,7 @@ const SetProfile = () =>{
                                     fontWeight={'bold'}
                                     color={'gray.400'}
                                     align={'left'}
-                                >{role?"管理員" : "使用者"}</Text>
+                                >{ isAdmin ?"管理員" : "使用者" }</Text>
                                 <Text
                                     fontWeight={'bold'}
                                     fontSize={'5xl'}
@@ -111,24 +103,22 @@ const SetProfile = () =>{
                             </Flex>
                         </Flex>
                     </Stack>
-                    <ProfileForm initial={profile} handle={handle}/>
+                    { profile }
                 </Flex>
             </ScaleFade>
-            {imgFormPop? 
-                <ImgForm 
-                    initial={img} 
-                    handle={handle} 
-                    close={()=>setPop(false)} 
-                    updateImg ={(newImg)=>{
-                        setProfile((old)=>{
-                            old.img = newImg;
-                            return old;
-                        })
-                    }}
-                /> : ''}
-            {(profile)?"":(<Loading/>)}
+            <img_context.Provider value={{imgPop, setPop}}>
+                { imgPop && image}
+            </img_context.Provider>
         </>
     )
 }
 
-export default SetProfile;
+const SettingLayout = (props) => {
+    return (
+        <RequireAuth>
+            <SettingContext {...props}/>
+        </RequireAuth>
+    );
+}
+
+export default SettingLayout;

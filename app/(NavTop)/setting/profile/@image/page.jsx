@@ -1,29 +1,47 @@
 'use client';
 
 import {
-    Box,
-    Flex,
     Image,
     Stack,
     Container,
     Center,
-    Text,
-    SlideFade,
     IconButton,
     SmallCloseIcon,
     Button
 } from '@/components/chakra';
-import { useState } from 'react';
+import { useRef, useContext } from 'react';
+import { auth_context } from '@/contexts/auth';
+import { img_context } from '../layout';
 import { HOST } from '@/setting';
+import useSWR from 'swr';
 import { success_swal, error_swal } from '@/components/notification';
 
-export const ImgForm = ({ 
-    initial,
-    handle,
-    close,
-    updateImg
-})=>{
-    const [img, setImg] = useState(initial);
+const imgFetcher = (...arg) => fetch(...arg).then((res)=>{
+    if(!res.ok){
+        const error = new Error("error on fetching user information")
+        error.message = "User Image Not Found"
+        throw error;
+    }
+    return res.blob();
+}).then((blob)=> new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>{
+        const base64 = reader.result;
+        resolve(base64);
+    }
+    reader.readAsDataURL(blob);
+}))
+
+const ImgForm = ()=>{
+    const ref = useRef(null);
+    const { user } = useContext(auth_context);
+    const { handle } = user;
+    const { imgPop, setPop } = useContext(img_context);
+    const { data: img, mutate } = useSWR(
+        `${HOST}/api/profile/${handle}/avatar`, 
+        imgFetcher,
+        { suspense : true }
+    )
 
     const selectImg = () =>{
         const file_input = document.createElement("input")
@@ -33,7 +51,7 @@ export const ImgForm = ({
             const image = e.target.files[0];
             const reader = new FileReader();
             reader.onload = readerEvent => {
-                setImg(readerEvent.target.result);
+                ref.current.src = readerEvent.target.result;
             }
             reader.readAsDataURL(image)
         }
@@ -41,13 +59,15 @@ export const ImgForm = ({
     }
 
     const handleUpdate = async () =>{
-        if(!img){
-            success_swal("大頭照並未更改").then(()=>close());
+        if(ref.current.src === img){
+            success_swal("大頭照並未更改").then(()=>setPop(false));
             return
         }
 
-        const imageBuffer = await fetch(img).then((res) =>res.arrayBuffer());
-        const mime = img?.match(/:(.*?);/)[1];
+        const new_img = ref.current.src;
+
+        const imageBuffer = await fetch(new_img).then((res) =>res.arrayBuffer());
+        const mime = new_img.match(/:(.*?);/)[1];
         
         let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
             method: "PUT",
@@ -59,14 +79,16 @@ export const ImgForm = ({
         })
         if(res.ok){
             success_swal("大頭照更改成功").then(()=>{
-                updateImg(img)
-                close()
+                mutate(new_img, {revalidate: false})
+                setPop(false)
             });
         }
         else{
             error_swal("大頭照上傳失敗");
         }
     }
+
+    if(!imgPop) return '';
 
     return(
         <>
@@ -96,13 +118,14 @@ export const ImgForm = ({
                         right={2}
                         marginLeft={'auto'} 
                         display={'block'}
-                        onClick={close}
+                        onClick={()=>setPop(false)}
                     />
-                    <Image 
-                        alt='avater preview' 
-                        src={img}
+                    <Image
+                        ref={ref}
+                        alt='avater preview'
                         rounded={'full'}
                         fit={'cover'}
+                        src={img}
                         boxSize={{base: "3xs", lg: 'xs'}}
                     />
                     <Container w={'fit-content'} display={'flex'} gap={3}>
@@ -125,3 +148,4 @@ export const ImgForm = ({
     )
 }
 
+export default ImgForm;

@@ -91,7 +91,7 @@ const Profile = ({ params })=>{
                                 (auth_handle === handle)?(
                                     <Link
                                         as={NextLink} 
-                                        href="/profile/setting"
+                                        href="/setting/profile"
                                         display={'block'}
                                         width={'100%'}
                                         borderWidth={"1px"}
