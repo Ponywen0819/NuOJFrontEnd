@@ -1,4 +1,3 @@
-import { MockProvider } from '@/mocks/provider';
 import { Providers } from '@/contexts/root';
 
 import LogoWhite from '@/public/logo-white.svg';
@@ -30,15 +29,7 @@ export default function RootLayout({ children }) {
         backgroundColor={'rgb(241 245 249)'}
         minH={'100vh'}
       >
-        {
-          enable? 
-            <MockProvider>
-              <Providers>
-                  {children}
-              </Providers>
-            </MockProvider>:
-            <Providers>{children}</Providers>
-        }
+        <Providers>{children}</Providers>
       </Box>
     </html>
   );
