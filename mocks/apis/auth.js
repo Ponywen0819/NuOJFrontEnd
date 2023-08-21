@@ -1,98 +1,148 @@
-import { rest } from "msw";
-import { HOST } from "@/setting";
+import cookieParser from "cookie-parser";
+import express from "express";
+import.meta;
 
-export const auth = [
-  rest.post(`${HOST}/api/auth/login`, async (req, res, ctx) => {
-    let req_json = await req.json();
-    if (req_json.account === undefined || req_json.password === undefined) {
-      return res(
-        ctx.status(400),
-        ctx.json({ message: "The format of the payload is incorrect." })
-      );
+export const createAuthRoute = (db) => {
+  const authRouter = express.Router();
+
+  authRouter.use(cookieParser());
+  authRouter.post("/verify_jwt", (req, res) => {
+    const { jwt } = req.cookies;
+    if (!jwt) {
+      res.status(403);
+      res.jsonp({
+        message: "JWT is invalid.",
+      });
+      return;
     }
-    if (req_json.account === "pony" && req_json.password === "0000") {
-      return res(ctx.cookie("jwt", "ya"));
-    } else if (req_json.account === "roy" && req_json.password === "0000") {
-      return res(
-        ctx.status(401),
-        ctx.json({
-          message: "The mail verification enabled but mail is not verify.",
-        })
-      );
-    } else {
-      return res(
-        ctx.status(403),
-        ctx.json({ message: "Incorrect account or password." })
-      );
-    }
-  }),
 
-  rest.post(`${HOST}/api/auth/logout`, async (req, res, ctx) => {
-    return res(ctx.status(200), ctx.cookie("jwt", "", { expires: 0 }));
-  }),
-
-  rest.post(`${HOST}/api/auth/register`, async (req, res, ctx) => {
-    let json = await req.json();
-    let { handle, password, email } = json;
-    if (handle === undefined || password === undefined || email === undefined) {
-      return res(
-        ctx.status(400),
-        ctx.json({ message: "The format of the payload is incorrect." })
-      );
-    } else if (handle === "" || password === "" || email === "") {
-      return res(
-        ctx.status(400),
-        ctx.json({ message: "The format of the payload is incorrect." })
-      );
-    } else if (handle === "pony" || email === "test@test.com") {
-      return res(
-        ctx.status(403),
-        ctx.json({ message: "The email or the handle is repeated." })
-      );
-    } else if (
-      handle === "invalidHandle" ||
-      email === "invalidEmail" ||
-      password === "invalidPassword"
-    ) {
-      return res(
-        ctx.status(422),
-        ctx.json({ message: `message": "Handle is invalid.` })
-      );
-    } else {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          message: "OK.",
-        })
-      );
-    }
-  }),
-
-  rest.post(`${HOST}/api/auth/verify_jwt`, async (req, res, ctx) => {
-    let jwt = req.cookies?.jwt;
-    if (jwt === "ya") {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          data: {
-            handle: "pony",
-            email: "pony076152340@gmail.com",
-          },
-        })
-      );
-    } else {
-      return res(ctx.status(401));
-    }
-  }),
-
-  rest.get(`${HOST}/api/auth/oauth_info`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        status: "ok",
-        github_oauth_url: "gitgub_url",
-        google_oauth_url: "google_url",
+    const user = db
+      .get("user")
+      .find({
+        handle: jwt,
       })
-    );
-  }),
-];
+      .value();
+
+    if (!user || !user.verified) {
+      res.status(403);
+      res.jsonp({
+        message: "JWT is invalid.",
+      });
+      return;
+    }
+
+    const { handle, email } = user;
+
+    res.status(200);
+    res.jsonp({
+      message: "OK",
+      handle,
+      email,
+    });
+  });
+
+  authRouter.use(express.json());
+  authRouter.post("/login", (req, res) => {
+    const { account, password } = req.body;
+
+    if (!account || !password) {
+      res.sendStatus(400);
+      res.json({
+        message: "The format of the payload is incorrect.",
+      });
+      return;
+    }
+
+    const user = db
+      .get("user")
+      .find({
+        email: account,
+        password: password,
+      })
+      .value();
+
+    if (!user) {
+      res.status(403);
+      res.jsonp({
+        message: "Incorrect account or password.",
+      });
+      return;
+    }
+
+    if (!user.verified) {
+      res.status(401);
+      res.jsonp({
+        message: "The mail verification enabled but mail is not verify.",
+      });
+      return;
+    }
+
+    res.status(200);
+    res.cookie("jwt", user.handle);
+    res.jsonp({
+      message: "OK.",
+      ...user,
+    });
+    return;
+  });
+
+  authRouter.post("/register", (req, res) => {
+    const { email, handle, password } = req.body;
+    if (!email || !handle || !password) {
+      res.status(400);
+      res.jsonp({
+        message: "The format of the payload is incorrect.",
+      });
+      return;
+    }
+
+    if (handle === "error" || email === "error" || password === "error") {
+      res.status(422);
+      res.jsonp({
+        message: "Handle is invalid.",
+      });
+    }
+
+    const sameHandle = db
+      .get("user")
+      .find({
+        handle: handle,
+      })
+      .size()
+      .value();
+
+    const sameEmail = db
+      .get("user")
+      .find({
+        email: email,
+      })
+      .size()
+      .value();
+
+    if (sameHandle || sameEmail) {
+      res.status(403);
+      res.jsonp({
+        message: "The email or the handle is repeated.",
+      });
+      return;
+    }
+
+    res.jsonp({
+      message: "OK.",
+    });
+  });
+
+  authRouter.post("/logout", (req, res) => {
+    res.clearCookie("jwt");
+    res.jsonp({
+      message: "OK.",
+    });
+  });
+
+  authRouter.get("/oauth_info", (req, res) => {
+    const oauth_info = db.get("oauth").value();
+    res.jsonp(oauth_info);
+  });
+
+  return authRouter;
+};
