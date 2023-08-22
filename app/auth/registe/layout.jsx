@@ -1,9 +1,9 @@
 export const metadata = {
-    title: "註冊"
+  title: "註冊",
 };
 
 const LoginLayout = ({ children }) => {
-    return children;
-}
+  return children;
+};
 
 export default LoginLayout;

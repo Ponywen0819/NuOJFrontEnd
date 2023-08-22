@@ -1,4 +1,3 @@
-const Loading = ()=> '';
-
+const Loading = () => "";
 
 export default Loading;

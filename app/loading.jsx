@@ -1,7 +1,9 @@
-import { Loading } from '@/components/loading';
+/** @format */
 
-const RootLoading = ()=>{
-    return <Loading/>
-}
+import { Loading } from "@/components/loading";
+
+const RootLoading = () => {
+	return <Loading />;
+};
 
 export default RootLoading;

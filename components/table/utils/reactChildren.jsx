@@ -1,8 +1,5 @@
-import { Children, isValidElement } from 'react';
+import { Children, isValidElement } from "react";
 
-
-export const getValidChildren = (children)=>{
-    return Children.toArray(children).filter((child)=>
-        isValidElement(child)
-    )
-}
+export const getValidChildren = (children) => {
+  return Children.toArray(children).filter((child) => isValidElement(child));
+};
