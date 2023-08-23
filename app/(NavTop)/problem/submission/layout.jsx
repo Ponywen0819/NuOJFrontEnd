@@ -1,4 +1,3 @@
-import { RequireAuth } from "@/contexts/auth";
 import {
   Table,
   Header,
@@ -8,6 +7,7 @@ import {
 } from "@/components/table";
 import { Subnav, Tab } from "@/components/subnav";
 import { Box } from "@/components/chakra";
+import { RequireAuth } from "@/components/require";
 
 export const metadata = {
   title: "繳交狀態",

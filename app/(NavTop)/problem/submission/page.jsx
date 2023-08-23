@@ -4,9 +4,7 @@ import { Row, Cell } from "@/components/table";
 import { Date, Time } from "@/components/table/types";
 import { Spinner } from "@/components/chakra";
 import { HOST } from "@/setting";
-import { data } from "autoprefixer";
 import Link from "next/link";
-
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -39,7 +37,7 @@ const List = () => {
   const link_class =
     "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
   const { data: submitions } = useSWR(`${HOST}/api/submition`, fetcher);
-  if (!data) return <Spinner />;
+  if (!submitions) return <Spinner />;
   return submitions.map((submition) => (
     <Row>
       <Cell>{submition.id}</Cell>
