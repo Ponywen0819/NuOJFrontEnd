@@ -2,8 +2,7 @@
 
 import { NavigateProvider } from "@/contexts/navigate";
 import { AuthProvider } from "@/contexts/auth";
-import { CacheProvider } from "@chakra-ui/next-js";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, CacheProvider } from "@/components/chakra";
 
 export const Providers = ({ children }) => {
   return (

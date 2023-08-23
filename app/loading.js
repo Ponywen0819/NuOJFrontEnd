@@ -1,9 +1,7 @@
-/** @format */
-
 import { Loading } from "@/components/loading";
 
 const RootLoading = () => {
-	return <Loading />;
+  return <Loading />;
 };
 
 export default RootLoading;

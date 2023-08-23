@@ -7,59 +7,68 @@ import { useRouter, usePathname } from "next/navigation";
 import { HOST } from "@/setting";
 import { navigate_context } from "@/contexts/navigate";
 import { Loading } from "@/components/loading";
+import { success_swal } from "@/components/notification";
 
 export const auth_context = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useContext(navigate_context);
+  const router = useRouter();
   const [user, setUser] = useState(null);
 
   useLayoutEffect(() => {
-    getJwtDecode();
+    checkCookieExsit() && getJwtDecode();
   }, []);
 
-  const getJwtDecode = async () => {
+  const checkCookieExsit = () => {
     const jwt = Cookies.get("jwt");
     if (!jwt) {
-      setUser({ islogin: false });
-      return;
+      setUser({ isLogin: false });
     }
+    return jwt;
+  };
 
+  const getJwtDecode = async (tragetError = false) => {
     const res = await fetch(`${HOST}/api/auth/verify_jwt`, {
       method: "POST",
+      credentials: "include",
     });
 
-    if (!res.ok) {
-      setUser({ islogin: false });
-      return res.status;
+    if (!res.ok) setUser({ islogin: false });
+
+    if (tragetError && !res.ok) {
+      const error = new Error("error on fetching jwt decode");
+      return error;
     }
 
     const { data } = await res.json();
-    const { handle, email } = data;
     setUser({
       isLogin: true,
-      handle,
-      email,
+      ...data,
     });
-    return res.status;
   };
 
-  const signin = async ({ account, password }) => {
+  const signin = async ({ account, password, errors = {} }) => {
     const res = await fetch(`${HOST}/api/auth/login`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({
-        account: account,
-        password: password,
+        account,
+        password,
       }),
     });
 
     if (!res.ok) {
-      return res.ok;
+      errors[res.status] && errors[res.status]();
+      return;
     }
-    const status = await getJwtDecode();
-    return status;
+
+    getJwtDecode();
+    success_swal("登入成功").then(() => {
+      const url = navigate.get() || "/";
+      router.push(url);
+    });
   };
 
   const signout = async () => {
@@ -86,6 +95,8 @@ export const RequireAuth = ({
   const navigate = useContext(navigate_context);
   const location = usePathname();
   const router = useRouter();
+
+  console.log(location);
 
   if (user) {
     if (user.isLogin) return children;

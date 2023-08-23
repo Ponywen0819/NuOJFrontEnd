@@ -78,7 +78,10 @@ export const createAuthRoute = (db) => {
     }
 
     res.status(200);
-    res.cookie("jwt", user.handle);
+    res.cookie("jwt", user.handle, {
+      sameSite: "none",
+      secure: true,
+    });
     res.jsonp({
       message: "OK.",
       ...user,

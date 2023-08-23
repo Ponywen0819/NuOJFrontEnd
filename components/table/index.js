@@ -1,3 +1,5 @@
+"use client";
+
 import { Table } from "./table";
 import { Body, Row, Cell } from "./body";
 import { Header, HeaderColumn } from "./headers";
