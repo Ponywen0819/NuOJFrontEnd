@@ -26,7 +26,7 @@ export const ProfileForm = () => {
   const { data: profile, mutate } = useSWR(
     `${HOST}/api/profile/${handle}`,
     fetcher,
-    { suspense: true },
+    { suspense: true }
   );
   const router = useRouter();
 
@@ -34,7 +34,7 @@ export const ProfileForm = () => {
 
   const handleProfileUpdate = async (data) => {
     let res = await fetch(`${HOST}/api/profile/${handle}`, {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
     });
