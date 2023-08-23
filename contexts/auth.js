@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
       return error;
     }
 
-    const { data } = await res.json();
+    const data = await res.json();
     setUser({
       isLogin: true,
       ...data,
