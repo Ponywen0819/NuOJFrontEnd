@@ -7,8 +7,8 @@ import logo from "@/public/logo-white.svg";
 
 export const Navbar = () => {
   return (
-    <Box as="nav" w={"100%"}>
-      <Container display={"flex"} height={16} maxW={"container.xl"}>
+    <Box as="nav" w={"100%"} py='3'>
+      <Container display={"flex"} height={16} maxW={'1680px'}>
         <Flex align={"center"}>
           <Link as={NextLink} href="/">
             <Image alt="logo" height={12} src={logo.src} />
@@ -25,7 +25,7 @@ export const Navbar = () => {
             display={{ base: "none", lg: "flex" }}
             direction={"row"}
             align={"center"}
-            gap={10}
+            gap={16}
           >
             {pages.map(({ title, href }) => (
               <NavLink key={href} href={href}>

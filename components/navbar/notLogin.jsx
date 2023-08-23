@@ -6,7 +6,7 @@ import { NavLink } from "./link";
 export const NotLoginInterface = () => {
   return (
     <>
-      <Flex display={{ base: "none", lg: "flex" }} gap={10}>
+      <Flex display={{ base: "none", lg: "flex" }} gap={16}>
         <NavLink href={"/auth/login"}>登入</NavLink>
         <NavLink href={"auth/registe"}>註冊</NavLink>
       </Flex>

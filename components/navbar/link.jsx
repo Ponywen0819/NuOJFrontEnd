@@ -11,7 +11,7 @@ export const NavLink = ({ href, children }) => {
       borderColor={"rgba(0,0,0,0)"}
       color={"whiteAlpha.900"}
       fontWeight={"bold"}
-      fontSize={"lg"}
+      fontSize={"2xl"}
       _hover={{
         borderColor: "whiteAlpha.900",
       }}
