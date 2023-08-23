@@ -29,7 +29,7 @@ const ProblemListLayout = ({ children }) => {
             <HeaderColumn>題目作者</HeaderColumn>
             <HeaderColumn>題目標籤</HeaderColumn>
           </Header>
-          <Body pageSize={30}>{children}</Body>
+          {children}
           <Selector />
         </Table>
       </Box>

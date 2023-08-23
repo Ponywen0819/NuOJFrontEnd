@@ -33,7 +33,7 @@ const ProblemSubmitionLayout = ({ children }) => {
             <HeaderColumn>記憶體</HeaderColumn>
             <HeaderColumn>時長</HeaderColumn>
           </Header>
-          <Body pageSize={30}>{children}</Body>
+          {children}
           <Selector />
         </Table>
       </Box>
