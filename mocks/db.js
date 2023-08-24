@@ -1,4 +1,5 @@
 import { Low, Memory } from "lowdb";
+import { v4 } from "uuid";
 
 const user = [
   {
@@ -21,12 +22,22 @@ const user = [
     school: "ntut",
     bio: "user profile test",
   },
+  {
+    role: 1,
+    id: 3,
+    verified: 1,
+    password: "test",
+    handle: "qqqq",
+    email: "test3@test",
+    school: "ntut",
+    bio: "user profile test",
+  },
 ];
 
 const problem = [...Array(30)].map((_, index) => {
   return {
     header: {
-      problem_pid: "66570e6a-dd25-4461-8af7-d51aacba3c02",
+      problem_pid: v4(),
       title: `Example Problem-${index}`,
       time_limit: 5,
       memory_limit: 131072,
