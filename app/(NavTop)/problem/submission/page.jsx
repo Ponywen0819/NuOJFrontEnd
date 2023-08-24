@@ -1,10 +1,14 @@
 "use client";
 
-import { Row, Cell, Body } from "@/components/table";
-import { Date, Time } from "@/components/table/types";
-import { Spinner } from "@/components/chakra";
+import { Table, Thead, Tr, Link } from "@/components/chakra";
+import {
+  TableProvider,
+  TableHeader,
+  TableBody,
+  TableSelector,
+} from "@/components/table";
 import { HOST } from "@/setting";
-import Link from "next/link";
+import NextLink from "next/link";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -23,40 +27,55 @@ const fetcher = (...arg) =>
         id: submit.id,
         problem: submit.problem,
         handle: {
-          text: submit.user.handle,
+          children: submit.user.handle,
           href: `/profile/${submit.user.handle}`,
         },
         date: submit.date,
         verdict: submit.verdict.verdict,
-        time: submit.verdict.time,
-        memory: submit.verdict.memory,
+        time: submit.verdict.time.toString(),
+        memory: submit.verdict.memory.toString(),
       }));
     });
 
-const ProblemList = () => {
-  const link_class =
-    "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
-  const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
+const TableLink = ({ children, href }) => {
   return (
-    <Body pageSize={30} isLoading={!submitions}>
-      {submitions?.map((submition) => (
-        <Row>
-          <Cell>{submition.id}</Cell>
-          <Cell>{submition.problem}</Cell>
-          <Cell
-            as={<Link />}
-            href={submition.handle.href}
-            className={link_class}
-          >
-            {submition.handle.text}
-          </Cell>
-          <Cell as={<Date />}>{submition.date}</Cell>
-          <Cell>{submition.verdict}</Cell>
-          <Cell as={<Time />}>{submition.time}</Cell>
-          <Cell>{submition.memory}</Cell>
-        </Row>
-      ))}
-    </Body>
+    <Link as={NextLink} href={href} color={"orange.600"}>
+      {children}
+    </Link>
+  );
+};
+
+const ProblemList = () => {
+  const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
+  console.log(submitions);
+  return (
+    <TableProvider
+      rounded={"lg"}
+      boxShadow={"sm"}
+      backgroundColor={"white"}
+      pageSize={10}
+      isLoading={!submitions}
+      enableSelector={true}
+    >
+      <Table>
+        <Thead backgroundColor={"rgb(254 215 170)"}>
+          <Tr>
+            <TableHeader title={"題目 ID"} id={"id"} />
+            <TableHeader title={"題目名稱"} id={"problem"} />
+            <TableHeader
+              title={"提交人"}
+              id={"handle"}
+              columnType={TableLink}
+            />
+            <TableHeader title={"提交時間"} id={"date"} />
+            <TableHeader title={"提交狀態"} id={"verdict"} />
+            <TableHeader title={"狀態"} id={"time"} />
+            <TableHeader title={"時長"} id={"memory"} />
+          </Tr>
+        </Thead>
+        <TableBody datas={submitions} />
+      </Table>
+    </TableProvider>
   );
 };
 

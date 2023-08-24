@@ -1,12 +1,14 @@
 import { createContext, useState, useRef } from "react";
-import { TableContainer, SlideFade } from "@/components/chakra";
+import { TableContainer, SlideFade, Box } from "@/components/chakra";
 import { TableLoading } from "./loading";
+import { TableSelector } from "./selector";
 
 export const table_context = createContext();
 
 export const TableProvider = ({
   pageSize,
   isLoading,
+  enableSelector = false,
   Loading = <TableLoading />,
   children,
   ...remain
@@ -52,9 +54,16 @@ export const TableProvider = ({
 
   return (
     <table_context.Provider value={value}>
-      <TableContainer {...remain}>
-        {isLoading ? Loading : <SlideFade in={true}>{children}</SlideFade>}
-      </TableContainer>
+      {isLoading ? (
+        Loading
+      ) : (
+        <SlideFade in={true}>
+          <TableContainer {...remain}>
+            <TableContainer>{children}</TableContainer>
+            {enableSelector && <TableSelector />}
+          </TableContainer>
+        </SlideFade>
+      )}
     </table_context.Provider>
   );
 };

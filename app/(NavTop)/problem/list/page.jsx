@@ -1,6 +1,6 @@
 "use client";
 
-import { Table, Thead, Tr, Link, Text } from "@/components/chakra";
+import { Table, Thead, Tr, Link } from "@/components/chakra";
 import {
   TableProvider,
   TableHeader,
@@ -51,6 +51,7 @@ const ProbleTable = () => {
       backgroundColor={"white"}
       pageSize={10}
       isLoading={!problems}
+      enableSelector={true}
     >
       <Table>
         <Thead paddingY={5}>
@@ -74,7 +75,6 @@ const ProbleTable = () => {
         </Thead>
         <TableBody datas={problems} />
       </Table>
-      <TableSelector />
     </TableProvider>
   );
 };
