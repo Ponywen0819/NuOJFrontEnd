@@ -1,7 +1,8 @@
 "use client";
 
 import { Navbar } from "@/components/navbar";
-import { auth_context, RequireAuth } from "@/contexts/auth";
+import { auth_context } from "@/contexts/auth";
+import { RequireAuth } from "@/components/require";
 import { Box, Container } from "@/components/chakra";
 import { redirect } from "next/navigation";
 import { useContext } from "react";
