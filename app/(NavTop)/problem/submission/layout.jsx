@@ -22,21 +22,7 @@ const ProblemSubmitionLayout = ({ children }) => {
           提交狀態
         </Tab>
       </Subnav>
-      <Box width={{ base: "container.lg", lg: "100%" }}>
-        <Table>
-          <Header height="64px">
-            <HeaderColumn width={"10%"}>題目 ID</HeaderColumn>
-            <HeaderColumn width="20%">題目名稱</HeaderColumn>
-            <HeaderColumn>提交人</HeaderColumn>
-            <HeaderColumn>提交時間</HeaderColumn>
-            <HeaderColumn>狀態</HeaderColumn>
-            <HeaderColumn>記憶體</HeaderColumn>
-            <HeaderColumn>時長</HeaderColumn>
-          </Header>
-          {children}
-          <Selector />
-        </Table>
-      </Box>
+      <Box width={{ base: "container.lg", lg: "100%" }}>{children}</Box>
     </RequireAuth>
   );
 };

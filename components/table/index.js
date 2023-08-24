@@ -1,8 +1,8 @@
 "use client";
 
-import { Table } from "./table";
-import { Body, Row, Cell } from "./body";
-import { Header, HeaderColumn } from "./headers";
-import { Selector } from "./selector";
+import { TableProvider } from "./provider";
+import { TableHeader } from "./headers";
+import { TableBody } from "./body";
+import { TableSelector } from "./selector";
 
-export { Table, Body, Row, Cell, Header, HeaderColumn, Selector };
+export { TableProvider, TableHeader, TableBody, TableSelector };

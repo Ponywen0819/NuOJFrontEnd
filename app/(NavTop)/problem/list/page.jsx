@@ -1,9 +1,14 @@
 "use client";
 
-import { Row, Cell, Body } from "@/components/table";
-import { Spinner } from "@/components/chakra";
-import NextLink from "next/link";
+import { Table, Thead, Tr, Link, Text } from "@/components/chakra";
+import {
+  TableProvider,
+  TableHeader,
+  TableBody,
+  TableSelector,
+} from "@/components/table";
 import { HOST } from "@/setting";
+import NextLink from "next/link";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -18,43 +23,59 @@ const fetcher = (...arg) =>
       return json.map((problem) => ({
         id: problem.header.problem_pid,
         title: {
-          text: problem.header.title,
+          children: problem.header.title,
           href: `/problem/${problem.header.problem_pid}`,
         },
         author: {
-          text: problem.author.handle,
+          children: problem.author.handle,
           href: `/profile/${problem.author.handle}`,
         },
+        lable: "",
       }));
     });
 
-const ProblemList = () => {
-  const link_class =
-    "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
-  const { data: problems } = useSWR(`${HOST}/api/problem`, fetcher);
+const TableLink = ({ children, href }) => {
   return (
-    <Body pageSize={30} isLoading={!problems}>
-      {problems?.map((problem) => (
-        <Row key={problem.id}>
-          <Cell>{problem.id}</Cell>
-          <Cell
-            as={<NextLink />}
-            href={problem.title.href}
-            className={link_class}
-          >
-            {problem.title.text}
-          </Cell>
-          <Cell
-            as={<NextLink />}
-            href={problem.author.href}
-            className={link_class}
-          >
-            {problem.author.text}
-          </Cell>
-        </Row>
-      ))}
-    </Body>
+    <Link as={NextLink} href={href} color={"orange.600"}>
+      {children}
+    </Link>
   );
 };
+const ProbleTable = () => {
+  const { data: problems } = useSWR(`${HOST}/api/problem`, fetcher);
 
-export default ProblemList;
+  return (
+    <TableProvider
+      rounded={"lg"}
+      boxShadow={"sm"}
+      backgroundColor={"white"}
+      pageSize={10}
+      isLoading={!problems}
+    >
+      <Table>
+        <Thead paddingY={5}>
+          <Tr backgroundColor={"rgb(254 215 170)"}>
+            <TableHeader title={"題目 ID"} width={"360px"} id={"id"} />
+            <TableHeader
+              title={"題目名稱"}
+              id={"title"}
+              width={"160px"}
+              textAlign={"center"}
+              columnType={TableLink}
+            />
+            <TableHeader
+              title={"題目作者"}
+              id={"author"}
+              textAlign={"center"}
+              columnType={TableLink}
+            />
+            <TableHeader title={"題目標籤"} id={"lable"} textAlign={"right"} />
+          </Tr>
+        </Thead>
+        <TableBody datas={problems} />
+      </Table>
+      <TableSelector />
+    </TableProvider>
+  );
+};
+export default ProbleTable;
