@@ -16,6 +16,6 @@ WORKDIR /etc/NuOJ-Front-End
 
 RUN pnpm install
 
-RUN pnpm run build
+# RUN pnpm run build
 
 CMD pnpm run start

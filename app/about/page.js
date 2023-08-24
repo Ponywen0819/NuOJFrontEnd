@@ -34,7 +34,7 @@ const Header = () => {
 const Main = () => {
   return (
     <Flex justify={"space-between"} as={"main"}>
-      <Card
+      <User
         name={"黃漢軒"}
         photo={uriah.src}
         duties={[
@@ -44,7 +44,7 @@ const Main = () => {
           "Research and Development",
         ]}
       />
-      <Card
+      <User
         name={"吳秉承"}
         photo={roy.src}
         duties={[
@@ -53,12 +53,12 @@ const Main = () => {
           "Research and Development",
         ]}
       />
-      <Card name={"溫紹傑"} photo={pony.src} duties={["Frontend Design"]} />
+      <User name={"溫紹傑"} photo={pony.src} duties={["Frontend Design"]} />
     </Flex>
   );
 };
 
-const Card = ({ name, photo, duties = [] }) => {
+const User = ({ name, photo, duties = [] }) => {
   return (
     <Stack>
       <Image

@@ -10,9 +10,9 @@ import {
   IconButton,
   EditIcon,
 } from "@/components/chakra";
-import { RequireAuth } from "@/contexts/auth";
 import { createContext, useContext, useState } from "react";
 import { auth_context } from "@/contexts/auth";
+import { RequireAuth } from "@/components/require";
 import useSWR from "swr";
 import { HOST } from "@/setting";
 
@@ -37,7 +37,7 @@ const imgFetcher = (...arg) =>
             resolve(base64);
           };
           reader.readAsDataURL(blob);
-        }),
+        })
     );
 
 export const img_context = createContext(null);
@@ -48,13 +48,11 @@ const SettingContext = (props) => {
   const { handle } = user;
   const { data: profileInfo } = useSWR(
     `${HOST}/api/profile/${handle}`,
-    fetcher,
-    { suspense: true },
+    fetcher
   );
   const { data: imgSrc } = useSWR(
     `${HOST}/api/profile/${handle}/avatar`,
-    imgFetcher,
-    { suspense: true },
+    imgFetcher
   );
   const isAdmin = profileInfo.role;
 

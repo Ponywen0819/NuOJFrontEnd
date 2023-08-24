@@ -6,7 +6,6 @@ import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { HOST } from "@/setting";
 import { navigate_context } from "@/contexts/navigate";
-import { Loading } from "@/components/loading";
 import { success_swal } from "@/components/notification";
 
 export const auth_context = createContext(null);
@@ -41,7 +40,7 @@ export const AuthProvider = ({ children }) => {
       return error;
     }
 
-    const { data } = await res.json();
+    const data = await res.json();
     setUser({
       isLogin: true,
       ...data,
@@ -85,24 +84,4 @@ export const AuthProvider = ({ children }) => {
   return (
     <auth_context.Provider value={context}>{children}</auth_context.Provider>
   );
-};
-
-export const RequireAuth = ({
-  children,
-  loadingElement = <Loading></Loading>,
-}) => {
-  const { user } = useContext(auth_context);
-  const navigate = useContext(navigate_context);
-  const location = usePathname();
-  const router = useRouter();
-
-  console.log(location);
-
-  if (user) {
-    if (user.isLogin) return children;
-    else return loadingElement;
-  } else {
-    navigate.record(location);
-    router.replace("/auth/login");
-  }
 };

@@ -1,4 +1,3 @@
-import { RequireAuth } from "@/contexts/auth";
 import {
   Table,
   Header,
@@ -8,6 +7,7 @@ import {
 } from "@/components/table";
 import { Subnav, Tab } from "@/components/subnav";
 import { Box } from "@/components/chakra";
+import { RequireAuth } from "@/components/require";
 
 export const metadata = {
   title: "繳交狀態",
@@ -33,7 +33,7 @@ const ProblemSubmitionLayout = ({ children }) => {
             <HeaderColumn>記憶體</HeaderColumn>
             <HeaderColumn>時長</HeaderColumn>
           </Header>
-          <Body pageSize={30}>{children}</Body>
+          {children}
           <Selector />
         </Table>
       </Box>
