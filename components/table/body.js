@@ -2,8 +2,17 @@ import { useContext, cloneElement, useLayoutEffect, useEffect } from "react";
 import { table_context } from "./table";
 import { getValidChildren } from "./utils/reactChildren";
 import { quickSort } from "./utils/sort";
+import { Center, Spinner } from "@/components/chakra";
 
-export const Body = ({ children, pageSize }) => {
+const DefaultLoading = () => {
+  return (
+    <Center width={"100%"} height={64} backgroundColor={"white"}>
+      <Spinner size={"xl"} />
+    </Center>
+  );
+};
+
+const Rows = ({ children, pageSize }) => {
   const { index, order, updateMax } = useContext(table_context);
   const validChildren = getValidChildren(children).map((child) => {
     const valid = getValidChildren(child.props.children);
@@ -13,7 +22,7 @@ export const Body = ({ children, pageSize }) => {
         ...child.props,
         represent: valid?.[order?.index || 0]?.props?.children || "",
       },
-      valid,
+      valid
     );
   });
 
@@ -21,20 +30,18 @@ export const Body = ({ children, pageSize }) => {
     ? order.ascending
       ? quickSort(
           validChildren,
-          (a, b) => a.props.represent > b.props.represent,
+          (a, b) => a.props.represent > b.props.represent
         )
       : quickSort(
           validChildren,
-          (a, b) => a.props.represent < b.props.represent,
+          (a, b) => a.props.represent < b.props.represent
         )
     : validChildren;
 
   const lowwerBound = pageSize ? index * pageSize : 0;
-
   const upperBound = pageSize ? lowwerBound + pageSize : orderedChilren.length;
-  const slicedChildren = orderedChilren.slice(lowwerBound, upperBound);
 
-  // console.log(slicedChildren)
+  const slicedChildren = orderedChilren.slice(lowwerBound, upperBound);
 
   useLayoutEffect(() => {
     updateMax(pageSize ? Math.ceil(orderedChilren.length / pageSize) : 1);
@@ -45,6 +52,16 @@ export const Body = ({ children, pageSize }) => {
       {slicedChildren}
     </div>
   );
+};
+
+export const Body = ({
+  children,
+  pageSize,
+  isLoading,
+  Loading = <DefaultLoading />,
+}) => {
+  if (isLoading) return Loading;
+  return <Rows pageSize={pageSize}>{children}</Rows>;
 };
 
 export const Row = ({ children }) => {
@@ -60,8 +77,8 @@ export const Row = ({ children }) => {
           width: widths[index],
           ...child.props,
         },
-        child.props.children,
-      ),
+        child.props.children
+      )
     );
 
   return (

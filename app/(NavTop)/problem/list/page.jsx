@@ -32,10 +32,9 @@ const ProblemList = () => {
   const link_class =
     "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
   const { data: problems } = useSWR(`${HOST}/api/problem`, fetcher);
-  if (!problems) return <Spinner />;
   return (
-    <Body pageSize={30}>
-      {problems.map((problem) => (
+    <Body pageSize={30} isLoading={!problems}>
+      {problems?.map((problem) => (
         <Row key={problem.id}>
           <Cell>{problem.id}</Cell>
           <Cell

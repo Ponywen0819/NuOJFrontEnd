@@ -37,10 +37,9 @@ const ProblemList = () => {
   const link_class =
     "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
   const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
-  if (!submitions) return <Spinner />;
   return (
-    <Body pageSize={30}>
-      {submitions.map((submition) => (
+    <Body pageSize={30} isLoading={!submitions}>
+      {submitions?.map((submition) => (
         <Row>
           <Cell>{submition.id}</Cell>
           <Cell>{submition.problem}</Cell>
