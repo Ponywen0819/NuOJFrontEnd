@@ -2,63 +2,117 @@
 
 import {
   Table,
-  Header,
-  HeaderColumn,
-  Body,
-  Row,
-  Cell,
-  Selector,
-} from "@/components/table";
+  Thead,
+  Tr,
+  Link,
+  SlideFade,
+  Box,
+  Flex,
+} from "@/components/chakra";
+import { TableProvider, TableHeader, TableBody } from "@/components/table";
 
-import { Date, Time } from "@/components/table/types";
-
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { SlideFade } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { HOST } from "@/setting";
 import useSWR from "swr";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const fetcher = (...arg) =>
+  fetch(...arg)
+    .then((res) => {
+      if (!res.ok) {
+        const error = new Error("error on fetching submition list");
+        error.message = "Can't get submition list";
+        throw error;
+      }
+
+      return res.json();
+    })
+    .then((json) => {
+      return json.map((submit) => ({
+        id: submit.id,
+        problem: submit.problem,
+        handle: {
+          children: submit.user.handle,
+          href: `/profile/${submit.user.handle}`,
+        },
+        date: { children: submit.date },
+        verdict: submit.verdict.verdict,
+        time: `${Math.round(submit.verdict.time / 10) / 100} s`,
+        memory: `${Math.round(submit.verdict.memory / 10) / 100} mb`,
+      }));
+    });
+
+const TableLink = ({ children, href }) => {
+  return (
+    <Link as={NextLink} href={href} color={"orange.600"}>
+      {children}
+    </Link>
+  );
+};
+
+const TableTime = ({ children }) => {
+  const year = children.slice(0, 4);
+  const month = children.slice(4, 6);
+  const day = children.slice(6, 8);
+  const hour = children.slice(9, 11);
+  const minumn = children.slice(11, 13);
+  const utc = parseInt(children.slice(15, 18));
+
+  return (
+    <p className="text-sm">
+      {`${year}/${month}/${day}`}
+      <br />
+      {`${hour}:${minumn}`}
+      <sub>{`utc${utc >= 0 ? "+" : ""}${utc}`}</sub>
+    </p>
+  );
+};
 
 const SubmitionArea = ({ params }) => {
   const { id } = params;
-  const { data } = useSWR(`${HOST}/api/submition/${id}`, fetcher, {
-    suspense: true,
-  });
+  const { data: submission } = useSWR(`${HOST}/api/submission/${id}`, fetcher);
 
-  const link_class =
-    "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
   return (
-    <>
-      <Table borderWidth="0px">
-        <Header height="64px" backgroundColor="white">
-          <HeaderColumn>提交 ID</HeaderColumn>
-          <HeaderColumn>提交人</HeaderColumn>
-          <HeaderColumn>提交時間</HeaderColumn>
-          <HeaderColumn>狀態</HeaderColumn>
-          <HeaderColumn>記憶體</HeaderColumn>
-          <HeaderColumn>時長</HeaderColumn>
-        </Header>
-        <Body pageSize={30}>
-          {data?.map((e) => (
-            <Row key={e.id}>
-              <Cell>{e.id}</Cell>
-              <Cell
-                as={<Link />}
-                href={`/profile/${e.user.handle}`}
-                className={link_class}
-              >
-                {e.user.handle}
-              </Cell>
-              <Cell as={<Date />}>{e.date}</Cell>
-              <Cell>{e.verdict.verdict}</Cell>
-              <Cell as={<Time />}>{e.verdict.time}</Cell>
-              <Cell>{e.verdict.memory}</Cell>
-            </Row>
-          ))}
-        </Body>
-      </Table>
-    </>
+    <Flex overflow={"auto"} flex={1}>
+      <TableProvider
+        pageSize={10}
+        isLoading={!submission}
+        flex={1}
+        overflow={"auto"}
+        enableSelector={true}
+      >
+        <Table>
+          <Thead>
+            <Tr>
+              <TableHeader
+                title={"題目 ID"}
+                id={"id"}
+                width={"360px"}
+                textAlign="start"
+              />
+              <TableHeader title={"題目名稱"} id={"problem"} width={"160px"} />
+              <TableHeader
+                title={"提交人"}
+                id={"handle"}
+                columnType={TableLink}
+              />
+              <TableHeader
+                title={"提交時間"}
+                id={"date"}
+                columnType={TableTime}
+              />
+              <TableHeader title={"提交狀態"} id={"verdict"} />
+              <TableHeader title={"時長"} id={"time"} />
+              <TableHeader
+                title={"記憶體用量"}
+                id={"memory"}
+                textAlign={"right"}
+              />
+            </Tr>
+          </Thead>
+          <TableBody datas={submission} />
+        </Table>
+      </TableProvider>
+    </Flex>
   );
 };
 

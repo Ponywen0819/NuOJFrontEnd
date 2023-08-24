@@ -3,7 +3,7 @@ import { Box, Container } from "@/components/chakra";
 
 const PaddingTop = ({ children }) => {
   return (
-    <Box minHeight={"100vh"} backgroundColor={"gray.100"}>
+    <Box minHeight={"100vh"} backgroundColor={"gray.50"}>
       <Box as="header" w={"100%"} backgroundColor={"blackAlpha.900"}>
         <Navbar />
       </Box>

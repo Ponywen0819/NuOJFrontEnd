@@ -5,7 +5,7 @@ export default function TableLayout({ children }) {
   return (
     <>
       <Flex gap={3}>
-        <Box as="section" flex={1} overflowX={"auto"}>
+        <Box as="section" flex={1} overflow={"hidden"}>
           {children}
         </Box>
         <Container

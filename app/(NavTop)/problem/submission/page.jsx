@@ -1,10 +1,9 @@
 "use client";
 
-import { Row, Cell, Body } from "@/components/table";
-import { Date, Time } from "@/components/table/types";
-import { Spinner } from "@/components/chakra";
+import { Table, Thead, Tr, Link } from "@/components/chakra";
+import { TableProvider, TableHeader, TableBody } from "@/components/table";
 import { HOST } from "@/setting";
-import Link from "next/link";
+import NextLink from "next/link";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -23,41 +22,86 @@ const fetcher = (...arg) =>
         id: submit.id,
         problem: submit.problem,
         handle: {
-          text: submit.user.handle,
+          children: submit.user.handle,
           href: `/profile/${submit.user.handle}`,
         },
-        date: submit.date,
+        date: { children: submit.date },
         verdict: submit.verdict.verdict,
-        time: submit.verdict.time,
-        memory: submit.verdict.memory,
+        time: `${Math.round(submit.verdict.time / 10) / 100} s`,
+        memory: `${Math.round(submit.verdict.memory / 10) / 100} mb`,
       }));
     });
 
-const ProblemList = () => {
-  const link_class =
-    "border-b-2 border-white border-opacity-0 duration-100 hover:border-black hover:border-opacity-100 py-1";
-  const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
-  if (!submitions) return <Spinner />;
+const TableLink = ({ children, href }) => {
   return (
-    <Body pageSize={30}>
-      {submitions.map((submition) => (
-        <Row>
-          <Cell>{submition.id}</Cell>
-          <Cell>{submition.problem}</Cell>
-          <Cell
-            as={<Link />}
-            href={submition.handle.href}
-            className={link_class}
-          >
-            {submition.handle.text}
-          </Cell>
-          <Cell as={<Date />}>{submition.date}</Cell>
-          <Cell>{submition.verdict}</Cell>
-          <Cell as={<Time />}>{submition.time}</Cell>
-          <Cell>{submition.memory}</Cell>
-        </Row>
-      ))}
-    </Body>
+    <Link as={NextLink} href={href} color={"orange.600"}>
+      {children}
+    </Link>
+  );
+};
+
+const TableTime = ({ children }) => {
+  const year = children.slice(0, 4);
+  const month = children.slice(4, 6);
+  const day = children.slice(6, 8);
+  const hour = children.slice(9, 11);
+  const minumn = children.slice(11, 13);
+  const utc = parseInt(children.slice(15, 18));
+
+  return (
+    <p className="text-sm">
+      {`${year}/${month}/${day}`}
+      <br />
+      {`${hour}:${minumn}`}
+      <sub>{`utc${utc >= 0 ? "+" : ""}${utc}`}</sub>
+    </p>
+  );
+};
+
+const ProblemList = () => {
+  const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
+  console.log(submitions);
+  return (
+    <TableProvider
+      rounded={"lg"}
+      boxShadow={"sm"}
+      backgroundColor={"white"}
+      pageSize={10}
+      isLoading={!submitions}
+      enableSelector={true}
+    >
+      <Table>
+        <Thead backgroundColor={"rgb(254 215 170)"}>
+          <Tr>
+            <TableHeader
+              title={"題目 ID"}
+              id={"id"}
+              width={"360px"}
+              textAlign="start"
+            />
+            <TableHeader title={"題目名稱"} id={"problem"} width={"160px"} />
+            <TableHeader
+              title={"提交人"}
+              id={"handle"}
+              columnType={TableLink}
+            />
+            <TableHeader
+              title={"提交時間"}
+              id={"date"}
+              columnType={TableTime}
+            />
+            <TableHeader title={"提交狀態"} id={"verdict"} />
+            <TableHeader title={"時長"} id={"time"} />
+            <TableHeader
+              title={"記憶體用量"}
+              id={"memory"}
+              textAlign={"right"}
+            />
+          </Tr>
+        </Thead>
+        <TableBody datas={submitions} />
+      </Table>
+    </TableProvider>
   );
 };
 

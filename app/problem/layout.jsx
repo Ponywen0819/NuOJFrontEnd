@@ -4,7 +4,7 @@ import { Navbar } from "@/components/navbar";
 const ProblemLayout = (props) => {
   const { children } = props;
   return (
-    <Stack minH={"lg"} height={"100vh"}>
+    <Stack minH={"lg"} height={"100vh"} gap={0}>
       <Box as="header" backgroundColor={"black"}>
         <Navbar />
       </Box>

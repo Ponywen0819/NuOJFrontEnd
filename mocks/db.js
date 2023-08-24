@@ -60,11 +60,12 @@ const problem = [...Array(30)].map((_, index) => {
 
 const submission = [...Array(30)].map((_, index) => {
   return {
-    id: index,
+    problem_id: problem[index].header.problem_pid,
+    id: v4(),
     date: "20230705T235853+0800",
     user: {
-      user_uid: "8d828772-50a5-4496-8114-0bf64132c125",
-      handle: "ntut-xuan",
+      user_uid: v4(),
+      handle: "pony0819",
       email: "ntut-xuan",
     },
     problem: "Hello World",
