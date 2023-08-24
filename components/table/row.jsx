@@ -22,7 +22,7 @@ export const TableRow = ({ data, index }) => {
 const Cell = ({ data, type, align }) => {
   const isString = typeof data === "string";
   if (isString) {
-    return <Td>{data}</Td>;
+    return <Td textAlign={align}>{data}</Td>;
   }
 
   const { children, ...props } = data;

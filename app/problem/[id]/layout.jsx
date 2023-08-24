@@ -34,22 +34,49 @@ const ProblemDetailLayout = (props) => {
   useSWR(`${HOST}/api/problem/${id}`, fetcher, { suspense: true });
 
   return (
-    <Flex as={"main"} flex={1} gap={3} paddingX={3} paddingY={5}>
-      <Box w={"50%"} boxShadow={"sm"} rounded={"lg"} backgroundColor={"white"}>
-        <Tabs isLazy>
-          <TabList>
-            <Tab>題目說明</Tab>
-            <Tab>提交狀態</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>{doc}</TabPanel>
-            <TabPanel>{submition}</TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
-      <Box w={"50%"} boxShadow={"sm"} rounded={"lg"} backgroundColor={"white"}>
-        {submit}
-      </Box>
+    <Flex
+      as={"main"}
+      flex={1}
+      gap={0}
+      paddingX={3}
+      paddingY={5}
+      backgroundColor={"gray.100"}
+    >
+      <Flex w={"50%"} paddingX={5} paddingY={3}>
+        <Flex
+          flex={1}
+          boxShadow={"sm"}
+          rounded={"lg"}
+          backgroundColor={"white"}
+          overflow={"hidden"}
+        >
+          <Tabs
+            flex={1}
+            display={"flex"}
+            flexDirection={"column"}
+            overflow={"auto"}
+            isLazy
+          >
+            <TabList>
+              <Tab>題目說明</Tab>
+              <Tab>提交狀態</Tab>
+            </TabList>
+            <TabPanels flex={1} display={"flex"}>
+              <TabPanel flex={1} display={"flex"}>
+                {doc}
+              </TabPanel>
+              <TabPanel flex={1} display={"flex"} overflow={"hidden"}>
+                {submition}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Flex>
+      </Flex>
+      <Flex w={"50%"} paddingX={5} paddingY={3}>
+        <Box flex={1} boxShadow={"sm"} rounded={"lg"} backgroundColor={"white"}>
+          {submit}
+        </Box>
+      </Flex>
     </Flex>
   );
 };

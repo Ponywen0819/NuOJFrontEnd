@@ -60,6 +60,7 @@ const problem = [...Array(30)].map((_, index) => {
 
 const submission = [...Array(30)].map((_, index) => {
   return {
+    problem_id: problem[index].header.problem_pid,
     id: v4(),
     date: "20230705T235853+0800",
     user: {

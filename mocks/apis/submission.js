@@ -12,7 +12,9 @@ export const createSubmissionRoute = (db) => {
     .all(express.json())
     .all((req, res, next) => {
       const id = req.params.id;
-      const submissionQuery = db.get("submission").get(id);
+      const submissionQuery = db
+        .get("submission")
+        .find((problem) => problem.problem_id === id);
       const submission = submissionQuery.value();
 
       if (!submission) {
@@ -27,7 +29,12 @@ export const createSubmissionRoute = (db) => {
     })
     .get((req, res) => {
       const submission = req.query.value();
-      res.jsonp(submission);
+      if (Array.isArray(submission)) {
+        res.jsonp(submission);
+        return;
+      }
+
+      res.jsonp([submission]);
     });
 
   return submissionRoute;

@@ -56,7 +56,12 @@ const ProbleTable = () => {
       <Table>
         <Thead paddingY={5}>
           <Tr backgroundColor={"rgb(254 215 170)"}>
-            <TableHeader title={"題目 ID"} width={"360px"} id={"id"} />
+            <TableHeader
+              title={"題目 ID"}
+              width={"360px"}
+              id={"id"}
+              textAlign="start"
+            />
             <TableHeader
               title={"題目名稱"}
               id={"title"}

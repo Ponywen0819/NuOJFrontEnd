@@ -1,4 +1,5 @@
 import { Subnav, Tab } from "@/components/subnav";
+import { RequireAuth } from "@/components/require";
 
 export const metadata = {
   title: "繳交狀態",
@@ -6,8 +7,8 @@ export const metadata = {
 
 const ProblemSubmitionLayout = ({ children }) => {
   return (
+    // <RequireAuth>
     <>
-      {/* // <RequireAuth> */}
       <Subnav>
         <Tab href={"/problem/list"}>題目列表</Tab>
         <Tab href={"/problem/submission"} isActive={true}>
@@ -16,6 +17,7 @@ const ProblemSubmitionLayout = ({ children }) => {
       </Subnav>
       {children}
     </>
+    // </RequireAuth>
   );
 };
 

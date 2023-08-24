@@ -17,7 +17,7 @@ const TexSupport = ({ text }) => {
         key={`math-${offset}`}
         display={false}
         tex={match.slice(1, -1)}
-      />,
+      />
     );
     from += match.length + offset;
   });
@@ -39,11 +39,11 @@ const DocArea = (props) => {
   const { header, content, author } = data;
 
   return (
-    <>
-      <Box marginX={"auto"} width={"fit-content"}>
+    <Box>
+      <Box marginX={"auto"} width={"fit-content"} marginBottom={3}>
         <Heading as={"h1"}>{header.title}</Heading>
-        <Text>{`運行時間限制 : ${header.time_limit}`}</Text>
-        <Text>{`記憶體限制 : ${header.memory_limit}`}</Text>
+        <Text align={"center"}>{`運行時間限制 : ${header.time_limit}`}</Text>
+        <Text align={"center"}>{`記憶體限制 : ${header.memory_limit}`}</Text>
       </Box>
       <Stack gap={3}>
         <Box>
@@ -71,7 +71,7 @@ const DocArea = (props) => {
           <TexSupport text={content.note} />
         </Box>
       </Stack>
-    </>
+    </Box>
   );
 };
 

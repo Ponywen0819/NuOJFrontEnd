@@ -1,12 +1,7 @@
 "use client";
 
 import { Table, Thead, Tr, Link } from "@/components/chakra";
-import {
-  TableProvider,
-  TableHeader,
-  TableBody,
-  TableSelector,
-} from "@/components/table";
+import { TableProvider, TableHeader, TableBody } from "@/components/table";
 import { HOST } from "@/setting";
 import NextLink from "next/link";
 import useSWR from "swr";
@@ -30,10 +25,10 @@ const fetcher = (...arg) =>
           children: submit.user.handle,
           href: `/profile/${submit.user.handle}`,
         },
-        date: submit.date,
+        date: { children: submit.date },
         verdict: submit.verdict.verdict,
-        time: submit.verdict.time.toString(),
-        memory: submit.verdict.memory.toString(),
+        time: `${Math.round(submit.verdict.time / 10) / 100} s`,
+        memory: `${Math.round(submit.verdict.memory / 10) / 100} mb`,
       }));
     });
 
@@ -42,6 +37,24 @@ const TableLink = ({ children, href }) => {
     <Link as={NextLink} href={href} color={"orange.600"}>
       {children}
     </Link>
+  );
+};
+
+const TableTime = ({ children }) => {
+  const year = children.slice(0, 4);
+  const month = children.slice(4, 6);
+  const day = children.slice(6, 8);
+  const hour = children.slice(9, 11);
+  const minumn = children.slice(11, 13);
+  const utc = parseInt(children.slice(15, 18));
+
+  return (
+    <p className="text-sm">
+      {`${year}/${month}/${day}`}
+      <br />
+      {`${hour}:${minumn}`}
+      <sub>{`utc${utc >= 0 ? "+" : ""}${utc}`}</sub>
+    </p>
   );
 };
 
@@ -60,17 +73,30 @@ const ProblemList = () => {
       <Table>
         <Thead backgroundColor={"rgb(254 215 170)"}>
           <Tr>
-            <TableHeader title={"題目 ID"} id={"id"} />
-            <TableHeader title={"題目名稱"} id={"problem"} />
+            <TableHeader
+              title={"題目 ID"}
+              id={"id"}
+              width={"360px"}
+              textAlign="start"
+            />
+            <TableHeader title={"題目名稱"} id={"problem"} width={"160px"} />
             <TableHeader
               title={"提交人"}
               id={"handle"}
               columnType={TableLink}
             />
-            <TableHeader title={"提交時間"} id={"date"} />
+            <TableHeader
+              title={"提交時間"}
+              id={"date"}
+              columnType={TableTime}
+            />
             <TableHeader title={"提交狀態"} id={"verdict"} />
-            <TableHeader title={"狀態"} id={"time"} />
-            <TableHeader title={"時長"} id={"memory"} />
+            <TableHeader title={"時長"} id={"time"} />
+            <TableHeader
+              title={"記憶體用量"}
+              id={"memory"}
+              textAlign={"right"}
+            />
           </Tr>
         </Thead>
         <TableBody datas={submitions} />

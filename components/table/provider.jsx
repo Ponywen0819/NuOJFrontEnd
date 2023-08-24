@@ -57,12 +57,15 @@ export const TableProvider = ({
       {isLoading ? (
         Loading
       ) : (
-        <SlideFade in={true}>
-          <TableContainer {...remain}>
-            <TableContainer>{children}</TableContainer>
-            {enableSelector && <TableSelector />}
-          </TableContainer>
-        </SlideFade>
+        <Box
+          {...remain}
+          overflowY={"hidden"}
+          display={"flex"}
+          flexDirection={"column"}
+        >
+          <TableContainer flex={1}>{children}</TableContainer>
+          {enableSelector && <TableSelector />}
+        </Box>
       )}
     </table_context.Provider>
   );

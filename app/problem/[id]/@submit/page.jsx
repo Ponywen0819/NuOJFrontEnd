@@ -4,8 +4,7 @@ import Editor from "@monaco-editor/react";
 import { success_swal, error_swal } from "@/components/notification";
 import { Loading } from "@/components/loading";
 import { useEffect, useState, useRef } from "react";
-import { Button } from "@chakra-ui/react";
-import { CheckIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { Button, Box, CheckIcon, ChevronDownIcon } from "@/components/chakra";
 
 const Select = ({ options = [], len, callback }) => {
   const [pop, setPop] = useState(false);
@@ -98,9 +97,12 @@ export const SubmitArea = ({ id }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="w-full h-10 flex px-2 border-b-2 flex items-center">
+      <Box
+        height={"32px"}
+        className="w-full flex px-2 border-b-2 flex items-center"
+      >
         <Select options={support_len} len={len} callback={setLen} />
-      </div>
+      </Box>
       <div className="grow py-2">
         <Editor
           language={len.val}
