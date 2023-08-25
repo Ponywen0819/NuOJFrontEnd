@@ -5,6 +5,7 @@ import {
   FormErrorMessage,
 } from "@/components/chakra";
 import { useFormContext } from "react-hook-form";
+import { createElement } from "react";
 
 export const InputGroup = ({
   id,
@@ -12,7 +13,10 @@ export const InputGroup = ({
   lable,
   placeholder,
   onChange,
+  defaultValue = "",
+  input = Input,
   required = false,
+  ...prop
 }) => {
   const {
     register,
@@ -21,12 +25,13 @@ export const InputGroup = ({
   return (
     <FormControl isInvalid={errors[id]}>
       <FormLabel>{lable}</FormLabel>
-      <Input
-        type={type}
-        placeholder={placeholder}
-        spellCheck={false}
-        {...register(id, { required })}
-      />
+      {createElement(input, {
+        type,
+        placeholder,
+        defaultValue,
+        ...prop,
+        ...register(id, { required }),
+      })}
       <FormErrorMessage>{errors[id] && errors[id].message}</FormErrorMessage>
     </FormControl>
   );

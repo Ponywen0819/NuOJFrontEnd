@@ -2,28 +2,39 @@
 
 import {
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
   Stack,
   Heading,
   Divider,
   Button,
   Flex,
-  FormErrorMessage,
+  Textarea,
 } from "@/components/chakra";
 import { Subnav, Tab } from "@/components/subnav";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
+import { InputGroup } from "@/components/form";
 import { HOST } from "@/setting";
 import { error_swal, success_swal } from "@/components/notification";
 
+const TextAreaInput = ({ id, lable, placeholder, required }) => {
+  return (
+    <InputGroup
+      id={id}
+      lable={lable}
+      placeholder={placeholder}
+      input={Textarea}
+      resize={"none"}
+      height={36}
+      required={required}
+    />
+  );
+};
+
 const AddProblemPage = () => {
+  const methods = useForm();
   const {
-    register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    formState: { isSubmitting },
+  } = methods;
 
   const handleAdd = async (data) => {
     const { title, time_limit, memory_limit, ...remain } = data;
@@ -51,114 +62,79 @@ const AddProblemPage = () => {
   };
 
   return (
-    <>
+    <Box as="section" flex={1}>
       <Subnav>
         <Tab href={"/admin/problem/list"}>題目列表</Tab>
         <Tab href={"/admin/problem/add"} isActive={true}>
           新增題目
         </Tab>
       </Subnav>
-      <Stack
-        as="form"
-        boxShadow={"sm"}
-        paddingX={3}
-        paddingY={5}
-        backgroundColor={"white"}
-        rounded={"lg"}
-        gap={3}
-        onSubmit={handleSubmit(handleAdd)}
-      >
-        <Heading as={"h1"}>新增題目</Heading>
-        <Divider />
-        <FormControl isInvalid={errors.title}>
-          <FormLabel>標題</FormLabel>
-          <Input
-            placeholder="請輸入題目"
-            {...register("title", {
-              required: "不可留空",
-            })}
+      <FormProvider {...methods}>
+        <Stack
+          as="form"
+          boxShadow={"sm"}
+          paddingX={3}
+          paddingY={5}
+          backgroundColor={"white"}
+          rounded={"lg"}
+          gap={3}
+          onSubmit={handleSubmit(handleAdd)}
+        >
+          <Heading as={"h1"}>新增題目</Heading>
+          <Divider />
+          <InputGroup
+            id={"title"}
+            lable={"標題"}
+            placeholder={"請輸入題目"}
+            required={"不可留空"}
           />
-          <FormErrorMessage>
-            {errors.title && errors.title.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.time_limit}>
-          <FormLabel>時間限制</FormLabel>
-          <Input
-            type="text"
-            placeholder="請輸入時間限制"
-            {...register("time_limit", {
-              required: "不可留空",
-              pattern: {
-                value: /^[1-9]+[0-9]*$/,
-                message: "請輸入正整數",
-              },
-            })}
+          <InputGroup
+            id={"time_limit"}
+            lable={"時間限制"}
+            placeholder={"請輸入時間限制"}
+            required={"不可留空"}
           />
-          <FormErrorMessage>
-            {errors.time_limit && errors.time_limit.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl isInvalid={errors.memory_limit}>
-          <FormLabel>記憶體限制</FormLabel>
-          <Input
-            type="text"
-            placeholder="請輸入記憶體限制"
-            {...register("memory_limit", {
-              required: "不可留空",
-              pattern: {
-                value: /^[1-9]+[0-9]*$/,
-                message: "請輸入正整數",
-              },
-            })}
+          <InputGroup
+            id={"memory_limit"}
+            lable={"記憶體限制"}
+            placeholder={"請輸入時間限制"}
+            required={"不可留空"}
           />
-          <FormErrorMessage>
-            {errors.memory_limit && errors.memory_limit.message}
-          </FormErrorMessage>
-        </FormControl>
+          <TextAreaInput
+            id={"description"}
+            lable={"題目敘述"}
+            placeholder={"請輸入題目敘述"}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"input_description"}
+            lable={"輸入敘述"}
+            placeholder={"請輸入輸入敘述"}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"output_description"}
+            lable={"輸出敘述"}
+            placeholder={"請輸入輸出敘述"}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"note"}
+            lable={"Note"}
+            placeholder={"請輸入 Note"}
+          />
 
-        <FormControl>
-          <FormLabel>題目敘述</FormLabel>
-          <Textarea
-            placeholder="請輸入題目"
-            {...register("description", {
-              required: "不可留空",
-            })}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>輸入敘述</FormLabel>
-          <Textarea
-            placeholder="請輸入題目"
-            {...register("input_description", {
-              required: "不可留空",
-            })}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>輸出敘述</FormLabel>
-          <Textarea
-            placeholder="請輸入題目"
-            {...register("output_description", {
-              required: "不可留空",
-            })}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Note</FormLabel>
-          <Textarea placeholder="請輸入題目" {...register("note")} />
-        </FormControl>
-
-        <Flex width={"fit-content"} marginX={"auto"} gap={3}>
-          <Button type="submit" colorScheme="orange" isLoading={isSubmitting}>
-            新增
-          </Button>
-          <Button type="reset" colorScheme="gray" isLoading={isSubmitting}>
-            清除
-          </Button>
-        </Flex>
-      </Stack>
-    </>
+          <Flex width={"fit-content"} marginX={"auto"} gap={3}>
+            <Button type="submit" colorScheme="orange" isLoading={isSubmitting}>
+              新增
+            </Button>
+            <Button type="reset" colorScheme="gray" isDisabled={isSubmitting}>
+              清除
+            </Button>
+          </Flex>
+        </Stack>
+      </FormProvider>
+    </Box>
   );
 };
 
