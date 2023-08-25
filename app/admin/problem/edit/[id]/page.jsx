@@ -5,13 +5,9 @@ import { useEffect, useRef, useState, forwardRef } from "react";
 import { HOST } from "@/setting";
 import { error_swal, success_swal } from "@/components/notification";
 import { SlideFade } from "@chakra-ui/react";
-import { Loading } from "@/components/loading";
-import { useRouter } from "next/navigation";
 import {
-  Input,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
+  Center,
+  Spinner,
   Stack,
   Heading,
   Divider,
@@ -20,27 +16,139 @@ import {
   Box,
   Textarea,
 } from "@/components/chakra";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
+import { InputGroup } from "@/components/form";
 import useSWR from "swr";
 
-const InputLine = forwardRef(({ initialval = "", title, ...props }, ref) => {
-  const val_ref = ref || useRef();
-  useEffect(() => {
-    val_ref.current.value = initialval;
-  }, [initialval]);
-
+const TextAreaInput = ({ id, lable, placeholder, required, defaultValue }) => {
   return (
-    <div className="flex">
-      <div className="w-40">
-        <p>{title}</p>
-      </div>
-      <textarea
-        className="grow p-2 h-fit min-h-[64px] border-2 rounded-lg"
-        ref={val_ref}
-      />
-    </div>
+    <InputGroup
+      id={id}
+      lable={lable}
+      placeholder={placeholder}
+      input={Textarea}
+      resize={"none"}
+      height={36}
+      defaultValue={defaultValue}
+      required={required}
+    />
   );
-});
+};
+
+const Loading = () => {
+  return (
+    <Center flex={1} height={48}>
+      <Spinner size={"xl"} />
+    </Center>
+  );
+};
+
+const Form = ({ id, mutate, detail }) => {
+  const methods = useForm();
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+  const handleUpdate = async (data) => {
+    const { title, time_limit, memory_limit, ...remain } = data;
+    const res = await fetch(`${HOST}/api/problem/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        header: {
+          title,
+          time_limit,
+          memory_limit,
+        },
+        content: { ...remain },
+      }),
+      headers: { "content-type": "application/json" },
+    });
+
+    if (!res.ok) {
+      error_swal("上傳出現錯誤");
+      return;
+    }
+
+    success_swal("更改成功");
+    mutate(data, { revalidate: false });
+  };
+  return (
+    <SlideFade in={true}>
+      <FormProvider {...methods}>
+        <Stack
+          as="form"
+          boxShadow={"sm"}
+          paddingX={3}
+          paddingY={5}
+          backgroundColor={"white"}
+          rounded={"lg"}
+          gap={3}
+          onSubmit={handleSubmit(handleUpdate)}
+        >
+          <Heading as={"h1"}>修改題目資訊</Heading>
+          <Heading as={"h2"} fontSize={"sm"}>{`題目 ID : ${id}`}</Heading>
+          <Divider />
+          <InputGroup
+            id={"title"}
+            lable={"標題"}
+            placeholder={"請輸入題目"}
+            defaultValue={detail.title}
+            required={"不可留空"}
+          />
+          <InputGroup
+            id={"time_limit"}
+            lable={"時間限制"}
+            defaultValue={detail.time_limit}
+            placeholder={"請輸入時間限制"}
+            required={"不可留空"}
+          />
+          <InputGroup
+            id={"memory_limit"}
+            lable={"記憶體限制"}
+            defaultValue={detail.memory_limit}
+            placeholder={"請輸入時間限制"}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"description"}
+            lable={"題目敘述"}
+            placeholder={"請輸入題目敘述"}
+            defaultValue={detail.description}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"input_description"}
+            lable={"輸入敘述"}
+            placeholder={"請輸入輸入敘述"}
+            defaultValue={detail.input_description}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"output_description"}
+            defaultValue={detail.output_description}
+            lable={"輸出敘述"}
+            placeholder={"請輸入輸出敘述"}
+            required={"不可留空"}
+          />
+          <TextAreaInput
+            id={"note"}
+            lable={"Note"}
+            placeholder={"請輸入 Note"}
+            defaultValue={detail.note}
+          />
+          <Flex width={"fit-content"} marginX={"auto"} gap={3}>
+            <Button type="submit" colorScheme="orange" isLoading={isSubmitting}>
+              新增
+            </Button>
+            <Button type="reset" colorScheme="gray" isDisabled={isSubmitting}>
+              清除
+            </Button>
+          </Flex>
+        </Stack>
+      </FormProvider>
+    </SlideFade>
+  );
+};
 
 const fetcher = (...arg) =>
   fetch(...arg)
@@ -67,43 +175,11 @@ const fetcher = (...arg) =>
 
 const EditProblemPage = ({ params }) => {
   const { id } = params;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
-  } = useForm();
-  const { data: detail, mutate } = useSWR(
-    `${HOST}/api/problem/${id}`,
-    fetcher,
-    { suspense: true },
-  );
 
-  const handleUpdate = async (data) => {
-    const modified = Object.entries(touchedFields).reduce((a, c) => {
-      const [key, val] = c;
-      if (val) {
-        a[key] = data[key];
-      }
-      return a;
-    }, {});
-
-    const res = await fetch(`${HOST}/api/problem/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(modified),
-      headers: { "content-type": "application/json" },
-    });
-
-    if (!res.ok) {
-      error_swal("上傳出現錯誤");
-      return;
-    }
-
-    success_swal("更改成功");
-    mutate(data, { revalidate: false });
-  };
+  const { data: detail, mutate } = useSWR(`${HOST}/api/problem/${id}`, fetcher);
 
   return (
-    <>
+    <Box flex={1}>
       <Subnav>
         <Tab href={"/admin/problem/list"}>題目列表</Tab>
         <Tab href={"/admin/problem/add"}>新增題目</Tab>
@@ -111,119 +187,8 @@ const EditProblemPage = ({ params }) => {
           修改題目
         </Tab>
       </Subnav>
-      <SlideFade in={true}>
-        <Stack
-          as="form"
-          boxShadow={"sm"}
-          paddingX={3}
-          paddingY={5}
-          backgroundColor={"white"}
-          rounded={"lg"}
-          gap={3}
-          onSubmit={handleSubmit(handleUpdate)}
-        >
-          <Heading as={"h1"}>修改題目資訊</Heading>
-          <Heading as={"h2"} fontSize={"sm"}>{`題目 ID : ${id}`}</Heading>
-          <Divider />
-          <FormControl isInvalid={errors.title}>
-            <FormLabel>標題</FormLabel>
-            <Input
-              defaultValue={detail.title}
-              placeholder="請輸入題目"
-              {...register("title", {
-                required: "不可留空",
-              })}
-            />
-            <FormErrorMessage>
-              {errors.title && errors.title.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.time_limit}>
-            <FormLabel>時間限制</FormLabel>
-            <Input
-              type="text"
-              placeholder="請輸入時間限制"
-              defaultValue={detail.time_limit}
-              {...register("time_limit", {
-                required: "不可留空",
-                pattern: {
-                  value: /^[1-9]+[0-9]*$/,
-                  message: "請輸入正整數",
-                },
-              })}
-            />
-            <FormErrorMessage>
-              {errors.time_limit && errors.time_limit.message}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.memory_limit}>
-            <FormLabel>記憶體限制</FormLabel>
-            <Input
-              type="text"
-              placeholder="請輸入記憶體限制"
-              defaultValue={detail.memory_limit}
-              {...register("memory_limit", {
-                required: "不可留空",
-                pattern: {
-                  value: /^[1-9]+[0-9]*$/,
-                  message: "請輸入正整數",
-                },
-              })}
-            />
-            <FormErrorMessage>
-              {errors.memory_limit && errors.memory_limit.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>題目敘述</FormLabel>
-            <Textarea
-              placeholder="請輸入題目"
-              defaultValue={detail.description}
-              {...register("description", {
-                required: "不可留空",
-              })}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>輸入敘述</FormLabel>
-            <Textarea
-              placeholder="請輸入題目"
-              defaultValue={detail.input_description}
-              {...register("input_description", {
-                required: "不可留空",
-              })}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>輸出敘述</FormLabel>
-            <Textarea
-              placeholder="請輸入題目"
-              defaultValue={detail.output_description}
-              {...register("output_description", {
-                required: "不可留空",
-              })}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Note</FormLabel>
-            <Textarea
-              placeholder="請輸入題目"
-              defaultValue={detail.note}
-              {...register("note")}
-            />
-          </FormControl>
-          <Flex width={"fit-content"} marginX={"auto"} gap={3}>
-            <Button type="submit" colorScheme="orange" isLoading={isSubmitting}>
-              新增
-            </Button>
-            <Button type="reset" colorScheme="gray" isLoading={isSubmitting}>
-              清除
-            </Button>
-          </Flex>
-        </Stack>
-      </SlideFade>
-    </>
+      {detail ? <Form id={id} detail={detail} mutate={mutate} /> : <Loading />}
+    </Box>
   );
 };
 
