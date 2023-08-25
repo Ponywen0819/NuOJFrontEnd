@@ -11,7 +11,8 @@ export const TableBody = ({ datas }) => {
     setLength(datas.length);
   }, [datas]);
 
-  const slicedDatas = datas.slice(pageIndex, pageIndex + pageSize);
+  const start = pageIndex * pageSize;
+  const slicedDatas = datas.slice(start, start + pageSize);
 
   return (
     <Tbody>
