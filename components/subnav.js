@@ -1,29 +1,32 @@
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+"use client";
+
+import NextLink from "next/link";
+import { Box, Button } from "@/components/chakra";
 
 export const Tab = ({ isActive, href, children, ...props }) => {
-  const link_active = "border-b-2 border-orange-500 border-opacity-100";
-  const link_class = "text-black text-sm inline-block h-6 px-4";
-
   return (
-    <li
-      className={`inline-block transition-all duration-500 border-opacity-0 ${
-        isActive ? link_active : ""
-      }`}
-    >
-      <Link className={link_class} href={href} {...props}>
+    <Box as="li" display={"inline"}>
+      <Button
+        as={NextLink}
+        href={href}
+        variant="ghost"
+        borderRadius={0}
+        borderBottomWidth={2}
+        marginBottom={"-2px"}
+        borderBottomColor={isActive ? "orange.300" : "gray.300"}
+      >
         {children}
-      </Link>
-    </li>
+      </Button>
+    </Box>
   );
 };
 
-export const Subnav = ({ borderWidth, borderColor, children }) => {
-  const nav_class = `w-full h-fit mb-2 px-2 border-b-2 border-gray`;
-
+export const Subnav = ({ children }) => {
   return (
-    <nav className={nav_class}>
-            <ul>{children}</ul>
-    </nav>
+    <Box as="nav" width={"full"} marginBottom={3}>
+      <Box as="ul" borderBottomColor={"gray.300"} borderBottomWidth={2}>
+        {children}
+      </Box>
+    </Box>
   );
 };
