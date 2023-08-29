@@ -44,15 +44,25 @@ const Header = () => {
 
 const Main = () => {
   return (
-    <Center flex={1} as="div" className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]">
+    <Center
+      flex={1}
+      as="main"
+      className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
+    >
       <Box>
-        <Text fontSize='5xl' textAlign={"center"} fontWeight={"semibold"}>
+        <Text fontSize="5xl" textAlign={"center"} fontWeight={"semibold"}>
           Welcome to NuOJ!
         </Text>
-        <Text fontSize='2xl' textAlign={"center"} fontWeight={'medium'} m='4' mt='1'>
+        <Text
+          fontSize="2xl"
+          textAlign={"center"}
+          fontWeight={"medium"}
+          m="4"
+          mt="1"
+        >
           一款來自 國立臺北科技大學 的線上程式評測系統
         </Text>
-        <Text fontSize='2xl' textAlign={"center"} fontWeight={"medium"} m='4'>
+        <Text fontSize="2xl" textAlign={"center"} fontWeight={"medium"} m="4">
           系統正在進行開發中，你可以追蹤
           <Link href="https://github.com/ntut-xuan/NuOJ" color={"orange.500"}>
             我們的開發進度
@@ -65,7 +75,10 @@ const Main = () => {
 
 const Footer = () => {
   return (
-    <Container as={"div"} className='absolute bottom-[9vh] left-[50%] -translate-x-[50%] w-full'>
+    <Container
+      as={"footer"}
+      className="absolute bottom-[9vh] left-[50%] -translate-x-[50%] w-full"
+    >
       <Link
         href="https://ntut.edu.tw"
         backgroundColor={"white"}
@@ -73,10 +86,10 @@ const Footer = () => {
         padding={3}
         width={"fit-content"}
         margin={"auto"}
-        my='5'
+        my="5"
         className="duration-500 hover:bg-slate-400"
-        >
-        <Image alt="NTUT" src={ntut_logo.src}/>
+      >
+        <Image alt="NTUT" src={ntut_logo.src} />
       </Link>
       <Text color={"whiteAlpha.900"} textAlign={"center"}>
         2023, NuOJ Team.
