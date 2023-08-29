@@ -6,7 +6,6 @@ import { Subnav, Tab } from "@/components/subnav";
 import { Box, SlideFade } from "@/components/chakra";
 import { IconButton } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
-import { HOST } from "@/setting";
 
 import useSWR from "swr";
 import NextLink from "next/link";
@@ -44,7 +43,7 @@ const ProblemOperator = ({ children, OnDelete }) => {
 };
 
 const ProblemTable = () => {
-  const { data: problems, mutate } = useSWR(`${HOST}/api/problem`, fetcher);
+  const { data: problems, mutate } = useSWR(`/api/problem`, fetcher);
   return (
     <SlideFade in={true}>
       <TableProvider

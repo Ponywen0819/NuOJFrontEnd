@@ -1,6 +1,5 @@
 import { DeleteIcon, IconButton } from "@/components/chakra";
 import Swal from "sweetalert2";
-import { HOST } from "@/setting";
 import { success_swal, error_swal } from "@/components/notification";
 
 const ConfirmDlete = async (id) => {
@@ -27,7 +26,7 @@ const IndicateWaiting = () => {
 
 const deleteProblem = async (id, OnDelete) => {
   IndicateWaiting();
-  const res = await fetch(`${HOST}/api/problem/${id}`, { method: "DELETE" });
+  const res = await fetch(`/api/problem/${id}`, { method: "DELETE" });
 
   if (!res.ok) {
     error_swal("出現預期外的錯誤");

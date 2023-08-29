@@ -14,7 +14,6 @@ import { useContext } from "react";
 import { auth_context } from "@/contexts/auth";
 import { PageOptions } from "./options";
 import useSWR from "swr";
-import { HOST } from "@/setting";
 import { success_swal, error_swal } from "@/components/notification";
 import { useRouter } from "next/navigation";
 
@@ -24,7 +23,7 @@ export const IsLoginInterface = () => {
   const router = useRouter();
   const { user, signout } = useContext(auth_context);
   const { handle } = user;
-  const { data: profile } = useSWR(`${HOST}/api/profile/${handle}`, fetcher);
+  const { data: profile } = useSWR(`/api/profile/${handle}`, fetcher);
   if (!profile) return <Spinner size={"lg"} color="gray.200" />;
 
   const handleSignout = async () => {

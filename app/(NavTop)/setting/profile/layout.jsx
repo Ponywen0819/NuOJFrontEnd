@@ -14,7 +14,6 @@ import { createContext, useContext, useState } from "react";
 import { auth_context } from "@/contexts/auth";
 import { RequireAuth } from "@/components/require";
 import useSWR from "swr";
-import { HOST } from "@/setting";
 
 const fetcher = (...arg) => fetch(...arg).then((res) => res.json());
 
@@ -46,14 +45,8 @@ const SettingContext = (props) => {
   const [imgPop, setPop] = useState(false);
   const { user } = useContext(auth_context);
   const { handle } = user;
-  const { data: profileInfo } = useSWR(
-    `${HOST}/api/profile/${handle}`,
-    fetcher
-  );
-  const { data: imgSrc } = useSWR(
-    `${HOST}/api/profile/${handle}/avatar`,
-    imgFetcher
-  );
+  const { data: profileInfo } = useSWR(`/api/profile/${handle}`, fetcher);
+  const { data: imgSrc } = useSWR(`/api/profile/${handle}/avatar`, imgFetcher);
   const isAdmin = profileInfo.role;
 
   const { profile, image } = props;

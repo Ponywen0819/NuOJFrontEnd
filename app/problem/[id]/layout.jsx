@@ -13,7 +13,6 @@ import {
   TabPanel,
 } from "@/components/chakra";
 import useSWR from "swr";
-import { HOST } from "@/setting";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -31,7 +30,7 @@ const ProblemDetailLayout = (props) => {
   const { doc, submit, submition, params } = props;
   const { id } = params;
 
-  useSWR(`${HOST}/api/problem/${id}`, fetcher, { suspense: true });
+  useSWR(`/api/problem/${id}`, fetcher, { suspense: true });
 
   return (
     <Flex

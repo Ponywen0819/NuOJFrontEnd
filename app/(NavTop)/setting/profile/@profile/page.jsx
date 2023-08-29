@@ -13,7 +13,6 @@ import {
 } from "@/components/chakra";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { HOST } from "@/setting";
 import { useContext } from "react";
 import { auth_context } from "@/contexts/auth";
 import useSWR from "swr";
@@ -23,17 +22,15 @@ const fetcher = (...arg) => fetch(...arg).then((v) => v.json());
 export const ProfileForm = () => {
   const { user } = useContext(auth_context);
   const { handle } = user;
-  const { data: profile, mutate } = useSWR(
-    `${HOST}/api/profile/${handle}`,
-    fetcher,
-    { suspense: true }
-  );
+  const { data: profile, mutate } = useSWR(`/api/profile/${handle}`, fetcher, {
+    suspense: true,
+  });
   const router = useRouter();
 
   const { register, handleSubmit } = useForm();
 
   const handleProfileUpdate = async (data) => {
-    let res = await fetch(`${HOST}/api/profile/${handle}`, {
+    let res = await fetch(`/api/profile/${handle}`, {
       method: "PUT",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },

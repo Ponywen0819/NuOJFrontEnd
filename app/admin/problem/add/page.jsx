@@ -12,7 +12,6 @@ import {
 import { Subnav, Tab } from "@/components/subnav";
 import { useForm, FormProvider } from "react-hook-form";
 import { InputGroup } from "@/components/form";
-import { HOST } from "@/setting";
 import { error_swal, success_swal } from "@/components/notification";
 
 const TextAreaInput = ({ id, lable, placeholder, required }) => {
@@ -38,7 +37,7 @@ const AddProblemPage = () => {
 
   const handleAdd = async (data) => {
     const { title, time_limit, memory_limit, ...remain } = data;
-    const res = await fetch(`${HOST}/api/problem`, {
+    const res = await fetch(`/api/problem`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

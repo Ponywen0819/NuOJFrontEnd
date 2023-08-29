@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
-import { HOST } from "@/setting";
 import { error_swal } from "@/components/notification";
 import { color_context } from "@/contexts/color";
 import { useContext } from "react";
@@ -54,7 +53,7 @@ const Register = () => {
 
     if (!validate(data)) return;
 
-    const res = await fetch(`${HOST}/api/auth/register`, {
+    const res = await fetch(`/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
