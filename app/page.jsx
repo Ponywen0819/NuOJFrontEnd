@@ -25,7 +25,7 @@ const Background = ({ children }) => {
       <Stack
         flex={1}
         direction={"column"}
-        backgroundColor={"rgba(0,0,0,0.6)"}
+        backgroundColor={"rgba(17,24,39,0.8)"}
         color={"whiteAlpha.900"}
       >
         {children}
@@ -44,18 +44,25 @@ const Header = () => {
 
 const Main = () => {
   return (
-    <Center flex={1} as="main">
+    <Center
+      flex={1}
+      as="main"
+      className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
+    >
       <Box>
-        <Heading as={"h1"} textAlign={"center"}>
-          Welcome to
-          <Box as="span" color={"orange.500"}>
-            NuOJ!
-          </Box>
-        </Heading>
-        <Text textAlign={"center"} fontWeight={"bold"}>
+        <Text fontSize="5xl" textAlign={"center"} fontWeight={"semibold"}>
+          Welcome to NuOJ!
+        </Text>
+        <Text
+          fontSize="2xl"
+          textAlign={"center"}
+          fontWeight={"medium"}
+          m="4"
+          mt="1"
+        >
           一款來自 國立臺北科技大學 的線上程式評測系統
         </Text>
-        <Text textAlign={"center"} fontWeight={"bold"}>
+        <Text fontSize="2xl" textAlign={"center"} fontWeight={"medium"} m="4">
           系統正在進行開發中，你可以追蹤
           <Link href="https://github.com/ntut-xuan/NuOJ" color={"orange.500"}>
             我們的開發進度
@@ -68,21 +75,24 @@ const Main = () => {
 
 const Footer = () => {
   return (
-    <Container as={"footer"} width={"fit-content"} paddingY={3}>
+    <Container
+      as={"footer"}
+      className="absolute bottom-[9vh] left-[50%] -translate-x-[50%] w-full"
+    >
       <Link
         href="https://ntut.edu.tw"
         backgroundColor={"white"}
         display={"block"}
         padding={3}
-        rounded={"lg"}
+        width={"fit-content"}
+        margin={"auto"}
+        my="5"
+        className="duration-500 hover:bg-slate-400"
       >
-        <Image alt="NTUT" src={ntut_logo.src} height={12} />
+        <Image alt="NTUT" src={ntut_logo.src} />
       </Link>
-      <Text color={"whiteAlpha.900"} textAlign={"center"} fontWeight={"bold"}>
-        <Box as="span" color={"orange.500"}>
-          2023
-        </Box>
-        , NuOJ Team.
+      <Text color={"whiteAlpha.900"} textAlign={"center"}>
+        2023, NuOJ Team.
       </Text>
     </Container>
   );
