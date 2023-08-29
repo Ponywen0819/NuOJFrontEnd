@@ -39,7 +39,7 @@ const DocArea = (props) => {
   const { header, content, author } = data;
 
   return (
-    <Box>
+    <Box width={"100%"}>
       <Box marginX={"auto"} width={"fit-content"} marginBottom={3}>
         <Heading as={"h1"}>{header.title}</Heading>
         <Text align={"center"}>{`運行時間限制 : ${header.time_limit}`}</Text>
