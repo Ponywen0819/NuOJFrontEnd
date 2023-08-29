@@ -8,7 +8,6 @@ import {
   Stack,
   Spinner,
 } from "@/components/chakra";
-import { HOST } from "@/setting";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -36,7 +35,7 @@ const Item = ({ title, content }) => {
 };
 
 export const ProfileInfo = ({ handle }) => {
-  const { data: profile } = useSWR(`${HOST}/api/profile/${handle}`, fetcher);
+  const { data: profile } = useSWR(`/api/profile/${handle}`, fetcher);
 
   if (!profile) return <Spinner />;
 

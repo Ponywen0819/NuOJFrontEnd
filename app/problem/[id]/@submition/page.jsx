@@ -12,7 +12,6 @@ import {
 import { TableProvider, TableHeader, TableBody } from "@/components/table";
 
 import NextLink from "next/link";
-import { HOST } from "@/setting";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -69,7 +68,7 @@ const TableTime = ({ children }) => {
 
 const SubmitionArea = ({ params }) => {
   const { id } = params;
-  const { data: submission } = useSWR(`${HOST}/api/submission/${id}`, fetcher);
+  const { data: submission } = useSWR(`/api/submission/${id}`, fetcher);
 
   return (
     <Flex overflow={"auto"} flex={1}>

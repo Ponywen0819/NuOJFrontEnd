@@ -1,7 +1,6 @@
 "use client";
 
 import useSWR from "swr";
-import { HOST } from "@/setting";
 import { Spinner, Center } from "@/components/chakra";
 
 const fetcher = (...arg) =>
@@ -37,12 +36,9 @@ const imgFetcher = (...arg) =>
 
 const ProfileLayout = ({ children, params }) => {
   const handle = params.handle;
-  const { data: profile, error } = useSWR(
-    `${HOST}/api/profile/${handle}`,
-    fetcher
-  );
+  const { data: profile, error } = useSWR(`/api/profile/${handle}`, fetcher);
   const { data: img } = useSWR(
-    () => `${HOST}/api/profile/${handle}/avatar`,
+    () => `/api/profile/${handle}/avatar`,
     imgFetcher
   );
   if (error) throw new Error("error on fetching user information");

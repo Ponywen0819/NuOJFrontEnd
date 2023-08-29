@@ -7,7 +7,6 @@ import { Box, Center, Text, Image, Container } from "@/components/chakra";
 import { redirect } from "next/navigation";
 import { useContext } from "react";
 import useSWR from "swr";
-import { HOST } from "@/setting";
 import logo_min from "@/public/logo_min.png";
 
 const fetcher = (...arg) =>
@@ -25,7 +24,7 @@ const RequireAdmin = (props) => {
   const { children } = props;
   const { user } = useContext(auth_context);
   const { handle } = user;
-  const { data: profile } = useSWR(`${HOST}/api/profile/${handle}`, fetcher);
+  const { data: profile } = useSWR(`/api/profile/${handle}`, fetcher);
 
   if (!profile) return "";
 

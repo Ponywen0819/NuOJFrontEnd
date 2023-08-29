@@ -1,5 +1,4 @@
 import { Spinner, Container, Stack, Button } from "@/components/chakra";
-import { HOST } from "@/setting";
 import useSWR from "swr";
 
 const fetcher = (...arg) =>
@@ -12,7 +11,7 @@ const fetcher = (...arg) =>
   });
 
 export const Oauth = () => {
-  const { data: oauth } = useSWR(`${HOST}/api/auth/oauth_info`, fetcher);
+  const { data: oauth } = useSWR(`/api/auth/oauth_info`, fetcher);
 
   if (!oauth) {
     return (

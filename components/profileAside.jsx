@@ -11,7 +11,6 @@ import {
   SlideFade,
 } from "@/components/chakra";
 import NextLink from "next/link";
-import { HOST } from "@/setting";
 import { auth_context } from "@/contexts/auth";
 import { useContext } from "react";
 
@@ -49,9 +48,9 @@ const imgFetcher = (...arg) =>
     );
 
 export const ProfileAside = ({ handle }) => {
-  const { data: profile } = useSWR(`${HOST}/api/profile/${handle}`, fetcher);
+  const { data: profile } = useSWR(`/api/profile/${handle}`, fetcher);
   const { data: img } = useSWR(
-    () => `${HOST}/api/profile/${handle}/avatar`,
+    () => `/api/profile/${handle}/avatar`,
     imgFetcher
   );
 

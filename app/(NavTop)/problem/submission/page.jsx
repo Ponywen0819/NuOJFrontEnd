@@ -2,7 +2,6 @@
 
 import { Table, Thead, Tr, Link } from "@/components/chakra";
 import { TableProvider, TableHeader, TableBody } from "@/components/table";
-import { HOST } from "@/setting";
 import NextLink from "next/link";
 import useSWR from "swr";
 
@@ -59,7 +58,7 @@ const TableTime = ({ children }) => {
 };
 
 const ProblemList = () => {
-  const { data: submitions } = useSWR(`${HOST}/api/submission`, fetcher);
+  const { data: submitions } = useSWR(`/api/submission`, fetcher);
   console.log(submitions);
   return (
     <TableProvider

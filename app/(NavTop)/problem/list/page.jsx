@@ -2,7 +2,6 @@
 
 import { Table, Thead, Tr, Link } from "@/components/chakra";
 import { TableProvider, TableHeader, TableBody } from "@/components/table";
-import { HOST } from "@/setting";
 import NextLink from "next/link";
 import useSWR from "swr";
 
@@ -37,7 +36,7 @@ const TableLink = ({ children, href }) => {
   );
 };
 const ProbleTable = () => {
-  const { data: problems } = useSWR(`${HOST}/api/problem`, fetcher);
+  const { data: problems } = useSWR(`/api/problem`, fetcher);
 
   return (
     <TableProvider

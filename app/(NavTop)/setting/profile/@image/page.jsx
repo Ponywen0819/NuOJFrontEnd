@@ -12,7 +12,6 @@ import {
 import { useRef, useContext } from "react";
 import { auth_context } from "@/contexts/auth";
 import { img_context } from "../layout";
-import { HOST } from "@/setting";
 import useSWR from "swr";
 import { success_swal, error_swal } from "@/components/notification";
 
@@ -35,7 +34,7 @@ const imgFetcher = (...arg) =>
             resolve(base64);
           };
           reader.readAsDataURL(blob);
-        }),
+        })
     );
 
 const ImgForm = () => {
@@ -44,9 +43,9 @@ const ImgForm = () => {
   const { handle } = user;
   const { imgPop, setPop } = useContext(img_context);
   const { data: img, mutate } = useSWR(
-    `${HOST}/api/profile/${handle}/avatar`,
+    `/api/profile/${handle}/avatar`,
     imgFetcher,
-    { suspense: true },
+    { suspense: true }
   );
 
   const selectImg = () => {
@@ -75,7 +74,7 @@ const ImgForm = () => {
     const imageBuffer = await fetch(new_img).then((res) => res.arrayBuffer());
     const mime = new_img.match(/:(.*?);/)[1];
 
-    let res = await fetch(`${HOST}/api/profile/${handle}/avatar`, {
+    let res = await fetch(`/api/profile/${handle}/avatar`, {
       method: "PUT",
       headers: {
         "content-type": mime,

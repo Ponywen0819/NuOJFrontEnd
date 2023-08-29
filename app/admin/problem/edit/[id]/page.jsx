@@ -2,7 +2,6 @@
 
 import { Subnav, Tab } from "@/components/subnav";
 import { useEffect, useRef, useState, forwardRef } from "react";
-import { HOST } from "@/setting";
 import { error_swal, success_swal } from "@/components/notification";
 import { SlideFade } from "@chakra-ui/react";
 import {
@@ -51,7 +50,7 @@ const Form = ({ id, mutate, detail }) => {
   } = methods;
   const handleUpdate = async (data) => {
     const { title, time_limit, memory_limit, ...remain } = data;
-    const res = await fetch(`${HOST}/api/problem/${id}`, {
+    const res = await fetch(`/api/problem/${id}`, {
       method: "PUT",
       body: JSON.stringify({
         header: {
@@ -176,7 +175,7 @@ const fetcher = (...arg) =>
 const EditProblemPage = ({ params }) => {
   const { id } = params;
 
-  const { data: detail, mutate } = useSWR(`${HOST}/api/problem/${id}`, fetcher);
+  const { data: detail, mutate } = useSWR(`/api/problem/${id}`, fetcher);
 
   return (
     <Box flex={1}>

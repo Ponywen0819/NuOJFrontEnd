@@ -4,7 +4,6 @@ import { createContext, useLayoutEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { HOST } from "@/setting";
 import { navigate_context } from "@/contexts/navigate";
 import { success_swal } from "@/components/notification";
 
@@ -28,7 +27,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getJwtDecode = async (tragetError = false) => {
-    const res = await fetch(`${HOST}/api/auth/verify_jwt`, {
+    const res = await fetch(`/api/auth/verify_jwt`, {
       method: "POST",
       credentials: "include",
     });
@@ -48,7 +47,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signin = async ({ account, password, errors = {} }) => {
-    const res = await fetch(`${HOST}/api/auth/login`, {
+    const res = await fetch(`/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -71,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signout = async () => {
-    const res = await fetch(`${HOST}/api/auth/logout`, { method: "POST" });
+    const res = await fetch(`/api/auth/logout`, { method: "POST" });
 
     Cookies.remove("jwt");
     if (res.ok) {

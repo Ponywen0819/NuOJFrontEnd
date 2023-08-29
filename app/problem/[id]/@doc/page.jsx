@@ -3,7 +3,6 @@
 import { MathComponent } from "mathjax-react";
 import useSWR from "swr";
 import { Box, Stack, Text, Heading } from "@/components/chakra";
-import { HOST } from "@/setting";
 
 const TexSupport = ({ text }) => {
   let res = [];
@@ -33,7 +32,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const DocArea = (props) => {
   const { id } = props.params;
-  const { data } = useSWR(`${HOST}/api/problem/${id}`, fetcher, {
+  const { data } = useSWR(`/api/problem/${id}`, fetcher, {
     suspense: true,
   });
   const { header, content, author } = data;
