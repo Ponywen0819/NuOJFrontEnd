@@ -47,16 +47,18 @@ export const IsLoginInterface = () => {
           <PageOptions />
           <MenuDivider />
         </Box>
-        <MenuItem as={MenuLink} href={`/profile/${handle}`}>
+        <MenuItem as={MenuLink} href={`/profile/${handle}`} color={"black"}>
           個人頁面
         </MenuItem>
         {isAdmin && (
-          <MenuItem as={MenuLink} href={`/admin/problem/list`}>
+          <MenuItem as={MenuLink} href={`/admin/problem/list`} color={"black"}>
             管理員頁面
           </MenuItem>
         )}
         <MenuDivider />
-        <MenuItem onClick={handleSignout}>登出</MenuItem>
+        <MenuItem onClick={handleSignout} color={"black"}>
+          登出
+        </MenuItem>
       </MenuList>
     </Menu>
   );
