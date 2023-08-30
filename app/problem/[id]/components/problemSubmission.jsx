@@ -66,52 +66,49 @@ const TableTime = ({ children }) => {
   );
 };
 
-const SubmitionArea = ({ params }) => {
-  const { id } = params;
+const SubmitionArea = ({ id }) => {
   const { data: submission } = useSWR(`/api/submission/${id}`, fetcher);
 
   return (
-    <Flex overflow={"auto"} flex={1}>
-      <TableProvider
-        pageSize={10}
-        isLoading={!submission}
-        flex={1}
-        overflow={"auto"}
-        enableSelector={true}
-      >
-        <Table>
-          <Thead>
-            <Tr>
-              <TableHeader
-                title={"題目 ID"}
-                id={"id"}
-                width={"360px"}
-                textAlign="start"
-              />
-              <TableHeader title={"題目名稱"} id={"problem"} width={"160px"} />
-              <TableHeader
-                title={"提交人"}
-                id={"handle"}
-                columnType={TableLink}
-              />
-              <TableHeader
-                title={"提交時間"}
-                id={"date"}
-                columnType={TableTime}
-              />
-              <TableHeader title={"提交狀態"} id={"verdict"} />
-              <TableHeader title={"時長"} id={"time"} />
-              <TableHeader
-                title={"記憶體用量"}
-                id={"memory"}
-                textAlign={"right"}
-              />
-            </Tr>
-          </Thead>
-          <TableBody datas={submission} />
-        </Table>
-      </TableProvider>
-    </Flex>
+    <TableProvider
+      pageSize={10}
+      isLoading={!submission}
+      enableSelector={true}
+      justify={"space-between"}
+      height={"100%"}
+    >
+      <Table height={"fit-content"}>
+        <Thead>
+          <Tr>
+            <TableHeader
+              title={"題目 ID"}
+              id={"id"}
+              width={"360px"}
+              textAlign="start"
+            />
+            <TableHeader title={"題目名稱"} id={"problem"} width={"160px"} />
+            <TableHeader
+              title={"提交人"}
+              id={"handle"}
+              columnType={TableLink}
+            />
+            <TableHeader
+              title={"提交時間"}
+              id={"date"}
+              columnType={TableTime}
+            />
+            <TableHeader title={"提交狀態"} id={"verdict"} />
+            <TableHeader title={"時長"} id={"time"} />
+            <TableHeader
+              title={"記憶體用量"}
+              id={"memory"}
+              textAlign={"right"}
+            />
+          </Tr>
+        </Thead>
+        <TableBody datas={submission} />
+      </Table>
+    </TableProvider>
   );
 };
 
