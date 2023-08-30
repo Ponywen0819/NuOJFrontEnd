@@ -57,7 +57,7 @@ export const TableProvider = ({
       {isLoading ? (
         Loading
       ) : (
-        <Stack {...remain}>
+        <Stack overflow={"hidden"} {...remain}>
           {/* <TableContainer>{children}</TableContainer> */}
           <Box overflow={"auto"} height={"100%"}>
             {children}
