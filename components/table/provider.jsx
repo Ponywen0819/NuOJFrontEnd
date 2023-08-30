@@ -1,5 +1,5 @@
 import { createContext, useState, useRef } from "react";
-import { TableContainer, SlideFade, Box } from "@/components/chakra";
+import { TableContainer, SlideFade, Box, Stack } from "@/components/chakra";
 import { TableLoading } from "./loading";
 import { TableSelector } from "./selector";
 
@@ -57,15 +57,13 @@ export const TableProvider = ({
       {isLoading ? (
         Loading
       ) : (
-        <Box
-          {...remain}
-          overflowY={"hidden"}
-          display={"flex"}
-          flexDirection={"column"}
-        >
-          <TableContainer flex={1}>{children}</TableContainer>
+        <Stack {...remain}>
+          {/* <TableContainer>{children}</TableContainer> */}
+          <Box overflow={"auto"} height={"100%"}>
+            {children}
+          </Box>
           {enableSelector && <TableSelector />}
-        </Box>
+        </Stack>
       )}
     </table_context.Provider>
   );

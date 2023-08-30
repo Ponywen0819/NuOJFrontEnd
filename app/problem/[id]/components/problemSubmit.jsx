@@ -4,7 +4,13 @@ import Editor from "@monaco-editor/react";
 import { success_swal, error_swal } from "@/components/notification";
 import { Loading } from "@/components/loading";
 import { useEffect, useState, useRef } from "react";
-import { Button, Box, CheckIcon, ChevronDownIcon } from "@/components/chakra";
+import {
+  Button,
+  Box,
+  Stack,
+  CheckIcon,
+  ChevronDownIcon,
+} from "@/components/chakra";
 
 const Select = ({ options = [], len, callback }) => {
   const [pop, setPop] = useState(false);
@@ -46,15 +52,16 @@ const Select = ({ options = [], len, callback }) => {
   );
 };
 
-export const SubmitArea = ({ id }) => {
-  const support_len = [
-    { text: "C++14 (g++)", val: "cpp", default: "// write your answer here" },
-    {
-      text: "Python 3.8.4",
-      val: "python",
-      default: "# write your answer here",
-    },
-  ];
+const support_len = [
+  { text: "C++14 (g++)", val: "cpp", default: "// write your answer here" },
+  {
+    text: "Python 3.8.4",
+    val: "python",
+    default: "# write your answer here",
+  },
+];
+
+export const SubmitArea = ({ id, isLoading }) => {
   const [len, setLen] = useState(support_len[0]);
   const code_ref = useRef(null);
   useEffect(() => {
@@ -96,7 +103,13 @@ export const SubmitArea = ({ id }) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <Stack
+      width={"50%"}
+      height={"100%"}
+      backgroundColor={"white"}
+      borderRadius={"lg"}
+      boxShadow={"sm"}
+    >
       <Box
         height={"32px"}
         className="w-full flex px-2 border-b-2 flex items-center"
@@ -152,7 +165,7 @@ export const SubmitArea = ({ id }) => {
           上傳檔案{" "}
         </button>
       </div>
-    </div>
+    </Stack>
   );
 };
 
