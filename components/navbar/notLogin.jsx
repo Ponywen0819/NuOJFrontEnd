@@ -8,7 +8,7 @@ export const NotLoginInterface = () => {
     <>
       <Flex display={{ base: "none", lg: "flex" }} gap={16}>
         <NavLink href={"/auth/login"}>登入</NavLink>
-        <NavLink href={"auth/registe"}>註冊</NavLink>
+        <NavLink href={"auth/register"}>註冊</NavLink>
       </Flex>
       <Box display={{ base: "block", lg: "none" }}>
         <Menu>

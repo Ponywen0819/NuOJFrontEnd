@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json();
     setUser({
       isLogin: true,
-      ...data,
+      ...data.data,
     });
   };
 

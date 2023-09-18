@@ -12,7 +12,7 @@ export const AuthOptions = () => {
       <MenuItem as={MenuLink} href="/auth/login">
         登入
       </MenuItem>
-      <MenuItem as={MenuLink} href="/auth/registe">
+      <MenuItem as={MenuLink} href="/auth/register">
         註冊
       </MenuItem>
     </>

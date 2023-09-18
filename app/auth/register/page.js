@@ -71,7 +71,7 @@ const Register = () => {
         router.push("/");
       });
     } else {
-      let resCode = res.status;
+      const resCode = res.status;
       if (resCode === 422) {
         setError("eamil", { message: "invalid" });
         setError("handle", { message: "invalid" });

@@ -60,7 +60,7 @@ const Main = () => {
 
 const User = ({ name, photo, duties = [] }) => {
   return (
-    <Stack>
+    <Stack marginX={"auto"}>
       <Image
         src={photo}
         boxSize={"64"}
@@ -93,7 +93,7 @@ const About = () => {
     >
       <Container
         backgroundColor={"white"}
-        minW={"container.md"}
+        minW={"container.lg"}
         rounded={"lg"}
         paddingX={3}
         paddingY={5}
