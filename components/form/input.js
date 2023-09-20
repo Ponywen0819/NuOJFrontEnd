@@ -32,7 +32,11 @@ export const InputGroup = ({
         ...prop,
         ...register(id, { required }),
       })}
-      <FormErrorMessage>{errors[id] && errors[id].message}</FormErrorMessage>
+      {errors[id]?.message && (
+        <FormErrorMessage marginTop={1} paddingX={1}>
+          {errors[id] && errors[id].message}
+        </FormErrorMessage>
+      )}
     </FormControl>
   );
 };

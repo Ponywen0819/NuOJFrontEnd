@@ -24,8 +24,8 @@ export const Oauth = () => {
   const { github_oauth_url, google_oauth_url } = oauth;
   return (
     <Stack gap={3}>
-      {github_oauth_url ? <Button>使用 github 登入</Button> : ""}
-      {google_oauth_url ? <Button>使用 google 登入</Button> : ""}
+      {github_oauth_url ? <Button>使用 GitHub 登入</Button> : ""}
+      {google_oauth_url ? <Button>使用 Google 登入</Button> : ""}
     </Stack>
   );
 };

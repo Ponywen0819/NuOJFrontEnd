@@ -100,11 +100,12 @@ export const createAuthRoute = (db) => {
       return;
     }
 
-    if (handle === "error" || email === "error" || password === "error") {
+    if (handle === "error") {
       res.status(422);
       res.jsonp({
         message: "Handle is invalid.",
       });
+      return;
     }
 
     const sameHandle = db
