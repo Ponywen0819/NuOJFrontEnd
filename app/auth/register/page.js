@@ -40,9 +40,9 @@ const Register = () => {
     const { password, password_check } = data;
 
     if (password !== password_check) {
-      setError("password_check", { type: "check", message: "密碼不一致" });
-      setError("password", { type: "check", message: "密碼不一致" });
-
+      setError("password_check");
+      setError("password");
+      error_swal("註冊失敗", "密碼不一致");
       return false;
     }
     return true;
@@ -70,19 +70,23 @@ const Register = () => {
       }).then(() => {
         router.push("/");
       });
-    } else {
-      const resCode = res.status;
-      if (resCode === 422) {
-        setError("eamil", { message: "invalid" });
-        setError("handle", { message: "invalid" });
-      }
-      if (resCode === 403) {
-        setError("eamil", { message: "duplicate" });
-        setError("handle", { message: "duplicate" });
-      } else {
-        error_swal("註冊失敗", "發生未知錯誤");
-      }
+      return;
     }
+
+    const resCode = res.status;
+    if (resCode === 422) {
+      setError("handle");
+      error_swal("註冊失敗", "帳號不合法");
+      return;
+    }
+    if (resCode === 403) {
+      setError("email");
+      setError("handle");
+      error_swal("註冊失敗", "帳號或電子信箱重複");
+      return;
+    }
+
+    error_swal("註冊失敗", "發生未知錯誤");
   };
 
   return (
