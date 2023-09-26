@@ -45,8 +45,9 @@ const Login = () => {
       show_mail_confirm_swal("undefined");
     },
     403: () => {
-      setError("account", { message: "incorrect" });
-      setError("password", { message: "incorrect" });
+      setError("account");
+      setError("password");
+      error_swal("帳號或密碼錯誤");
     },
   };
 
