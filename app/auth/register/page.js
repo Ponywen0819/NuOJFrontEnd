@@ -1,21 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import NextLink from "next/link";
 import { error_swal } from "@/components/notification";
 import { color_context } from "@/contexts/color";
 import { useContext } from "react";
-import {
-  Box,
-  AbsoluteCenter,
-  Divider,
-  Button,
-  Stack,
-} from "@/components/chakra";
+import { Button, Stack } from "@/components/chakra";
 import Swal from "sweetalert2";
-import { Header } from "@/components/authHeader";
-import { Oauth } from "@/components/authOauth";
-import { Footer } from "@/components/authFooter";
+import { Header } from "../components/header";
+import { AuthDivider } from "../components/divider";
+import { Oauth } from "../components/oauth";
+import { Footer } from "../components/footer";
 import { useFormContext, useForm, FormProvider } from "react-hook-form";
 import { Form, InputGroup } from "@/components/form";
 
@@ -76,7 +70,10 @@ const Register = () => {
     const resCode = res.status;
     if (resCode === 422) {
       setError("handle");
-      error_swal("註冊失敗", "帳號不合法");
+      setError("email");
+      setError("password");
+      setError("password_check");
+      error_swal("註冊失敗", "帳號、電子郵件或密碼不合法");
       return;
     }
     if (resCode === 403) {
@@ -91,7 +88,7 @@ const Register = () => {
 
   return (
     <FormProvider {...methods}>
-      <Header lable={"註冊"} />
+      <Header label={"註冊"} />
       <Stack
         as={"form"}
         onSubmit={handleSubmit(handleRegister)}
@@ -128,12 +125,9 @@ const Register = () => {
         />
         <RegisterBtn />
       </Stack>
-      <Box position={"relative"} marginY={3}>
-        <Divider />
-        <AbsoluteCenter>或</AbsoluteCenter>
-      </Box>
+      <AuthDivider />
       <Oauth />
-      <Footer lable={"登入"} href={"/auth/login"} />
+      <Footer label={"登入"} href={"/auth/login"} />
     </FormProvider>
   );
 };

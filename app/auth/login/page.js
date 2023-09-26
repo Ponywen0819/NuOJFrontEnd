@@ -1,26 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { color_context } from "@/contexts/color";
 import { auth_context } from "@/contexts/auth";
-import { navigate_context } from "@/contexts/navigate";
 import {
   success_swal,
   error_swal,
   show_mail_confirm_swal,
 } from "@/components/notification";
-import {
-  Box,
-  AbsoluteCenter,
-  Divider,
-  Button,
-  Stack,
-} from "@/components/chakra";
+import { Button, Stack } from "@/components/chakra";
 import { InputGroup } from "@/components/form";
-import { Header } from "@/components/authHeader";
-import { Oauth } from "@/components/authOauth";
-import { Footer } from "@/components/authFooter";
+import { AuthDivider } from "../components/divider";
+import { Header } from "../components/header";
+import { Oauth } from "../components/oauth";
+import { Footer } from "../components/footer";
 import { useFormContext, useForm, FormProvider } from "react-hook-form";
 
 const LoginBtn = () => {
@@ -59,7 +52,7 @@ const Login = () => {
 
   return (
     <FormProvider {...methods}>
-      <Header lable={"登入"} />
+      <Header label={"登入"} />
       <Stack
         as={"form"}
         onSubmit={handleSubmit(handleLogin)}
@@ -82,12 +75,9 @@ const Login = () => {
         />
         <LoginBtn />
       </Stack>
-      <Box position={"relative"}>
-        <Divider />
-        <AbsoluteCenter>或</AbsoluteCenter>
-      </Box>
+      <AuthDivider />
       <Oauth />
-      <Footer lable={"註冊"} href={"/auth/register"} />
+      <Footer label={"註冊"} href={"/auth/register"} />
     </FormProvider>
   );
 };
