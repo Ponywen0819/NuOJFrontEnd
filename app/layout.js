@@ -1,11 +1,12 @@
 import { Providers } from "@/contexts/root";
 import LogoWhite from "@/public/logo-white.svg";
+import Icon from "@/public/logo_min.png";
 import "./global.css";
 
 export const metadata = {
   title: {
-    template: "Nuoj - %s",
-    default: "Nuoj",
+    template: "NuOJ - %s",
+    default: "NuOJ",
   },
   openGraph: {
     title: "NuOJ - Index",
@@ -13,6 +14,9 @@ export const metadata = {
     image: LogoWhite.src,
   },
   description: "一款來自 國立臺北科技大學 的線上程式評測系統s",
+  icons: {
+    icon: Icon.src,
+  },
 };
 
 export default function RootLayout({ children }) {

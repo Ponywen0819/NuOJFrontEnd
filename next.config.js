@@ -1,12 +1,11 @@
 module.exports = {
   async rewrites() {
-    return {
-      fallback: [
-        {
-          source: "/:path*",
-          destination: "http://localhost:3001/:path*",
-        },
-      ],
-    };
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://localhost:8080/api/:path*",
+        // destination: "http://localhost:3001/api/:path*",
+      },
+    ];
   },
 };

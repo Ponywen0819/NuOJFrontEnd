@@ -36,7 +36,7 @@ const TableLink = ({ children, href }) => {
   );
 };
 const ProbleTable = () => {
-  const { data: problems } = useSWR(`/api/problem`, fetcher);
+  const { data: problems } = useSWR(`/api/problem/`, fetcher);
 
   return (
     <TableProvider
