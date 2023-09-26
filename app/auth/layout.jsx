@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack } from "@/components/chakra";
+import { Box, Stack, AbsoluteCenter } from "@/components/chakra";
 import { color_context, ColorProvider } from "@/contexts/color";
 import { useContext } from "react";
 
@@ -15,21 +15,23 @@ const Content = ({ children }) => {
       paddingY={5}
       overflow={"auto"}
     >
-      <Stack
-        as={"main"}
-        position={"relative"}
-        width={"sm"}
-        boxShadow={"sm"}
-        boxSizing="border-box"
-        marginX={"auto"}
-        borderRadius={"lg"}
-        backgroundColor={"white"}
-        paddingX={3}
-        paddingY={5}
-        gap={5}
-      >
-        {children}
-      </Stack>
+      <AbsoluteCenter>
+        <Stack
+          as={"main"}
+          position={"relative"}
+          width={"sm"}
+          boxShadow={"sm"}
+          boxSizing="border-box"
+          marginX={"auto"}
+          borderRadius={"lg"}
+          backgroundColor={"white"}
+          paddingX={3}
+          paddingY={5}
+          gap={5}
+        >
+          {children}
+        </Stack>
+      </AbsoluteCenter>
     </Box>
   );
 };
