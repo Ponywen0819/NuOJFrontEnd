@@ -29,26 +29,31 @@ const LoginBtn = () => {
 };
 
 const Login = () => {
-  const auth = useContext(auth_context);
+  const { login } = useContext(auth_context);
   const methods = useForm();
   const { handleSubmit, setError } = methods;
 
-  const errors = {
-    401: () => {
-      show_mail_confirm_swal("undefined");
-    },
-    403: () => {
-      setError("account");
-      setError("password");
-      error_swal("帳號或密碼錯誤");
-    },
+  const resultHandler = (code: Number) => {
+    switch (code) {
+      case 200:
+        success_swal("登入成功");
+        break;
+      case 400:
+        error_swal("發生未知的錯誤");
+        break;
+      case 401:
+        show_mail_confirm_swal("undefined");
+        break;
+      case 403:
+        setError("account", {});
+        setError("password", {});
+        error_swal("帳號或密碼錯誤");
+        break;
+    }
   };
 
   const handleLogin = (data) =>
-    auth.signin({
-      ...data,
-      errors,
-    });
+    login(data.account, data.password, resultHandler);
 
   return (
     <FormProvider {...methods}>
