@@ -84,3 +84,11 @@ export const AuthProvider = ({ children }) => {
     <auth_context.Provider value={context}>{children}</auth_context.Provider>
   );
 };
+
+export const useAuth = () => {
+  const context = useContext(auth_context);
+  if (!context) {
+    throw new Error("not in auth provider");
+  }
+  return context;
+};

@@ -12,6 +12,7 @@ import {
 } from "@/components/chakra";
 import IndexImg from "@/public/index.jpg";
 import ntut_logo from "@/public/ntut_logo.png";
+import { Header } from "@/components/header";
 
 const Background = ({ children }) => {
   return (
@@ -34,13 +35,13 @@ const Background = ({ children }) => {
   );
 };
 
-const Header = () => {
-  return (
-    <Box as="header" w={"100%"} zIndex={50}>
-      <Navbar />
-    </Box>
-  );
-};
+// const Header = () => {
+//   return (
+//     <Box as="header" w={"100%"} zIndex={50}>
+//       <Navbar />
+//     </Box>
+//   );
+// };
 
 const Main = () => {
   return (
