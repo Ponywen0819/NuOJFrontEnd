@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       callback && callback(res.status);
     }
 
-    getJwtDecode().then(() => {
+    await getJwtDecode().then(() => {
       const url = navigate.get() || "/";
       router.push(url);
       callback && callback(res.status);

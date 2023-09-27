@@ -16,6 +16,7 @@ import { useAuth } from "@/contexts/auth";
 import { NavLink } from "./link";
 import { List } from "./list";
 import useSWR from "swr";
+import { success_swal } from "../notification";
 
 type LinkProps = {
   href: string;
@@ -68,8 +69,19 @@ const PageLink = ({ href, children }: LinkProps) => (
   </MenuItem>
 );
 
+const PageLinkDivider = () => {
+  return (
+    <MenuDivider
+      display={{
+        base: "block",
+        lg: "none",
+      }}
+    />
+  );
+};
+
 const UserMenu = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { data: profile } = useSWR<Profile | undefined>(
     () => (user ? `/api/profile/${user.handle}` : null),
     fetcher
@@ -82,6 +94,7 @@ const UserMenu = () => {
       <MenuList>
         <PageLink href="/problem">題目</PageLink>
         <PageLink href="/about">關於</PageLink>
+        <PageLinkDivider />
         <NavItem href={`/profile/${user.handle}`}>個人頁面</NavItem>
         {isAdmin ? (
           <NavItem href="/admin/problem/list">管理員介面</NavItem>
@@ -89,7 +102,9 @@ const UserMenu = () => {
           ""
         )}
         <MenuDivider />
-        <MenuItem color={"black"}>登出</MenuItem>
+        <MenuItem color={"black"} onClick={() => logout(logoutResultHandler)}>
+          登出
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -122,4 +137,12 @@ export const Auth = () => {
       <UserMenu />
     </List>
   );
+};
+
+const logoutResultHandler = (code: number) => {
+  switch (code) {
+    case 200:
+      success_swal("已登出");
+      break;
+  }
 };
