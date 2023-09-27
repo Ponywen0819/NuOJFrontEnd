@@ -62,7 +62,7 @@ const Main = () => {
 
 const Footer = () => {
   return (
-    <Container as={"footer"} paddingBottom={56}>
+    <Container as={"footer"} paddingBottom={36}>
       <Link
         href="https://ntut.edu.tw"
         backgroundColor={"white"}
