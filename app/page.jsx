@@ -1,14 +1,12 @@
-import { Navbar } from "@/components/navbar";
 import {
   Box,
   Flex,
-  Heading,
   Text,
   Link,
   Image,
   Stack,
-  Center,
   Container,
+  AbsoluteCenter,
 } from "@/components/chakra";
 import IndexImg from "@/public/index.jpg";
 import ntut_logo from "@/public/ntut_logo.png";
@@ -35,22 +33,10 @@ const Background = ({ children }) => {
   );
 };
 
-// const Header = () => {
-//   return (
-//     <Box as="header" w={"100%"} zIndex={50}>
-//       <Navbar />
-//     </Box>
-//   );
-// };
-
 const Main = () => {
   return (
-    <Center
-      flex={1}
-      as="main"
-      className="absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
-    >
-      <Box>
+    <Box flex={1} as="main">
+      <AbsoluteCenter>
         <Text fontSize="5xl" textAlign={"center"} fontWeight={"semibold"}>
           Welcome to NuOJ!
         </Text>
@@ -69,17 +55,14 @@ const Main = () => {
             我們的開發進度
           </Link>
         </Text>
-      </Box>
-    </Center>
+      </AbsoluteCenter>
+    </Box>
   );
 };
 
 const Footer = () => {
   return (
-    <Container
-      as={"footer"}
-      className="absolute bottom-[9vh] left-[50%] -translate-x-[50%] w-full"
-    >
+    <Container as={"footer"} paddingBottom={56}>
       <Link
         href="https://ntut.edu.tw"
         backgroundColor={"white"}
