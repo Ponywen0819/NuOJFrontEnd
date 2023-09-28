@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar } from "@/components/navbar";
+import { Header } from "@/components/header";
 import { RequireAuth } from "@/components/require";
 import { auth_context } from "@/contexts/auth";
 import { Box, Center, Text, Image, Container } from "@/components/chakra";
@@ -71,9 +71,7 @@ const AdminLayout = ({ children }) => {
     <RequireAuth>
       <RequireAdmin>
         <Box backgroundColor={"gray.100"} minH={"100vh"}>
-          <Box as="header" backgroundColor={"blackAlpha.900"}>
-            <Navbar />
-          </Box>
+          <Header bgColor="normal" />
           <Container
             paddingX={3}
             paddingY={5}

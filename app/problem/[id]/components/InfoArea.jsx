@@ -44,7 +44,6 @@ export const InfoArea = ({ id, data }) => {
     <Tabs
       isLazy
       width={"50%"}
-      height={"100%"}
       borderRadius={"lg"}
       backgroundColor={"white"}
       boxShadow={"sm"}

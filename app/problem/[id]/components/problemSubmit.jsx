@@ -2,7 +2,6 @@
 
 import Editor from "@monaco-editor/react";
 import { success_swal, error_swal } from "@/components/notification";
-import { Loading } from "@/components/loading";
 import { useEffect, useState, useRef } from "react";
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   Stack,
   CheckIcon,
   ChevronDownIcon,
+  Spinner,
 } from "@/components/chakra";
 
 const Select = ({ options = [], len, callback }) => {
@@ -105,7 +105,6 @@ export const SubmitArea = ({ id, isLoading }) => {
   return (
     <Stack
       width={"50%"}
-      height={"100%"}
       backgroundColor={"white"}
       borderRadius={"lg"}
       boxShadow={"sm"}
@@ -140,7 +139,7 @@ export const SubmitArea = ({ id, isLoading }) => {
             },
             scrollBeyondLastLine: 0,
           }}
-          loading={<Loading />}
+          loading={<Spinner />}
           onMount={(editor, monaco) => {
             code_ref.current = editor;
           }}
@@ -154,15 +153,13 @@ export const SubmitArea = ({ id, isLoading }) => {
           className="inline-block bg-orange-700 w-32 delay-100 py-2 hover:bg-orange-500 rounded-lg text-white mx-5"
           onClick={() => handleCodeUpload(code_ref.current.getValue())}
         >
-          {" "}
-          提交{" "}
+          提交
         </button>
         <button
           className="inline-block bg-orange-700 w-32 delay-100 py-2 hover:bg-orange-500 rounded-lg text-white mx-5"
           onClick={handleFileUpload}
         >
-          {" "}
-          上傳檔案{" "}
+          上傳檔案
         </button>
       </div>
     </Stack>
