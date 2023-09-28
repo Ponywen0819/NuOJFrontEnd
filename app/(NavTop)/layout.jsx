@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/navbar";
 import { Header } from "@/components/header";
 import { Box, Container } from "@/components/chakra";
 
