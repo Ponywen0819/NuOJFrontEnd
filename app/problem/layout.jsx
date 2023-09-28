@@ -1,6 +1,5 @@
 import { Box, Stack } from "@/components/chakra";
 import { Header } from "@/components/header";
-import { Navbar } from "@/components/navbar";
 
 const ProblemLayout = (props) => {
   const { children } = props;

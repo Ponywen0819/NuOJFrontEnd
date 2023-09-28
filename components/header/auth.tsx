@@ -1,14 +1,11 @@
 "use client";
 
 import {
-  Flex,
   Menu,
   MenuList,
   MenuItem,
   MenuDivider,
-  Box,
   Spinner,
-  forwardRef,
   MenuItemProps,
   MenuButton,
   IconButton,
@@ -18,11 +15,24 @@ import NextLink from "next/link";
 import { useAuth } from "@/contexts/auth";
 import { NavLink } from "./link";
 import { List } from "./list";
+import useSWR from "swr";
+import { success_swal } from "../notification";
 
 type LinkProps = {
   href: string;
   children: string;
 };
+
+type Profile = {
+  user_uid: string;
+  email: string;
+  school: string;
+  bio: string;
+  handle: string;
+  role: number;
+};
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export const HamburgerBtn = () => (
   <MenuButton
@@ -59,24 +69,42 @@ const PageLink = ({ href, children }: LinkProps) => (
   </MenuItem>
 );
 
+const PageLinkDivider = () => {
+  return (
+    <MenuDivider
+      display={{
+        base: "block",
+        lg: "none",
+      }}
+    />
+  );
+};
+
 const UserMenu = () => {
-  const { user } = useAuth();
-  const isAdmin = user.role === 1;
+  const { user, logout } = useAuth();
+  const { data: profile } = useSWR<Profile | undefined>(
+    () => (user ? `/api/profile/${user.handle}` : null),
+    fetcher
+  );
+  const isAdmin = user?.isLogin && profile?.role === 1;
 
   return (
     <Menu>
       <HamburgerBtn />
       <MenuList>
-        <PageLink href="/profile">個人頁面</PageLink>
+        <PageLink href="/problem">題目</PageLink>
+        <PageLink href="/about">關於</PageLink>
+        <PageLinkDivider />
+        <NavItem href={`/profile/${user.handle}`}>個人頁面</NavItem>
         {isAdmin ? (
-          <PageLink href="/admin/problem/list">管理員介面</PageLink>
+          <NavItem href="/admin/problem/list">管理員介面</NavItem>
         ) : (
           ""
         )}
-        <NavItem href="/profile">個人頁面</NavItem>
-        <NavItem href="/admin/problem/list">管理員介面</NavItem>
         <MenuDivider />
-        <MenuItem>登出</MenuItem>
+        <MenuItem color={"black"} onClick={() => logout(logoutResultHandler)}>
+          登出
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -109,4 +137,12 @@ export const Auth = () => {
       <UserMenu />
     </List>
   );
+};
+
+const logoutResultHandler = (code: number) => {
+  switch (code) {
+    case 200:
+      success_swal("已登出");
+      break;
+  }
 };

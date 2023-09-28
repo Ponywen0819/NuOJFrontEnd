@@ -36,8 +36,10 @@ export const createAuthRoute = (db) => {
     res.status(200);
     res.jsonp({
       message: "OK",
-      handle,
-      email,
+      data: {
+        handle,
+        email,
+      },
     });
   });
 
