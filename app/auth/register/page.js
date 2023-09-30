@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { error_swal } from "@/components/notification";
+import { error_swal, success_swal } from "@/components/notification";
 import { color_context } from "@/contexts/color";
 import { useContext } from "react";
 import { Button, Stack } from "@/components/chakra";
@@ -42,6 +42,35 @@ const Register = () => {
     return true;
   };
 
+  const handleError = (code) => {
+    switch (code) {
+      case 403:
+        setError("email");
+        setError("handle");
+        error_swal("註冊失敗", "帳號或電子信箱重複");
+        break;
+      case 422:
+        setError("handle");
+        setError("email");
+        setError("password");
+        setError("password_check");
+        error_swal("註冊失敗", "帳號、電子郵件或密碼不合法");
+        break;
+      default:
+        error_swal("註冊失敗", "發生未知錯誤");
+    }
+  };
+
+  const handleEmailNotify = () =>
+    Swal.fire({
+      icon: "success",
+      title: "註冊成功",
+      text: "驗證信已寄至信箱，請收信來驗證信箱",
+      showConfirmButton: true,
+    });
+
+  const handleRegisterSuccess = () => success_swal("註冊成功");
+
   const handleRegister = async (data) => {
     const { handle, email, password } = data;
 
@@ -55,35 +84,15 @@ const Register = () => {
       body: JSON.stringify({ handle, email, password }),
     });
 
-    if (res.ok) {
-      Swal.fire({
-        icon: "success",
-        title: "註冊成功",
-        text: "驗證信已寄至信箱，請收信來驗證信箱",
-        showConfirmButton: true,
-      }).then(() => {
-        router.push("/");
-      });
+    if (!res.ok) {
+      handleError(res.status);
       return;
     }
 
-    const resCode = res.status;
-    if (resCode === 422) {
-      setError("handle");
-      setError("email");
-      setError("password");
-      setError("password_check");
-      error_swal("註冊失敗", "帳號、電子郵件或密碼不合法");
-      return;
-    }
-    if (resCode === 403) {
-      setError("email");
-      setError("handle");
-      error_swal("註冊失敗", "帳號或電子信箱重複");
-      return;
-    }
+    const { mail_verification_enabled } = await res.json();
 
-    error_swal("註冊失敗", "發生未知錯誤");
+    mail_verification_enabled ? handleEmailNotify() : handleRegisterSuccess();
+    router.push("/auth/login");
   };
 
   return (
