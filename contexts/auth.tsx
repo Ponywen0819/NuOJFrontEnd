@@ -70,11 +70,10 @@ export const AuthProvider = ({ children }) => {
 
     if (!res.ok) {
       callback && callback(res.status);
+      return;
     }
 
     await getJwtDecode().then(() => {
-      const url = navigate.get() || "/";
-      router.push(url);
       callback && callback(res.status);
     });
   };

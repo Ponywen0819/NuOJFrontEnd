@@ -10,6 +10,7 @@ import {
 } from "@/components/notification";
 import { Button, Stack } from "@/components/chakra";
 import { InputGroup } from "@/components/form";
+import { useRouter } from "next/navigation";
 import { AuthDivider } from "../components/divider";
 import { Header } from "../components/header";
 import { Oauth } from "../components/oauth";
@@ -32,11 +33,13 @@ const Login = () => {
   const { login } = useContext(auth_context);
   const methods = useForm();
   const { handleSubmit, setError } = methods;
+  const router = useRouter();
 
   const resultHandler = (code: Number) => {
     switch (code) {
       case 200:
         success_swal("登入成功");
+        router.push("/");
         break;
       case 400:
         error_swal("發生未知的錯誤");
@@ -52,8 +55,9 @@ const Login = () => {
     }
   };
 
-  const handleLogin = (data) =>
+  const handleLogin = (data) => {
     login(data.account, data.password, resultHandler);
+  };
 
   return (
     <FormProvider {...methods}>
