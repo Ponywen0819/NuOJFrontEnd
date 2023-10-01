@@ -1,8 +1,8 @@
 "use client";
 
 import { Flex, Stack } from "@/components/chakra";
-import { ProfileAside } from "@/components/profileAside";
-import { ProfileInfo } from "@/components/profileInfo";
+import { ProfileAside } from "./components/aside";
+import { ProfileInfo } from "./components/info";
 
 const Profile = ({ params }) => {
   const handle = params.handle;

@@ -4,31 +4,31 @@ import { Table, Thead, Tr, Link } from "@/components/chakra";
 import { TableProvider, TableHeader, TableBody } from "@/components/table";
 import NextLink from "next/link";
 import useSWR from "swr";
+import { problemInfo } from "@/type";
 
-const fetcher = (...arg) =>
-  fetch(...arg)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("error on fetching problem list");
-      }
-      return res.json();
-    })
-    .then((json) => {
-      return json.map((problem) => ({
-        id: {
-          children: problem.head.problem_pid,
-        },
-        title: {
-          children: problem.head.title,
-          href: `/problem/${problem.head.problem_pid}`,
-        },
-        author: {
-          children: problem.author.handle,
-          href: `/profile/${problem.author.handle}`,
-        },
-        lable: "",
-      }));
-    });
+const fetcher = (url: string): Promise<problemInfo[]> =>
+  fetch(url).then((res) => {
+    if (!res.ok) {
+      throw new Error("error on fetching problem list");
+    }
+    return res.json();
+  });
+
+const formatter = (data: problemInfo[]) =>
+  data.map((problem) => ({
+    id: {
+      children: problem.head.problem_pid,
+    },
+    title: {
+      children: problem.head.title,
+      href: `/problem/${problem.head.problem_pid}`,
+    },
+    author: {
+      children: problem.author.handle,
+      href: `/profile/${problem.author.handle}`,
+    },
+    label: "",
+  }));
 
 const TableLink = ({ children, href }) => {
   return (
@@ -37,8 +37,11 @@ const TableLink = ({ children, href }) => {
     </Link>
   );
 };
-const ProbleTable = () => {
+
+const ProblemTable = () => {
   const { data: problems } = useSWR(`/api/problem`, fetcher);
+
+  const info = problems && formatter(problems);
 
   return (
     <TableProvider
@@ -46,7 +49,7 @@ const ProbleTable = () => {
       boxShadow={"sm"}
       backgroundColor={"white"}
       pageSize={10}
-      isLoading={!problems}
+      isLoading={!info}
       enableSelector={true}
     >
       <Table>
@@ -71,12 +74,12 @@ const ProbleTable = () => {
               textAlign={"center"}
               columnType={TableLink}
             />
-            <TableHeader title={"題目標籤"} id={"lable"} textAlign={"right"} />
+            <TableHeader title={"題目標籤"} id={"label"} textAlign={"right"} />
           </Tr>
         </Thead>
-        <TableBody datas={problems} />
+        {problems?.length ? <TableBody datas={info} /> : <></>}
       </Table>
     </TableProvider>
   );
 };
-export default ProbleTable;
+export default ProblemTable;

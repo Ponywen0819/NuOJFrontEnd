@@ -9,6 +9,7 @@ import {
   Text,
   IconButton,
   EditIcon,
+  Spinner,
 } from "@/components/chakra";
 import { createContext, useContext, useState } from "react";
 import { auth_context } from "@/contexts/auth";
@@ -47,6 +48,8 @@ const SettingContext = (props) => {
   const { handle } = user;
   const { data: profileInfo } = useSWR(`/api/profile/${handle}`, fetcher);
   const { data: imgSrc } = useSWR(`/api/profile/${handle}/avatar`, imgFetcher);
+
+  if (!profileInfo || !imgSrc) return <Spinner />;
   const isAdmin = profileInfo.role;
 
   const { profile, image } = props;

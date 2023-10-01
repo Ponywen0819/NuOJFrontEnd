@@ -10,28 +10,31 @@ import { EditIcon } from "@chakra-ui/icons";
 import useSWR from "swr";
 import NextLink from "next/link";
 import { DeleteButton } from "@/components/problemDleteBtn";
+import { problemInfo } from "@/type";
 
-const fetcher = (...arg) =>
-  fetch(...arg)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("error on fetching problem list");
-      }
-      return res.json();
-    })
-    .then((json) => {
-      return json.map((problem) => ({
-        id: problem.header.problem_pid,
-        title: problem.header.title,
-        opt: { children: problem.header.problem_pid },
-      }));
-    });
+const fetcher = (url: string): Promise<problemInfo[]> =>
+  fetch(url).then((res) => {
+    if (!res.ok) {
+      throw new Error("error on fetching problem list");
+    }
+    return res.json();
+  });
+
+const formatter = (data: problemInfo[]) =>
+  data.map((problemInfo) => ({
+    id: {
+      children: problemInfo.head.problem_pid,
+    },
+    title: problemInfo.head.title,
+    opt: { children: problemInfo.head.problem_pid },
+  }));
 
 const ProblemOperator = ({ children, OnDelete }) => {
   return (
     <Box>
       <IconButton
         icon={<EditIcon />}
+        aria-label="operator btn"
         as={NextLink}
         href={`/admin/problem/edit/${children}`}
         color={"blackAlpha.900"}
@@ -44,10 +47,13 @@ const ProblemOperator = ({ children, OnDelete }) => {
 
 const ProblemTable = () => {
   const { data: problems, mutate } = useSWR(`/api/problem`, fetcher);
+
+  const infos = problems && formatter(problems);
+
   return (
     <SlideFade in={true}>
       <TableProvider
-        isLoading={!problems}
+        isLoading={!infos}
         rounded={"lg"}
         boxShadow={"sm"}
         backgroundColor={"white"}
@@ -72,7 +78,7 @@ const ProblemTable = () => {
                   return (
                     <ProblemOperator
                       OnDelete={(id) => {
-                        mutate(problems.filter((problem) => problem.id !== id));
+                        // mutate(problems.filter((problem) => problem.id !== id));
                       }}
                     >
                       {children}
@@ -82,7 +88,7 @@ const ProblemTable = () => {
               />
             </Tr>
           </Thead>
-          <TableBody datas={problems} />
+          <TableBody datas={infos} />
         </Table>
       </TableProvider>
     </SlideFade>
