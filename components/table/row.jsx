@@ -4,7 +4,6 @@ import { table_context } from "./provider";
 
 export const TableRow = ({ data, index }) => {
   const { columns } = useContext(table_context);
-
   return (
     <Tr key={data}>
       {columns.map(({ id, type, textAlign }) => (

@@ -15,10 +15,12 @@ const fetcher = (...arg) =>
     })
     .then((json) => {
       return json.map((problem) => ({
-        id: problem.header.problem_pid,
+        id: {
+          children: problem.head.problem_pid,
+        },
         title: {
-          children: problem.header.title,
-          href: `/problem/${problem.header.problem_pid}`,
+          children: problem.head.title,
+          href: `/problem/${problem.head.problem_pid}`,
         },
         author: {
           children: problem.author.handle,
@@ -36,7 +38,7 @@ const TableLink = ({ children, href }) => {
   );
 };
 const ProbleTable = () => {
-  const { data: problems } = useSWR(`/api/problem/`, fetcher);
+  const { data: problems } = useSWR(`/api/problem`, fetcher);
 
   return (
     <TableProvider

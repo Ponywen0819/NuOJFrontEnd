@@ -43,10 +43,10 @@ const AddProblemPage = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        header: {
+        head: {
           title,
-          time_limit,
-          memory_limit,
+          time_limit: parseInt(time_limit),
+          memory_limit: parseInt(memory_limit),
         },
         content: remain,
       }),
