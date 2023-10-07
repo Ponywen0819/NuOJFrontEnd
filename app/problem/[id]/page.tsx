@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 const Main = dynamic(() => import("./components/main"));
 import useSWR from "swr";
 
-const fetcher = (...arg) =>
-  fetch(...arg).then((res) => {
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
     if (!res.ok) {
       throw new Error("error on fetching problem detail");
     }

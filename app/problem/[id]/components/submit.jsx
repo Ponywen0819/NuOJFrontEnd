@@ -72,7 +72,7 @@ export const SubmitArea = ({ id, isLoading }) => {
     let res = await fetch(`/api/submit/`, {
       body: JSON.stringify({
         code: text,
-        compiler: len.text,
+        language: len.text,
         problem_id: id,
       }),
       method: "POST",
@@ -109,10 +109,7 @@ export const SubmitArea = ({ id, isLoading }) => {
       borderRadius={"lg"}
       boxShadow={"sm"}
     >
-      <Box
-        height={"32px"}
-        className="w-full flex px-2 border-b-2 flex items-center"
-      >
+      <Box height={"32px"} className="w-full px-2 border-b-2 flex items-center">
         <Select options={support_len} len={len} callback={setLen} />
       </Box>
       <div className="grow py-2">

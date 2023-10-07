@@ -1,27 +1,28 @@
 "use client";
 
 import { MathComponent } from "mathjax-react";
+import { Box, Text } from "@/components/chakra";
 
 export const TexSupport = ({ children }) => {
   let res = [];
   let from = 0;
   children.slice(from).replaceAll(/(\$.*\$)/g, (match, _, offset, string) => {
     if (offset !== 0) {
-      res.push(<span key={offset}>{string.slice(0, offset - 1)}</span>);
+      res.push(string.slice(0, offset - 1));
     }
     res.push(
       <MathComponent
-        key={`math-${offset}`}
-        display={false}
         tex={match.slice(1, -1)}
+        display={false}
+        key={`math-${offset}`}
       />
     );
     from += match.length + offset;
   });
 
   if (from !== children.length) {
-    res.push(<span key={children.length}>{children.slice(from)}</span>);
+    res.push(children.slice(from));
   }
 
-  return <p className="py-1">{res}</p>;
+  return <Text>{res}</Text>;
 };

@@ -70,7 +70,7 @@ const AdminLayout = ({ children }) => {
   return (
     <RequireAuth>
       <RequireAdmin>
-        <Box backgroundColor={"gray.100"} minH={"100vh"}>
+        <Box backgroundColor={"gray.100"} minH={"100vh"} overflowX={"hidden"}>
           <Header bgColor="normal" />
           <Container
             paddingX={3}

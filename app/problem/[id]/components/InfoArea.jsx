@@ -8,9 +8,8 @@ import {
   Spinner,
 } from "@/components/chakra";
 import dynamic from "next/dynamic";
-import ProblemDocument from "./problemDocument";
+import ProblemDocument from "./document";
 const ProblemSubmission = dynamic(() => import("./problemSubmission"));
-// import ProblemSubmission from "./problemSubmission";
 
 const Loading = () => {
   return (
@@ -25,15 +24,15 @@ const Content = ({ id, data }) => {
     <>
       <TabList>
         <Tab>題目說明</Tab>
-        <Tab>提交狀態</Tab>
+        {/* <Tab>提交狀態</Tab> */}
       </TabList>
       <TabPanels flex={1}>
         <TabPanel>
           <ProblemDocument data={data} />
         </TabPanel>
-        <TabPanel height={"100%"}>
+        {/* <TabPanel height={"100%"}>
           <ProblemSubmission id={id} />
-        </TabPanel>
+        </TabPanel> */}
       </TabPanels>
     </>
   );

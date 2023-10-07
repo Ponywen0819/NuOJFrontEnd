@@ -1,7 +1,7 @@
 "use client";
 
 import { InfoArea } from "./InfoArea";
-import { SubmitArea } from "./problemSubmit";
+import { SubmitArea } from "./submit";
 
 const Main = ({ id, data }) => {
   return (

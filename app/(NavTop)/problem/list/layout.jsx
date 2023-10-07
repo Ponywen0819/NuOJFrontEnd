@@ -11,7 +11,7 @@ const ProblemListLayout = ({ children }) => {
         <Tab href={"/problem/list"} isActive={true}>
           題目列表
         </Tab>
-        <Tab href={"/problem/submission"}>提交狀態</Tab>
+        {/* <Tab href={"/problem/submission"}>提交狀態</Tab> */}
       </Subnav>
       {children}
     </>

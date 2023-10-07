@@ -83,43 +83,43 @@ const AddProblemPage = () => {
           <Divider />
           <InputGroup
             id={"title"}
-            lable={"標題"}
+            label={"標題"}
             placeholder={"請輸入題目"}
             required={"不可留空"}
           />
           <InputGroup
             id={"time_limit"}
-            lable={"時間限制"}
+            label={"時間限制"}
             placeholder={"請輸入時間限制"}
             required={"不可留空"}
           />
           <InputGroup
             id={"memory_limit"}
-            lable={"記憶體限制"}
+            label={"記憶體限制"}
             placeholder={"請輸入時間限制"}
             required={"不可留空"}
           />
           <TextAreaInput
             id={"description"}
-            lable={"題目敘述"}
+            label={"題目敘述"}
             placeholder={"請輸入題目敘述"}
             required={"不可留空"}
           />
           <TextAreaInput
             id={"input_description"}
-            lable={"輸入敘述"}
+            label={"輸入敘述"}
             placeholder={"請輸入輸入敘述"}
             required={"不可留空"}
           />
           <TextAreaInput
             id={"output_description"}
-            lable={"輸出敘述"}
+            label={"輸出敘述"}
             placeholder={"請輸入輸出敘述"}
             required={"不可留空"}
           />
           <TextAreaInput
             id={"note"}
-            lable={"Note"}
+            label={"Note"}
             placeholder={"請輸入 Note"}
           />
 
